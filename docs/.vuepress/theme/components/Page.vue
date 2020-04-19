@@ -34,7 +34,7 @@ export default {
       const gitalk = new Gitalk({
         clientID: 'bd729577007e51c7024e',
         clientSecret: '2ffab37b6220d89b521a4c2e3d1093bf7ca86ec1',
-        repo: 'pf-table',
+        repo: 'p-element',
         owner: 'pangao66',
         // 这里接受一个数组，可以添加多个管理员
         admin: ['pangao66'],

@@ -2,6 +2,7 @@
 // import 'highlight.js/styles/atom-one-dark.css'
 import Element from 'element-ui'
 import PElement from '../../index'
+import DemoBlock from './components/demo-block'
 import 'element-ui/lib/theme-chalk/index.css'
 import './mock'
 import Mock from './mock/base-table'
@@ -26,4 +27,5 @@ export default (
       })
     }
   })
+  Vue.component('demo-block', DemoBlock)
 }

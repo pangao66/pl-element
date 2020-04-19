@@ -3,9 +3,9 @@ module.exports = {
   dest: './dist',
   themeConfig: {
     // 你的GitHub仓库，请正确填写
-    repo: 'https://github.com/xxxxxxx/blog',
+    repo: 'https://github.com/pangao66/p-element',
     // 自定义仓库链接文字。
-    repoLabel: 'My GitHub',
+    repoLabel: '仓库地址',
     // sidebar: [
     //   {
     //     title: 'pf-table',   // 必要的

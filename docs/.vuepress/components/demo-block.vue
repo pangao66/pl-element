@@ -43,7 +43,7 @@
   </div>
 </template>
 
-<style lang="stylus">
+<style lang="stylus" >
   .demo-block {
     border: solid 1px #ebebeb;
     border-radius: 3px;
