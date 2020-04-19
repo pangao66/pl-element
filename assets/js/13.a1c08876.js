@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[13],{504:function(e,t,n){"use strict";n.r(t);var a={name:"table-formatter"},r=n(21),l=Object(r.a)(a,(function(){var e=this.$createElement;return(this._self._c||e)("pe-table")}),[],!1,null,"3d079506",null);t.default=l.exports}}]);
