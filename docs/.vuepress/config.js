@@ -1,6 +1,29 @@
 module.exports = {
   base: '/p-element/',
   dest: './dist',
+  title: 'pElement',
+  description: 'elementUI组件封装',
+  locales: {
+    '/': {
+      lang: 'zh-CN',
+      title: 'pElement',
+      description: 'elementUI组件封装'
+    }
+  },
+  head: [
+    ['link', { rel: 'icon', href: '/favicon.ico' }],
+    // ['link', { rel: 'manifest', href: '/manifest.json' }],
+    ['meta', { name: 'theme-color', content: '#3eaf7c' }],
+    ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
+    [
+      'meta',
+      { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }
+    ],
+    ['link', { rel: 'apple-touch-icon', href: '/favicon.ico' }],
+    ['link', { rel: 'mask-icon', href: '/favicon.ico', color: '#3eaf7c' }],
+    ['meta', { name: 'msapplication-TileImage', content: '/favicon.ico' }],
+    ['meta', { name: 'msapplication-TileColor', content: '#000000' }]
+  ],
   themeConfig: {
     // 你的GitHub仓库，请正确填写
     repo: 'https://github.com/pangao66/p-element',
@@ -18,20 +41,12 @@ module.exports = {
     //   }
     // ]
     sidebar: [
-      // {
-      //   title: '入门',
-      //   collapsable: false,
-      //   children: [
-      //     '/install/',
-      //     '/get-started/'
-      //   ]
-      // },
       {
         title: '组件',
-        collapsable: false,
+        collapsable: true,
         children: [
-          '/components/table'
-          // '/components/button',
+          'components/table',
+          '/components/pe-page-table',
           // '/components/tabs',
           // '/components/input',
           // '/components/grid',
@@ -58,7 +73,20 @@ module.exports = {
   },
   // title: 'Hello VuePress',
   // description: 'Just playing around'
-  plugins: [],
+  lastUpdated: '上次更新',
+  plugins: [
+    '@vuepress/last-updated',
+    '@vuepress/back-to-top'
+    // [
+    //   '@vuepress/pwa',
+    //   {
+    //     updatePopup: {
+    //       message: '发现新内容可用',
+    //       buttonText: '刷新'
+    //     }
+    //   }
+    // ]
+  ],
   chainWebpack: (config, isServer) => {
     config.module
       .rule('js') // Find the rule.

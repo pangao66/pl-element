@@ -15,7 +15,6 @@
     </template>
   </pe-table>
 </template>
-
 <script>
 export default {
   name: 'table-template',

@@ -12,7 +12,7 @@
         :label="col.label"
         v-bind="col.attrs||{}"
         show-overflow-tooltip
-        :formatter="col.formatter?(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter):undefined"
+        :formatter="col.formatter?(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter,col):undefined"
     >
       <template v-slot:header="scope" v-if="col.headerSlot || col.tip">
         <template v-if="col.tip">
@@ -25,6 +25,10 @@
       </template>
       <template v-slot="scope" v-if="col.slot">
         <slot :name="col.slot" v-bind="{...scope}"></slot>
+      </template>
+      <template v-slot="scope" v-if="col.customerRender">
+                {{col.customerRender(scope)}}
+<!--        <VNodes :vnodes="col.customerRender(scope)"></VNodes>-->
       </template>
     </el-table-column>
   </el-table>
@@ -59,12 +63,13 @@ export default {
       defaultTableAttrs: {
         border: true,
         stripe: true,
-        'highlight-current-row': true
+        'highlight-current-row': true,
+        'span-method': this.arraySpanMethod
       }
     }
   },
   methods: {
-    formatCell (row, column, cellValue, index, formatter) {
+    formatCell (row, column, cellValue, index, formatter, col) {
       const type = typeof formatter
       if (type === 'function') {
         return formatter({ row, column, cellValue, index })
@@ -73,16 +78,18 @@ export default {
         switch (formatter) {
           case 'date':
             return formatDate(cellValue, 'yyyy-MM-dd')
-          case 'time':
+          case 'datetime':
             return formatDate(cellValue, 'yyyy-MM-dd HH:mm:ss')
+          case 'time':
+            return formatDate(cellValue, 'HH:mm:ss')
           case 'money': // 金额三位分割
             return cellValue.toLocaleString()
           case 'point2': // 保留两位小数
-            // return NP.round(cellValue, 2).toFixed(2)
+          // return NP.round(cellValue, 2).toFixed(2)
           case 'rmb': // 人民币分变成元
-            // return NP.round(NP.divide(cellValue, 100), 2)
+          // return NP.round(NP.divide(cellValue, 100), 2)
           case 'percent': // 小数转百分比
-            // return NP.round(NP.times(cellValue, 100), 2)
+          // return NP.round(NP.times(cellValue, 100), 2)
           default :
             return cellValue
         }
@@ -90,6 +97,9 @@ export default {
       if (type === 'object') {
         if (formatter.type && formatter.type === 'date') {
           return formatDate(cellValue, formatter.content)
+        }
+        if (formatter.type === 'dict') {
+          return formatter.dict[cellValue]
         }
       }
       return cellValue
@@ -111,16 +121,58 @@ export default {
       document.execCommand('Copy')
       input.remove()
       this.$message.success('复制成功：' + textToCopy)
+    },
+    arraySpanMethod ({ row, column, rowIndex, columnIndex }) {
+      const rowSpan = this.columns[columnIndex] && this.columns[columnIndex].rowSpan
+      if (rowSpan) {
+        if (rowSpan === 'all') {
+          if (rowIndex === 0) {
+            return [ this.data.length, 1 ]
+          } else {
+            return [ 0, 0 ]
+          }
+        } else if (rowSpan.length > 0) {
+          let spanArr = [ 1, 1 ]
+          rowSpan.forEach((span, index) => {
+            if (span.length > 0) {
+              const startRow = span[0]
+              const rows = span[1] - span[0] + 1
+              if (rowIndex === startRow) {
+                spanArr = [ rows, 1 ]
+              } else if (rowIndex > startRow && rowIndex <= span[1]) {
+                spanArr = [ 0, 0 ]
+              }
+            }
+          })
+          return spanArr
+        } else {
+          return [ 1, 1 ]
+        }
+      } else {
+        return [ 1, 1 ]
+      }
     }
   },
-  computed: {
-    tableColumns () {
-      return this.columns.filter((item) => !item.hidden)
+  computed: {},
+  components: {
+    VNodes: {
+      functional: true,
+      props: {
+        vnodes: {
+          type: Function,
+          default: () => {}
+        }
+      },
+      render: (h, ctx) => {
+        return ctx.props.vnodes
+      }
     }
   }
 }
 </script>
 
 <style>
-
+  .el-table .el-table__row td .cell:empty:before, .el-table .el-table__footer-wrapper td .cell:empty:before {
+    content: "-"
+  }
 </style>
