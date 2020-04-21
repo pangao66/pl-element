@@ -181,248 +181,248 @@ $gt-size-avatar-mobi := em(32px)
       &:hover
         background-color: lighten($gt-color-main, 20%)
         border-color: lighten($gt-color-main, 20%)
-&-loadmore
-// loadmore
+    &-loadmore
+      // loadmore
 
-/* error */
-.gt-error
-  text-align: center
-  margin: em(10px)
-  color: $gt-color-error
+  /* error */
+  .gt-error
+    text-align: center
+    margin: em(10px)
+    color: $gt-color-error
 
-/* initing */
-.gt-initing
-  padding: em(20px) 0
-  text-align: center
-  &-text
-    margin: em(10px) auto
-    font-size: 92%
+  /* initing */
+  .gt-initing
+    padding: em(20px) 0
+    text-align: center
+    &-text
+      margin: em(10px) auto
+      font-size: 92%
 
-/* no int */
-.gt-no-init
-  padding: em(20px) 0
-  text-align: center
+  /* no int */
+  .gt-no-init
+    padding: em(20px) 0
+    text-align: center
 
-/* link */
-.gt-link
-  border-bottom: 1px dotted $gt-color-main
-  &-counts, &-project
-    text-decoration: none
-
-/* meta */
-.gt-meta
-  margin: em(20px) 0
-  padding: em(16px) 0
-  position: relative
-  border-bottom: 1px solid $gt-color-hr
-  font-size: em(16px)
-  position: relative
-  z-index: 10
-  clearfix()
-
-.gt-counts
-  margin: 0 em(10px) 0 0
-
-.gt-user
-  float: right
-  margin: 0
-  font-size: 92%
-  &-pic
-    width: 16px
-    height: 16px
-    vertical-align: top
-    margin-right: em(8px)
-  &-inner
-    display: inline-block
-    cursor: pointer
-  .gt-ico
-    margin: 0 0 0 em(5px)
-    svg
-      fill: inherit
-  .is--poping
-    .gt-ico
-      svg
-        fill: $gt-color-main
-
-.gt-version
-  color: $gt-color-sub
-  margin-left: em(6px)
-
-.gt-copyright
-  margin: 0 em(15px) em(8px)
-  border-top: 1px solid $gt-color-hr
-  padding-top: em(8px)
-
-/* popup */
-.gt-popup
-  position: absolute
-  right: 0
-  top: em(38px)
-  background: $gt-color-popbg
-  display: inline-block
-  border: 1px solid $gt-color-hr
-  padding: em(10px) 0
-  font-size: em(14px)
-  letter-spacing: .5px
-  .gt-action
-    cursor: pointer
-    display: block
-    margin: em(8px) 0
-    padding: 0 em(18px)
-    position: relative
-    text-decoration: none
-    &.is--active
-      &:before
-        content: ''
-        width: em(4px)
-        height: em(4px)
-        background: $gt-color-main
-        position: absolute
-        left: em(8px)
-        top: em(7px)
-/* header */
-.gt-header
-  position: relative
-  display: flex
-  &-comment
-    flex: 1
-    margin-left: em(20px)
-    +mobile()
-      margin-left: em(14px)
-  &-textarea
-    padding: em(12px)
-    display: block
-    box-sizing: border-box
-    width: 100%
-    min-height: em(82px)
-    max-height: em(240px)
-    border-radius: $gt-size-border-radius
-    border: 1px solid $gt-color-input-border
-    font-size: em(14px)
-    word-wrap: break-word
-    resize: vertical
-    background-color: $gt-color-input-bg
-    outline: none
-    transition: all 0.25s ease
-    &:hover
-      background-color: lighten($gt-color-input-bg, 50%)
-  // box-shadow: 0 em(10px) em(60px) 0 $gt-color-input-bg
-  &-preview
-    padding: em(12px)
-    border-radius: $gt-size-border-radius
-    border: 1px solid $gt-color-input-border
-    background-color: $gt-color-input-bg
-  &-controls
-    position: relative
-    margin: em(12px) 0 0
-    clearfix()
-    +mobile()
-      margin: 0
-    &-tip
-      font-size: em(14px)
-      color: $gt-color-main
+  /* link */
+  .gt-link
+    border-bottom: 1px dotted $gt-color-main
+    &-counts, &-project
       text-decoration: none
-      vertical-align: sub
-      +mobile()
-        display: none
-    .gt-btn
-      float: right
+
+  /* meta */
+  .gt-meta
+    margin: em(20px) 0
+    padding: em(16px) 0
+    position: relative
+    border-bottom: 1px solid $gt-color-hr
+    font-size: em(16px)
+    position: relative
+    z-index: 9
+    clearfix()
+
+  .gt-counts
+    margin: 0 em(10px) 0 0
+
+  .gt-user
+    float: right
+    margin: 0
+    font-size: 92%
+    &-pic
+      width: 16px
+      height: 16px
+      vertical-align: top
+      margin-right: em(8px)
+    &-inner
+      display: inline-block
+      cursor: pointer
+    .gt-ico
+      margin: 0 0 0 em(5px)
+      svg
+        fill: inherit
+    .is--poping
+      .gt-ico
+        svg
+          fill: $gt-color-main
+
+  .gt-version
+    color: $gt-color-sub
+    margin-left: em(6px)
+
+  .gt-copyright
+    margin: 0 em(15px) em(8px)
+    border-top: 1px solid $gt-color-hr
+    padding-top: em(8px)
+
+  /* popup */
+  .gt-popup
+    position: absolute
+    right: 0
+    top: em(38px)
+    background: $gt-color-popbg
+    display: inline-block
+    border: 1px solid $gt-color-hr
+    padding: em(10px) 0
+    font-size: em(14px)
+    letter-spacing: .5px
+    .gt-action
+      cursor: pointer
+      display: block
+      margin: em(8px) 0
+      padding: 0 em(18px)
+      position: relative
+      text-decoration: none
+      &.is--active
+        &:before
+          content: ''
+          width: em(4px)
+          height: em(4px)
+          background: $gt-color-main
+          position: absolute
+          left: em(8px)
+          top: em(7px)
+  /* header */
+  .gt-header
+    position: relative
+    display: flex
+    &-comment
+      flex: 1
       margin-left: em(20px)
       +mobile()
-        float: none
-        width: 100%
-        margin: em(12px) 0 0
+        margin-left: em(14px)
+    &-textarea
+      padding: em(12px)
+      display: block
+      box-sizing: border-box
+      width: 100%
+      min-height: em(82px)
+      max-height: em(240px)
+      border-radius: $gt-size-border-radius
+      border: 1px solid $gt-color-input-border
+      font-size: em(14px)
+      word-wrap: break-word
+      resize: vertical
+      background-color: $gt-color-input-bg
+      outline: none
+      transition: all 0.25s ease
+      &:hover
+        background-color: lighten($gt-color-input-bg, 50%)
+        // box-shadow: 0 em(10px) em(60px) 0 $gt-color-input-bg
+    &-preview
+      padding: em(12px)
+      border-radius: $gt-size-border-radius
+      border: 1px solid $gt-color-input-border
+      background-color: $gt-color-input-bg
+    &-controls
+      position: relative
+      margin: em(12px) 0 0
+      clearfix()
+      +mobile()
+        margin: 0
+      &-tip
+        font-size: em(14px)
+        color: $gt-color-main
+        text-decoration: none
+        vertical-align: sub
+        +mobile()
+          display: none
+      .gt-btn
+        float: right
+        margin-left: em(20px)
+        +mobile()
+          float: none
+          width: 100%
+          margin: em(12px) 0 0
 
-&:after
-  content: ''
-  position: fixed
-  bottom: 100%
-  left: 0
-  right: 0
-  top: 0
-  opacity: 0
-&.gt-input-focused
-  position: relative
   &:after
     content: ''
     position: fixed
-    bottom: 0%
+    bottom: 100%
     left: 0
     right: 0
     top: 0
-    background: #000
-    opacity: 0.6
-    transition: opacity .3s, bottom 0s
-    z-index: $gt-mask-z-index
-  .gt-header-comment
-    z-index: $gt-mask-z-index + 1
-
-/* comments */
-.gt-comments
-  padding-top: em(20px)
-  &-null
-    text-align: center
-  &-controls
-    margin: em(20px) 0
-    text-align: center
-
-/* comment */
-.gt-comment
-  position: relative
-  padding: em(10px) 0
-  display: flex
-  &-content
-    flex: 1
-    margin-left: em(20px)
-    padding: em(12px) em(16px)
-    background-color: $gt-color-comment-bg
-    overflow: auto
-    transition: all ease 0.25s
-    &:hover
-      box-shadow: 0 em(10px) em(60px) 0 darken($gt-color-comment-bg, 2%)
-    +mobile()
-      margin-left: em(14px)
-      padding: em(10px) em(12px)
-  &-header
-    margin-bottom: em(8px)
-    font-size: em(14px)
+    opacity: 0
+  &.gt-input-focused
     position: relative
-  &-block-1
-    float: right
-    height: em(22px)
-    width: em(32px)
-  &-block-2
-    float: right
-    height: em(22px)
-    width: em(64px)
-  &-username
-    font-weight: 500
-    color: $gt-color-main
-    text-decoration: none
-    &:hover
-      text-decoration: underline
-  &-text
-    margin-left: em(8px)
-    color: $gt-color-sub
-  &-date
-    margin-left: em(8px)
-    color: $gt-color-sub
-  &-like, &-edit, &-reply
-    position: absolute
-    height: em(22px)
-    &:hover
-      cursor: pointer
-  &-like
-    top: 0
-    right: em(32px)
-  &-edit, &-reply
-    top: 0
-    right: 0
-  &-body
-    color: $gt-color-comment-txt !important
-  &-admin
+    &:after
+      content: ''
+      position: fixed
+      bottom: 0%
+      left: 0
+      right: 0
+      top: 0
+      background: #000
+      opacity: 0.6
+      transition: opacity .3s, bottom 0s
+      z-index: $gt-mask-z-index
+    .gt-header-comment
+      z-index: $gt-mask-z-index + 1
+
+  /* comments */
+  .gt-comments
+    padding-top: em(20px)
+    &-null
+      text-align: center
+    &-controls
+      margin: em(20px) 0
+      text-align: center
+
+  /* comment */
+  .gt-comment
+    position: relative
+    padding: em(10px) 0
+    display: flex
+    &-content
+      flex: 1
+      margin-left: em(20px)
+      padding: em(12px) em(16px)
+      background-color: $gt-color-comment-bg
+      overflow: auto
+      transition: all ease 0.25s
+      &:hover
+        box-shadow: 0 em(10px) em(60px) 0 darken($gt-color-comment-bg, 2%)
+      +mobile()
+        margin-left: em(14px)
+        padding: em(10px) em(12px)
+    &-header
+      margin-bottom: em(8px)
+      font-size: em(14px)
+      position: relative
+    &-block-1
+      float: right
+      height: em(22px)
+      width: em(32px)
+    &-block-2
+      float: right
+      height: em(22px)
+      width: em(64px)
+    &-username
+      font-weight: 500
+      color: $gt-color-main
+      text-decoration: none
+      &:hover
+        text-decoration: underline
+    &-text
+      margin-left: em(8px)
+      color: $gt-color-sub
+    &-date
+      margin-left: em(8px)
+      color: $gt-color-sub
+    &-like, &-edit, &-reply
+      position: absolute
+      height: em(22px)
+      &:hover
+        cursor: pointer
+    &-like
+      top: 0
+      right: em(32px)
+    &-edit, &-reply
+      top: 0
+      right: 0
+    &-body
+      color: $gt-color-comment-txt !important
+    &-admin
       .gt-comment-content
-         background-color: $gt-color-comment-adminbg
+        background-color: $gt-color-comment-adminbg
 
 @keyframes gt-kf-rotate
   0%

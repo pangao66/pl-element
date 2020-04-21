@@ -63,8 +63,7 @@ export default {
       defaultTableAttrs: {
         border: true,
         stripe: true,
-        'highlight-current-row': true,
-        'span-method': this.arraySpanMethod
+        'highlight-current-row': true
       }
     }
   },
@@ -121,36 +120,6 @@ export default {
       document.execCommand('Copy')
       input.remove()
       this.$message.success('复制成功：' + textToCopy)
-    },
-    arraySpanMethod ({ row, column, rowIndex, columnIndex }) {
-      const rowSpan = this.columns[columnIndex] && this.columns[columnIndex].rowSpan
-      if (rowSpan) {
-        if (rowSpan === 'all') {
-          if (rowIndex === 0) {
-            return [ this.data.length, 1 ]
-          } else {
-            return [ 0, 0 ]
-          }
-        } else if (rowSpan.length > 0) {
-          let spanArr = [ 1, 1 ]
-          rowSpan.forEach((span, index) => {
-            if (span.length > 0) {
-              const startRow = span[0]
-              const rows = span[1] - span[0] + 1
-              if (rowIndex === startRow) {
-                spanArr = [ rows, 1 ]
-              } else if (rowIndex > startRow && rowIndex <= span[1]) {
-                spanArr = [ 0, 0 ]
-              }
-            }
-          })
-          return spanArr
-        } else {
-          return [ 1, 1 ]
-        }
-      } else {
-        return [ 1, 1 ]
-      }
     }
   },
   computed: {},

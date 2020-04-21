@@ -1,6 +1,9 @@
 <template>
-  <pe-table :data="tableData" :columns="columns" @selection-change="handleSelectionChange">
-
+  <pe-table
+      :data="tableData"
+      :columns="columns"
+      @selection-change="handleSelectionChange"
+  >
   </pe-table>
 </template>
 

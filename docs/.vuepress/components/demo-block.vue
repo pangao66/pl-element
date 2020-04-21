@@ -169,7 +169,7 @@
     th,
     td,
     tr {
-      border: 0;
+      /*border: 0;*/
     }
   }
   .el-popper {
