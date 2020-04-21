@@ -11,18 +11,20 @@ module.exports = {
     }
   },
   head: [
-    ['link', { rel: 'icon', href: '/favicon.ico' }],
+    [ 'link', { rel: 'icon', href: '/favicon.ico' } ],
     // ['link', { rel: 'manifest', href: '/manifest.json' }],
-    ['meta', { name: 'theme-color', content: '#3eaf7c' }],
-    ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
+    [ 'meta', { name: 'theme-color', content: '#3eaf7c' } ],
+    [ 'meta', { name: 'apple-mobile-web-app-capable', content: 'yes' } ],
     [
       'meta',
       { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }
     ],
-    ['link', { rel: 'apple-touch-icon', href: '/favicon.ico' }],
-    ['link', { rel: 'mask-icon', href: '/favicon.ico', color: '#3eaf7c' }],
-    ['meta', { name: 'msapplication-TileImage', content: '/favicon.ico' }],
-    ['meta', { name: 'msapplication-TileColor', content: '#000000' }]
+    [ 'link', { rel: 'apple-touch-icon', href: '/favicon.ico' } ],
+    [ 'link', { rel: 'mask-icon', href: '/favicon.ico', color: '#3eaf7c' } ],
+    [ 'link', { rel: 'stylesheet', href: 'https://unpkg.com/element-ui/lib/theme-chalk/index.css' } ],
+    [ 'meta', { name: 'msapplication-TileImage', content: '/favicon.ico' } ],
+    [ 'meta', { name: 'msapplication-TileColor', content: '#000000' } ],
+    [ 'script', { src: 'https://unpkg.com/element-ui/lib/index.js' } ]
   ],
   themeConfig: {
     // 你的GitHub仓库，请正确填写
@@ -46,7 +48,7 @@ module.exports = {
         collapsable: true,
         children: [
           'components/table',
-          '/components/pe-page-table',
+          '/components/pe-page-table'
           // '/components/tabs',
           // '/components/input',
           // '/components/grid',
@@ -87,15 +89,24 @@ module.exports = {
     //   }
     // ]
   ],
-  chainWebpack: (config, isServer) => {
-    config.module
-      .rule('js') // Find the rule.
-      .use('babel-loader') // Find the loader
-      .tap(options => Object.assign(options, { // Modifying options
-        plugins: [
-          '@babel/plugin-proposal-nullish-coalescing-operator',
-          '@babel/plugin-proposal-optional-chaining'
-        ]
-      }))
+  chainWebpack: {
+    // config.module
+    //   .rule('js') // Find the rule.
+    //   .use('babel-loader') // Find the loader
+    //   .tap(options => Object.assign(options, { // Modifying options
+    //     plugins: [
+    //       '@babel/plugin-proposal-nullish-coalescing-operator',
+    //       '@babel/plugin-proposal-optional-chaining'
+    //     ]
+    //   }))
+    externals: {
+      // vue: 'Vue',
+      // vuex: 'Vuex',
+      // 'vue-router': 'VueRouter',
+      // 'swiper': 'Swiper',
+      // 'moment': 'moment'
+      // 'socket.io-client': 'io'
+      'element-ui': 'ELEMENT'
+    }
   }
 }
