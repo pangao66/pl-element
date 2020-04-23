@@ -7,7 +7,7 @@
   >
     <el-table-column
         v-for="(col,index) in columns"
-        :key="index"
+        :key="col.key||getRandomKey()"
         :prop="col.prop"
         :label="col.label"
         v-bind="col.attrs||{}"
@@ -37,6 +37,7 @@
 <script>
 import { formatDate } from 'element-ui/lib/utils/date-util'
 // import NP from 'number-precision'
+import { getRandomKey } from '../../utils'
 
 export default {
   name: 'pe-table',
@@ -120,6 +121,9 @@ export default {
       document.execCommand('Copy')
       input.remove()
       this.$message.success('复制成功：' + textToCopy)
+    },
+    getRandomKey () {
+      return getRandomKey()
     }
   },
   computed: {},

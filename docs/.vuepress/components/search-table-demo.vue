@@ -1,5 +1,11 @@
 <template>
-  <pe-search-table :data="tableData" :columns="columns"></pe-search-table>
+  <pe-search-table :data="tableData" :columns="columns">
+    <template #handle="{row}">
+      <div>
+        <el-button type="primary">buttonCont</el-button>
+      </div>
+    </template>
+  </pe-search-table>
 </template>
 
 <script>
@@ -17,7 +23,7 @@ export default {
   },
   methods: {
     getTableData () {
-      axios.get('https://proapi.azurewebsites.net//api/rule?current=1&pageSize=50').then((res) => {
+      axios.get('https://proapi.azurewebsites.net/api/rule?current=1&pageSize=50').then((res) => {
         res = res.data
         this.tableData = res.data
       })
@@ -31,7 +37,8 @@ export default {
         { label: '描述', prop: 'desc' },
         { label: '调用服务次数', prop: 'callNo' },
         { label: '状态', prop: 'status' },
-        { label: '上次调度时间', prop: 'updatedAt' }
+        { label: '上次调度时间', prop: 'updatedAt' },
+        { label: '操作', slot: 'handle' }
       ]
     }
   }

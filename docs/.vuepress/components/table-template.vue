@@ -3,6 +3,7 @@
     <template #date="{row}">
       <i class="el-icon-time"></i>
       <span style="margin-left: 10px">{{row.date}}</span>
+      <el-button type="primary">buttonCont</el-button>
     </template>
     <template #name="{row}">
       <el-popover trigger="hover" placement="top">

@@ -21,12 +21,12 @@ module.exports = {
     ],
     [ 'link', { rel: 'apple-touch-icon', href: '/favicon.ico' } ],
     [ 'link', { rel: 'mask-icon', href: '/favicon.ico', color: '#3eaf7c' } ],
-    [ 'link', { rel: 'stylesheet', href: 'https://unpkg.com/element-ui/lib/theme-chalk/index.css' } ],
+    // [ 'link', { rel: 'stylesheet', href: 'https://unpkg.com/element-ui/lib/theme-chalk/index.css' } ],
     [ 'meta', { name: 'msapplication-TileImage', content: '/favicon.ico' } ],
     [ 'meta', { name: 'msapplication-TileColor', content: '#000000' } ],
-    [ 'script', { src: 'https://unpkg.com/element-ui/lib/index.js' } ],
     // [ 'script', { src: 'https://shadow.elemecdn.com/npm/vue@2.5.21/dist/vue.runtime.min.js' } ],
-    // [ 'script', { src: 'https://shadow.elemecdn.com/npm/vue-router@3.0.1/dist/vue-router.min.js' } ]
+    // [ 'script', { src: 'https://shadow.elemecdn.com/npm/vue-router@3.0.1/dist/vue-router.min.js' } ],
+    // [ 'script', { src: 'https://unpkg.com/element-ui/lib/index.js' } ]
   ],
   themeConfig: {
     // 你的GitHub仓库，请正确填写
@@ -91,16 +91,7 @@ module.exports = {
     //   }
     // ]
   ],
-  chainWebpack: {
-    // config.module
-    //   .rule('js') // Find the rule.
-    //   .use('babel-loader') // Find the loader
-    //   .tap(options => Object.assign(options, { // Modifying options
-    //     plugins: [
-    //       '@babel/plugin-proposal-nullish-coalescing-operator',
-    //       '@babel/plugin-proposal-optional-chaining'
-    //     ]
-    //   }))
+  configureWebpack: {
     externals: {
       // vue: 'Vue',
       // vuex: 'Vuex',
@@ -108,7 +99,8 @@ module.exports = {
       // 'swiper': 'Swiper',
       // 'moment': 'moment'
       // 'socket.io-client': 'io'
-      'element-ui': 'ELEMENT',
+      // 'vue':'Vue',
+      // 'element-ui': 'ELEMENT'
       // 'mock': 'Mock'
     }
   }
