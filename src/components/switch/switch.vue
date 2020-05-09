@@ -7,6 +7,10 @@
 <script>
 export default {
   name: 'pl-switch',
+  model: {
+    prop: 'value',
+    event: 'change'
+  },
   props: {
     label: {
       type: String,
@@ -32,7 +36,7 @@ export default {
   },
   data () {
     return {
-      switchValue: true
+      switchValue: ''
     }
   },
   methods: {
@@ -59,7 +63,7 @@ export default {
     value: {
       immediate: true,
       handler (val) {
-        this.switchValue = !!val
+        this.switchValue = val
       }
     }
   }

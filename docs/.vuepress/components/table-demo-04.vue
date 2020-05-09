@@ -80,7 +80,7 @@ export default {
         { label: '名称', prop: 'name', rowSpan: 'all' },
         {
           label: '地址',
-          customerRender: ({ row, index }) => {
+          customerRenderText: ({ row, index }) => {
             const { province, city, address } = row
             return province + city + address
           }

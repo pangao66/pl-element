@@ -23,12 +23,12 @@
         </template>
         <slot :name="col.headerSlot" v-bind="scope" v-if="col.headerSlot"></slot>
       </template>
-      <template v-slot="scope" v-if="col.slot||col.customerRender">
-        <slot :name="col.slot" v-bind="{...scope}" v-if="col.slot"></slot>
-        <template v-if="col.customerRender">
-          {{col.customerRender(scope)}}
+      <template v-slot="scope" v-if="col.slot||col.customerRender||col.customerRenderText">
+        <slot :name="col.slot" v-bind="scope" v-if="col.slot"></slot>
+        <template v-if="col.customerRenderText">
+          {{col.customerRenderText(scope)}}
         </template>
-        <!--        <VNodes :vnodes="col.customerRender(scope)"></VNodes>-->
+        <VNodes v-if="col.customerRender" :vnodes="col.customerRender(scope)"></VNodes>
       </template>
     </el-table-column>
   </el-table>
