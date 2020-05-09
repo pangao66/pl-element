@@ -40,7 +40,7 @@ import { formatDate } from 'element-ui/lib/utils/date-util'
 import { getRandomKey } from '../../utils'
 
 export default {
-  name: 'pe-table',
+  name: 'pl-table',
   props: {
     columns: {
       required: true,

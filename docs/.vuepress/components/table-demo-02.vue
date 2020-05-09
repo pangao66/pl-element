@@ -1,9 +1,8 @@
 <template>
-  <pe-table :data="tableData" :columns="columns">
+  <pl-table :data="tableData" :columns="columns">
     <template #date="{row}">
       <i class="el-icon-time"></i>
       <span style="margin-left: 10px">{{row.date}}</span>
-      <el-button type="primary">buttonCont</el-button>
     </template>
     <template #name="{row}">
       <el-popover trigger="hover" placement="top">
@@ -14,11 +13,11 @@
         </div>
       </el-popover>
     </template>
-  </pe-table>
+  </pl-table>
 </template>
 <script>
 export default {
-  name: 'table-template',
+  name: 'table-demo-02',
   data () {
     return {
       tableData: [
@@ -41,6 +40,3 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>

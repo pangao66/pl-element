@@ -17,24 +17,24 @@ sidebarDepth: 2
 基础的表格展示用法。
 
 <demo-block>
-<base-table slot="source"></base-table>
-`pe-table`基于`el-table`,`data`属性保持不变, 新增`columns`属性以替换重复的`el-table-column`,columns的每一项属性有两个必要值`label`和`prop`与`el-table-column`的`label`和`value`保持一致.而`el-table-column`的所有属性均可有`columns`的每一项中的`attrs`属性继承,如上例中`attrs`中的`width`属性。
+<table-demo-01 slot="source"></table-demo-01>
+`pl-table`基于`el-table`,`data`属性保持不变, 新增`columns`属性以替换重复的`el-table-column`,columns的每一项属性有两个必要值`label`和`prop`与`el-table-column`的`label`和`value`保持一致.而`el-table-column`的所有属性均可有`columns`的每一项中的`attrs`属性继承,如上例中`attrs`中的`width`属性。
 
-<<< docs/.vuepress/components/base-table.vue
+<<< docs/.vuepress/components/table-demo-01.vue
 </demo-block>
 
 ## 自定义列模板
 自定义列的显示内容，可组合其他组件使用。
 
 <demo-block>
-<table-template slot="source"></table-template>
+<table-demo-02 slot="source"></table-demo-02>
 如简单的`prop`不能满足渲染表格,可设置`columns`该列的`slot`属性,`slot`为一个字符串,然后就可以在模板中写相关的自定义内容,写法与`el-table`的写法类似,本例采用了`vue2.6`的`v-slot`插槽语法。
 
-<<< docs/.vuepress/components/table-template.vue
+<<< docs/.vuepress/components/table-demo-02.vue
 </demo-block>
 
 ## 格式化内容
-`pe-table`组件内置一些常用的格式化工具,增强了`el-table`自带的`formatter`功能,只需给`columns`该项传递`formatter`属性即可
+`pl-table`组件内置一些常用的格式化工具,增强了`el-table`自带的`formatter`功能,只需给`columns`该项传递`formatter`属性即可
 ::: tip
 - 空数据单元格显示'-' 短横杠
 - `formatter`属性可以传递一个函数,这时与`el-table-column`的`formatter`基本一致,只是返回值多个参数形式变成了对象解构形式
@@ -43,17 +43,18 @@ sidebarDepth: 2
 - 单元格没有内容默认展示`-` 短横杠
 :::
 <demo-block>
-<table-formatter slot="source"></table-formatter>
+<table-demo-03 slot="source"></table-demo-03>
 
-<<< docs/.vuepress/components/table-formatter.vue
+<<< docs/.vuepress/components/table-demo-03.vue
 </demo-block>
 
 ## 综合演示
 
 <demo-block>
-<table-complex-demo slot="source"></table-complex-demo>
-<<< docs/.vuepress/components/table-complex-demo.vue
-</demo-block>
+<table-demo-04 slot="source"></table-demo-04>
 
+<<< docs/.vuepress/components/table-demo-04.vue
+
+</demo-block>
 
 

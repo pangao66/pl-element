@@ -1,15 +1,15 @@
 <template>
   <div>
-    <pe-table
+    <pl-table
         :data="tableData"
         :columns="columns"
     >
-    </pe-table>
+    </pl-table>
   </div>
 </template>
 <script>
 export default {
-  name: 'base-table',
+  name: 'table-demo-01',
   data () {
     return {
       tableData: [

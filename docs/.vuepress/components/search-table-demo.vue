@@ -1,11 +1,11 @@
 <template>
-  <pe-search-table :data="tableData" :columns="columns">
+  <p-search-table :data="tableData" :columns="columns">
     <template #handle="{row}">
       <div>
         <el-button type="primary">buttonCont</el-button>
       </div>
     </template>
-  </pe-search-table>
+  </p-search-table>
 </template>
 
 <script>

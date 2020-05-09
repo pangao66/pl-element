@@ -21,9 +21,9 @@ module.exports = {
     ],
     [ 'link', { rel: 'apple-touch-icon', href: '/favicon.ico' } ],
     [ 'link', { rel: 'mask-icon', href: '/favicon.ico', color: '#3eaf7c' } ],
-    // [ 'link', { rel: 'stylesheet', href: 'https://unpkg.com/element-ui/lib/theme-chalk/index.css' } ],
+    [ 'link', { rel: 'stylesheet', href: 'https://unpkg.com/element-ui/lib/theme-chalk/index.css' } ],
     [ 'meta', { name: 'msapplication-TileImage', content: '/favicon.ico' } ],
-    [ 'meta', { name: 'msapplication-TileColor', content: '#000000' } ],
+    [ 'meta', { name: 'msapplication-TileColor', content: '#000000' } ]
     // [ 'script', { src: 'https://shadow.elemecdn.com/npm/vue@2.5.21/dist/vue.runtime.min.js' } ],
     // [ 'script', { src: 'https://shadow.elemecdn.com/npm/vue-router@3.0.1/dist/vue-router.min.js' } ],
     // [ 'script', { src: 'https://unpkg.com/element-ui/lib/index.js' } ]
@@ -49,8 +49,14 @@ module.exports = {
         title: '组件',
         collapsable: true,
         children: [
+          'components/button',
+          '/components/input',
+          '/components/select',
+          '/components/radio',
+          '/components/checkbox',
+          '/components/form',
           'components/table',
-          '/components/pe-page-table'
+          '/components/pe-page-table',
           // '/components/tabs',
           // '/components/input',
           // '/components/grid',
@@ -79,8 +85,8 @@ module.exports = {
   // description: 'Just playing around'
   lastUpdated: '上次更新',
   plugins: [
-    '@vuepress/last-updated',
-    '@vuepress/back-to-top'
+    '@vuepress/last-updated'
+    // '@vuepress/back-to-top'
     // [
     //   '@vuepress/pwa',
     //   {

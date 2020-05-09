@@ -4,8 +4,8 @@ import Element from 'element-ui'
 import PElement from '../../index'
 import DemoBlock from './components/demo-block'
 // import 'element-ui/lib/theme-chalk/index.css'
-// import './mock'
-// import Mock from './mock/base-table'
+import './mock'
+import Mock from './mock/base-table'
 // import VueECharts from 'vue-echarts' //注册图表
 export default (
     {
@@ -21,11 +21,11 @@ export default (
   // Vue.use(VueHighlightJS)
   Vue.use(PElement)
   Vue.mixin({
-    // mounted() {
-    //   Mock.setup({
-    //     timeout: '800-1300'
-    //   })
-    // }
+    mounted() {
+      Mock.setup({
+        timeout: '800-1300'
+      })
+    }
   })
   Vue.component('demo-block', DemoBlock)
 }

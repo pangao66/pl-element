@@ -1,15 +1,15 @@
 <template>
-  <pe-table
+  <pl-table
       :data="tableData"
       :columns="columns"
       @selection-change="handleSelectionChange"
   >
-  </pe-table>
+  </pl-table>
 </template>
 
 <script>
 export default {
-  name: 'table-complex-demo',
+  name: 'table-demo-04',
   data () {
     return {
       tableData: [
@@ -90,7 +90,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

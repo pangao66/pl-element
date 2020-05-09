@@ -1,5 +1,5 @@
-import PeTable from './table.vue'
+import PlTable from './table.vue'
 
-PeTable.install = Vue => Vue.component(PeTable.name, PeTable)
+PlTable.install = Vue => Vue.component(PlTable.name, PlTable)
 
-export default PeTable
+export default PlTable

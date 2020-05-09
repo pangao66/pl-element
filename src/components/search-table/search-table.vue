@@ -24,10 +24,16 @@
           <el-icon class="el-icon-setting" slot="reference"></el-icon>
         </el-popover>
       </div>
-      <pe-table :data="data" :columns="tableColumns">
-        <slot></slot>
-      </pe-table>
-      <!--      <el-pagination></el-pagination>-->
+      <pl-table :data="data" :columns="tableColumns">
+        <template v-for="item in columnSlots" v-slot:[item]="scope">
+          <slot :name="item" v-bind="{...scope}"></slot>
+        </template>
+      </pl-table>
+      <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          v-bind="{...defaultPageConfig,...pageConfig}"
+      ></el-pagination>
     </div>
   </div>
 </template>
@@ -63,7 +69,14 @@ export default {
       columnsCopy: [],
       isIndeterminate: true,
       checkAll: true,
-      columnsShowList: []
+      columnsShowList: [],
+      defaultPageConfig: {
+        layout: 'total, sizes, prev, pager, next, jumper',
+        pageSizes: [ 10, 20, 50, 100 ],
+        background: true
+      },
+      pageSize: 10,
+      currentPage: 1
     }
   },
   mounted () {
@@ -99,6 +112,15 @@ export default {
         list.push(Math.ceil(Math.random() * 10000))
       }
       return list.join('-')
+    },
+    handleCurrentChange (val) {
+      this.currentPage = val
+      // this.getTableData()
+    },
+    handleSizeChange (val) {
+      this.pageSize = val
+      this.currentPage = 1
+      // this.getTableData()
     }
   },
   computed: {
@@ -106,6 +128,9 @@ export default {
       return this.columnsCopy.map((item) => {
         return item
       }).filter((item) => this.columnsShowList.includes(item.label))
+    },
+    columnSlots () {
+      return this.columns.filter((c) => c.slot).map((c) => c.slot)
     }
   },
   watch: {
@@ -121,9 +146,10 @@ export default {
 </script>
 
 <style lang="stylus">
-  .search-table-column-config-item  {
-    .anticon{
-      &:last-child{
+  .search-table-column-config-item {
+    .anticon {
+      font-size: 12px
+      &:last-child {
         margin-left: 8px
       }
     }

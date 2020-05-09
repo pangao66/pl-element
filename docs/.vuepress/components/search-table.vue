@@ -1,12 +1,12 @@
 <template>
-  <pf-table
+  <pl-table
       :columns="columns"
       :data="tableData"
       :total="total"
       :form-items="formItems"
       @get-table-data="getTableData"
   >
-  </pf-table>
+  </pl-table>
 </template>
 
 <script>

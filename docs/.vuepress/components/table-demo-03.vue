@@ -1,6 +1,6 @@
 <template>
-  <pe-table :data="tableData" :columns="columns">
-  </pe-table>
+  <pl-table :data="tableData" :columns="columns">
+  </pl-table>
 </template>
 
 <script>
@@ -15,7 +15,7 @@ const jobDict = {
   product: '产品'
 }
 export default {
-  name: 'table-formatter',
+  name: 'table-demo-03',
   data () {
     return {
       tableData: [
@@ -48,7 +48,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
