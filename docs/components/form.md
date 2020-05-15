@@ -26,7 +26,9 @@ sidebarDepth: 2
 
 </demo-block>
 
-## 响应式表格
+## 响应式
+
+主要用于查询表格
 
 <demo-block>
 

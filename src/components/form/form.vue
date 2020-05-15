@@ -1,7 +1,7 @@
 <template>
   <el-form :model="form" v-bind="$attrs" ref="plForm" :class="{advance:advanced,'search':isSearchForm}">
     <template v-if="isSearchForm">
-      <el-row>
+      <el-row :gutter="10">
         <template v-for="(item,index) in formItems">
           <el-col :xl="6" :lg="8" :md="12" :sm="12" class="el-col-xll-6">
             <component
