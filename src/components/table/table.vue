@@ -1,37 +1,45 @@
 <template>
-  <el-table
-      :data="data"
-      v-on="$listeners"
-      v-bind="{...defaultTableAttrs,...tableConfig}"
-      @cell-dblclick="copy"
-  >
-    <el-table-column
-        v-for="(col,index) in columns"
-        :key="col.key||getRandomKey()"
-        :prop="col.prop"
-        :label="col.label"
-        v-bind="col.attrs||{}"
-        show-overflow-tooltip
-        :formatter="col.formatter?(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter,col):undefined"
+  <div>
+    <el-table
+        :data="data"
+        v-on="$listeners"
+        v-bind="{...defaultTableAttrs,...tableConfig}"
+        @cell-dblclick="copy"
     >
-      <template v-slot:header="scope" v-if="col.headerSlot || col.tip">
-        <template v-if="col.tip">
-          {{col.label}}
-          <el-tooltip class="item" effect="dark" :content="col.tip" placement="top">
-            <i class="el-icon-question"></i>
-          </el-tooltip>
+      <el-table-column
+          v-for="(col,index) in columns"
+          :key="col.key||getRandomKey()"
+          :prop="col.prop"
+          :label="col.label"
+          v-bind="col.attrs||{}"
+          show-overflow-tooltip
+          :formatter="col.formatter?(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter,col):undefined"
+      >
+        <template v-slot:header="scope" v-if="col.headerSlot || col.tip">
+          <template v-if="col.tip">
+            {{col.label}}
+            <el-tooltip class="item" effect="dark" :content="col.tip" placement="top">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+          </template>
+          <slot :name="col.headerSlot" v-bind="scope" v-if="col.headerSlot"></slot>
         </template>
-        <slot :name="col.headerSlot" v-bind="scope" v-if="col.headerSlot"></slot>
-      </template>
-      <template v-slot="scope" v-if="col.slot||col.customerRender||col.customerRenderText">
-        <slot :name="col.slot" v-bind="scope" v-if="col.slot"></slot>
-        <template v-if="col.customerRenderText">
-          {{col.customerRenderText(scope)}}
+        <template v-slot="scope" v-if="col.slot||col.customerRender||col.customerRenderText">
+          <slot :name="col.slot" v-bind="scope" v-if="col.slot"></slot>
+          <template v-if="col.customerRenderText">
+            {{col.customerRenderText(scope)}}
+          </template>
+          <VNodes v-if="col.customerRender" :vnodes="col.customerRender(scope)"></VNodes>
         </template>
-        <VNodes v-if="col.customerRender" :vnodes="col.customerRender(scope)"></VNodes>
-      </template>
-    </el-table-column>
-  </el-table>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+        v-if="showPager"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        v-bind="{...defaultPageConfig,...pageConfig}"
+    ></el-pagination>
+  </div>
 </template>
 
 <script>
@@ -47,8 +55,8 @@ export default {
       default: () => []
     },
     data: {
-      required: true,
-      default: () => []
+      // required: true,
+      // default: () => []
     },
     dbClickCopy: {
       type: Boolean,
@@ -57,6 +65,14 @@ export default {
     tableConfig: {
       type: Object,
       default: () => ({})
+    },
+    pageConfig: {
+      type: Object,
+      default: () => ({})
+    },
+    showPager: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -65,7 +81,15 @@ export default {
         border: true,
         stripe: true,
         'highlight-current-row': true
-      }
+      },
+      defaultPageConfig: {
+        layout: 'total, sizes, prev, pager, next, jumper',
+        pageSizes: [ 10, 20, 50, 100 ],
+        background: true
+      },
+      pageSize: 10,
+      currentPage: 1,
+      tableData: []
     }
   },
   methods: {
@@ -124,9 +148,20 @@ export default {
     },
     getRandomKey () {
       return getRandomKey()
+    },
+    handleCurrentChange (val) {
+      this.currentPage = val
+      // this.getTableData()
+    },
+    handleSizeChange (val) {
+      this.pageSize = val
+      this.currentPage = 1
+      // this.getTableData()
     }
   },
-  computed: {},
+  computed: {
+
+  },
   components: {
     VNodes: {
       functional: true,

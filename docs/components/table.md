@@ -58,3 +58,11 @@ sidebarDepth: 2
 </demo-block>
 
 
+## 分页异步数据
+
+<demo-block>
+<table-demo-05 slot="source"></table-demo-05>
+
+<<< docs/.vuepress/components/table-demo-05.vue
+
+</demo-block>

@@ -25,3 +25,13 @@ sidebarDepth: 2
 <<< docs/.vuepress/components/form-demo-02.vue
 
 </demo-block>
+
+## 响应式表格
+
+<demo-block>
+
+<form-demo-03 slot="source"></form-demo-03>
+
+<<< docs/.vuepress/components/form-demo-03.vue
+
+</demo-block>

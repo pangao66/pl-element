@@ -55,8 +55,7 @@ export default {
               span: 16, comp: 'pl-input', label: '说明', prop: 'desc', type: 'textarea',
               maxlength: 300,
               'show-word-limit': true,
-              required: true,
-              autosize: { minRows: 2, maxRows: 4 }
+              required: true
             }
           ]
         }

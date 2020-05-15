@@ -3,6 +3,7 @@
       :data="tableData"
       :columns="columns"
       @selection-change="handleSelectionChange"
+      show-pager
   >
   </pl-table>
 </template>
