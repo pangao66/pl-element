@@ -1,6 +1,11 @@
 <template>
-  <pl-table :columns="[]">
-
+  <pl-table
+      :columns="columns"
+      :fetch="getTableData"
+      :auto-load="true"
+      @get-table-data="getTableData"
+      show-pager
+  >
   </pl-table>
 </template>
 
@@ -13,12 +18,17 @@ export default {
     this.getTableData({}, () => {})
   },
   methods: {
-    async getTableData ({}, done) {
-      let res = await axios.post('/base-table')
+    async getTableData ({ currentPage, pageSize }, done) {
+      let res = await axios.post('/page-table', {
+        currentPage, pageSize
+      })
+      console.log(res)
       if (res.status === 200) {
         res = res.data
+        console.log(res)
         done({
-          data: res.data
+          data: res.list,
+          total: res.total
         })
       }
       // done()
@@ -27,6 +37,7 @@ export default {
   computed: {
     columns () {
       return [
+        { prop: 'index', label: '序号', type: 'index' },
         { prop: 'id', label: 'id' },
         { prop: 'name', label: '姓名', attrs: { width: 60 } },
         { prop: 'address', label: '地址', attrs: { minWidth: 140 } },

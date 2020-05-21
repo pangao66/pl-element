@@ -39,7 +39,10 @@ sidebarDepth: 2
 ## textarea
 
 与`el-input`渲染textarea一致,添加`type`属性即可
+
 <demo-block>
 <input-demo-04 slot="source"></input-demo-04>
+
 <<< docs/.vuepress/components/input-demo-04.vue
+
 </demo-block>

@@ -31,8 +31,8 @@ export default {
   computed: {
     columns () {
       return [
-        { label: '日期', attrs: { width: 180 }, slot: 'date' },
-        { label: '姓名', attrs: { width: 180 }, slot: 'name' },
+        { label: '日期', attrs: { width: 180 }, slotName: 'date' },
+        { label: '姓名', attrs: { width: 180 }, slotName: 'name' },
         { label: '地址', prop: 'address' }
       ]
     }

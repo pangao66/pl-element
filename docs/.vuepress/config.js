@@ -56,7 +56,8 @@ module.exports = {
           '/components/checkbox',
           '/components/form',
           'components/table',
-          '/components/pe-page-table',
+          'components/search-list'
+          // '/components/pe-page-table',
           // '/components/tabs',
           // '/components/input',
           // '/components/grid',
@@ -109,5 +110,6 @@ module.exports = {
       // 'element-ui': 'ELEMENT'
       // 'mock': 'Mock'
     }
-  }
+  },
+  // evergreen: true
 }

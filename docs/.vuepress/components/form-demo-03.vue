@@ -7,7 +7,6 @@
         @submit="submit"
         class="form-demo-03"
         ref="form"
-        :rules="rules"
         :is-search-form="true"
     >
       <template v-slot:date="{form,item}">
@@ -75,14 +74,6 @@ export default {
         { label: '广州', value: 'guangzhou' },
         { label: '深圳', value: 'shenzhen' }
       ]
-    },
-    rules () {
-      return {
-        name: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-        ]
-      }
     }
   }
 }

@@ -13,6 +13,7 @@ import PlDate from './src/components/date'
 import PlButton from './src/components/button'
 import PlSwitch from './src/components/switch'
 import PlForm from './src/components/form'
+import PlSearchList from './src/components/search-list'
 
 const PElement = {
   install: function (Vue) {
@@ -31,6 +32,7 @@ const PElement = {
     Vue.component('pl-switch', PlSwitch)
     Vue.component('pl-form', PlForm)
     Vue.component('pl-button', PlButton)
+    Vue.component('pl-search-list', PlSearchList)
   }
 }
 export default PElement

@@ -1,17 +1,17 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <el-table
-        :data="data"
+        :data="data||tableData"
         v-on="$listeners"
         v-bind="{...defaultTableAttrs,...tableConfig}"
         @cell-dblclick="copy"
     >
       <el-table-column
           v-for="(col,index) in columns"
-          :key="col.key||getRandomKey()"
+          v-bind="col"
+          :key="getRandomKey(col)"
           :prop="col.prop"
           :label="col.label"
-          v-bind="col.attrs||{}"
           show-overflow-tooltip
           :formatter="col.formatter?(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter,col):undefined"
       >
@@ -24,12 +24,15 @@
           </template>
           <slot :name="col.headerSlot" v-bind="scope" v-if="col.headerSlot"></slot>
         </template>
-        <template v-slot="scope" v-if="col.slot||col.customerRender||col.customerRenderText">
-          <slot :name="col.slot" v-bind="scope" v-if="col.slot"></slot>
+        <template v-slot="scope" v-if="col.slotName||col.customerRender||col.customerRenderText">
+          <slot :name="col.slotName" v-bind="scope" v-if="col.slotName"></slot>
           <template v-if="col.customerRenderText">
             {{col.customerRenderText(scope)}}
           </template>
           <VNodes v-if="col.customerRender" :vnodes="col.customerRender(scope)"></VNodes>
+        </template>
+        <template v-slot="{$index}" v-if="col.type==='index'">
+          {{(currentPage-1)*pageSize+$index+1}}
         </template>
       </el-table-column>
     </el-table>
@@ -37,6 +40,7 @@
         v-if="showPager"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
+        :total="total"
         v-bind="{...defaultPageConfig,...pageConfig}"
     ></el-pagination>
   </div>
@@ -47,6 +51,7 @@ import { formatDate } from 'element-ui/lib/utils/date-util'
 // import NP from 'number-precision'
 import { getRandomKey } from '../../utils'
 
+const Item2UIDMap = new WeakMap()
 export default {
   name: 'pl-table',
   props: {
@@ -73,6 +78,14 @@ export default {
     showPager: {
       type: Boolean,
       default: false
+    },
+    fetch: {
+      type: Function,
+      default: null
+    },
+    autoLoad: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -89,7 +102,14 @@ export default {
       },
       pageSize: 10,
       currentPage: 1,
-      tableData: []
+      total: 10,
+      tableData: [],
+      loading: false
+    }
+  },
+  created () {
+    if (this.autoLoad) {
+      this.getTableData()
     }
   },
   methods: {
@@ -146,22 +166,36 @@ export default {
       input.remove()
       this.$message.success('复制成功：' + textToCopy)
     },
-    getRandomKey () {
-      return getRandomKey()
+    getRandomKey (item) {
+      const persistedUID = Item2UIDMap.get(item)
+      if (!persistedUID) {
+        Item2UIDMap.set(item, getRandomKey())
+        return getRandomKey()
+      }
+      return persistedUID
     },
     handleCurrentChange (val) {
       this.currentPage = val
-      // this.getTableData()
+      this.getTableData()
     },
     handleSizeChange (val) {
       this.pageSize = val
       this.currentPage = 1
-      // this.getTableData()
+      this.getTableData()
+    },
+    getTableData () {
+      this.loading = true
+      this.$emit('get-table-data', {
+        pageSize: this.pageSize,
+        currentPage: this.currentPage
+      }, ({ data, total }) => {
+        this.tableData = data
+        this.total = total
+        this.loading = false
+      })
     }
   },
-  computed: {
-
-  },
+  computed: {},
   components: {
     VNodes: {
       functional: true,

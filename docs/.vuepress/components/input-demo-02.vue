@@ -4,7 +4,7 @@
     <pl-input label="手机号" prop="mobile" v-model="form.mobile" required validation="tel"></pl-input>
     <pl-input type="password" v-model="form.pass" label="密码" prop="pass" autocomplete="off"></pl-input>
     <pl-input type="password" v-model="form.checkPass" label="确认密码" prop="checkPass" autocomplete="off"></pl-input>
-    <p-input v-model.number="form.age" label="年龄" prop="age" :rules="ageRule"></p-input>
+    <pl-input v-model.number="form.age" label="年龄" prop="age" :rules="ageRule"></pl-input>
   </el-form>
 </template>
 <script>

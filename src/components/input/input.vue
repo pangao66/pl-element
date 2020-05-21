@@ -56,6 +56,9 @@ export default {
     cent: {
       type: Boolean,
       default: false
+    },
+    transfer: {
+      type: Function
     }
     // attrs: {
     //   type: Object,
@@ -75,13 +78,10 @@ export default {
       return Number.isNaN(parseFloat(num))
     },
     handleChange (val) {
-      let message = this.message
-      if (this.cent && !this.isNaN(this.message)) {
-        message = NP.round(NP.times(this.message, 100), 0)
-        this.message = NP.round(this.message, 2)
-      }
-      this.$emit('input', message)
-      this.$emit('change', this.message)
+      this.$emit('input', this.calValue)
+      this.$nextTick(() => {
+        this.$emit('change', this.message)
+      })
     },
     handleInput (val) {
       if (!this.cent) {
@@ -90,12 +90,10 @@ export default {
     },
     init () {
       if (this.cent) {
-        if (this.value !== undefined && this.value != null) {
-          this.message = NP.divide(this.value, 100) || 0
-          return
-        }
+        this.calValue = NP.divide(this.value, 100) || 0
+      } else {
+        this.message = this.value
       }
-      this.message = this.value
     }
   },
   computed: {
@@ -131,6 +129,18 @@ export default {
       }
       rules = rules.filter(v => v)
       return rules.length ? rules : undefined
+    },
+    calValue: {
+      set (val) {
+        this.message = val.toFixed(2)
+        console.log(this.message)
+      },
+      get () {
+        if (this.cent) {
+          return NP.round(NP.times(this.message, 100), 0)
+        }
+        return this.message
+      }
     }
   },
   watch: {

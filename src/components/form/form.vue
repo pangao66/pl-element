@@ -3,20 +3,20 @@
     <template v-if="isSearchForm">
       <el-row :gutter="10">
         <template v-for="(item,index) in formItems">
-          <el-col :xl="6" :lg="8" :md="12" :sm="12" class="el-col-xll-6">
+          <el-col :xl="5" :lg="8" :md="12" :sm="12" class="el-col-xll-6">
             <component
                 :is="item.comp"
                 v-bind="item"
                 v-model="form[item.prop]"
-                :key="index"
+                :key="getRandomKey(item)"
                 :ref="item.prop"
             >
             </component>
             <slot :name="item.slot" v-bind="{form,item}"></slot>
           </el-col>
         </template>
-        <el-form-item style="margin-left: auto;margin-right: 0;width: 250px;" label-width="0">
-          <el-button type="primary" @click="submitForm">提交</el-button>
+        <el-form-item style="float:right;width: 250px;" label-width="0">
+          <el-button type="primary" @click="submitForm">查询</el-button>
           <el-button @click="resetForm">重置</el-button>
           <a @click="toggleAdvanced" style="margin-left: 8px">
             {{ advanced ? '展开' : '收起' }}
@@ -59,9 +59,10 @@
 </template>
 
 <script>
-// import { getRandomKey } from '../../utils'
+import { getRandomKey } from '../../utils'
 import FormItemGrid from './form-item-grid'
 
+const Item2UIDMap = new WeakMap()
 export default {
   name: 'pl-form',
   components: { FormItemGrid },
@@ -109,10 +110,15 @@ export default {
     },
     toggleAdvanced () {
       this.advanced = !this.advanced
+    },
+    getRandomKey (item) {
+      const persistedUID = Item2UIDMap.get(item)
+      if (!persistedUID) {
+        Item2UIDMap.set(item, getRandomKey())
+        return getRandomKey()
+      }
+      return persistedUID
     }
-    // getRandomKey () {
-    //   return getRandomKey()
-    // }
   },
   computed: {
     // getRandomKey () {
@@ -143,16 +149,22 @@ export default {
     .el-col-xll-6 {
       width: 25%
     }
+    .el-col-xll-4 {
+      width: 25%
+    }
+    .el-col-xll-5 {
+      width: 20.33333%
+    }
   }
   .el-form {
     &.search {
       .el-input {
-        width: 100%;
+        width: 220px;
       }
     }
     &.advance {
       @media only screen and (min-width: 1900px) {
-        .el-col:nth-child(n+4) {
+        .el-col:nth-child(n+5) {
           display: none;
         }
       }
