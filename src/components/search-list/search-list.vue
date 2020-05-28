@@ -1,7 +1,13 @@
 <template>
   <div>
-    <el-form :model="form" v-on="$listeners" v-bind="{...defaultFormOptions,...formConfig}" class="pl-search-list-form"
-             :class="[{advance:advanced},hasChildClass]">
+    <el-form
+        :model="form"
+        v-on="$listeners"
+        v-bind="{...defaultFormOptions,...formConfig}"
+        class="pl-search-list-form"
+        :class="[{advance:advanced},hasChildClass]"
+        ref="plForm"
+    >
       <el-row :gutter="10">
         <template v-for="(item,index) in formItems">
           <el-col :xl="6" :lg="8" :md="12" :sm="24" class="el-col-xll-6">
@@ -27,12 +33,28 @@
       </el-row>
     </el-form>
     <slot name="form-after"></slot>
-    <pl-table :columns="columns" :table-config="tableConfig" :page-config="pageConfig" show-pager v-on="$listeners"
-              auto-load>
+    <pl-table
+        :columns="columns"
+        :data="tableData"
+        :table-config="tableConfig"
+        :page-config="pageConfig"
+        v-loading="loading"
+        v-on="$listeners"
+    >
       <template v-for="item in columns">
         <slot :name="item.slotName" :slot="item.slotName" v-bind="item"></slot>
       </template>
+      <template v-slot:index="{row,$index}">
+        {{(currentPage-1)*pageSize+$index+1}}
+      </template>
     </pl-table>
+    <el-pagination
+        v-if="showPager"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :total="total"
+        v-bind="{...defaultPageConfig,...pageConfig}"
+    ></el-pagination>
   </div>
 </template>
 
@@ -66,6 +88,10 @@ export default {
     value: {
       type: Object,
       default: () => ({})
+    },
+    showPager: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -76,12 +102,26 @@ export default {
         labelPosition: 'right',
         labelSuffix: '：'
       },
-      advanced: false
+      advanced: false,
+      defaultPageConfig: {
+        layout: 'total, sizes, prev, pager, next, jumper',
+        pageSizes: [ 10, 20, 50, 100 ],
+        background: true
+      },
+      pageSize: 10,
+      currentPage: 1,
+      total: 10,
+      loading: false,
+      tableData: []
     }
   },
   methods: {
-    search () {},
-    resetForm () {},
+    search () {
+      this.getTableData()
+    },
+    resetForm () {
+      this.$refs.plForm.resetFields()
+    },
     getRandomKey (item) {
       const persistedUID = Item2UIDMap.get(item)
       if (!persistedUID) {
@@ -104,6 +144,27 @@ export default {
         'switch': 'pl-switch'
       }
       return map[comp] || comp
+    },
+    handleCurrentChange (val) {
+      this.currentPage = val
+      this.getTableData()
+    },
+    handleSizeChange (val) {
+      this.pageSize = val
+      this.currentPage = 1
+      this.getTableData()
+    },
+    getTableData () {
+      this.loading = true
+      this.$emit('get-table-data', {
+        pageSize: this.pageSize,
+        currentPage: this.currentPage,
+        ...this.form
+      }, ({ data, total }) => {
+        this.tableData = data
+        this.total = total
+        this.loading = false
+      })
     }
   },
   computed: {

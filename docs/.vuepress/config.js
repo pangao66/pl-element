@@ -49,14 +49,15 @@ module.exports = {
         title: '组件',
         collapsable: true,
         children: [
-          'components/button',
+          '/components/button',
           '/components/input',
           '/components/select',
           '/components/radio',
           '/components/checkbox',
+          '/components/date',
           '/components/form',
-          'components/table',
-          'components/search-list'
+          '/components/table',
+          '/components/search-list'
           // '/components/pe-page-table',
           // '/components/tabs',
           // '/components/input',

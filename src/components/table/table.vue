@@ -1,7 +1,7 @@
 <template>
   <div v-loading="loading" class="pl-table-container">
     <el-table
-        :data="data||tableData"
+        :data="data"
         v-on="$listeners"
         v-bind="{...defaultTableAttrs,...tableConfig}"
         @cell-dblclick="copy"
@@ -31,18 +31,11 @@
           </template>
           <VNodes v-if="col.customerRender" :vnodes="col.customerRender(scope)"></VNodes>
         </template>
-        <template v-slot="{$index}" v-if="col.type==='index'">
-          {{(currentPage-1)*pageSize+$index+1}}
+        <template v-slot="scope" v-if="col.type==='index'">
+          <slot name="index" v-bind="scope"></slot>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-        v-if="showPager"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :total="total"
-        v-bind="{...defaultPageConfig,...pageConfig}"
-    ></el-pagination>
   </div>
 </template>
 
@@ -61,8 +54,8 @@ export default {
       default: () => []
     },
     data: {
-      // required: true,
-      // default: () => []
+      required: true,
+      default: () => []
     },
     dbClickCopy: {
       type: Boolean,
@@ -96,22 +89,14 @@ export default {
         stripe: true,
         'highlight-current-row': true
       },
-      defaultPageConfig: {
-        layout: 'total, sizes, prev, pager, next, jumper',
-        pageSizes: [ 10, 20, 50, 100 ],
-        background: true
-      },
-      pageSize: 10,
-      currentPage: 1,
-      total: 10,
       tableData: [],
       loading: false
     }
   },
   created () {
-    if (this.autoLoad) {
-      this.getTableData()
-    }
+    // if (this.autoLoad) {
+    //   this.getTableData()
+    // }
   },
   methods: {
     formatCell (row, column, cellValue, index, formatter, col) {
@@ -174,26 +159,6 @@ export default {
         return getRandomKey()
       }
       return persistedUID
-    },
-    handleCurrentChange (val) {
-      this.currentPage = val
-      this.getTableData()
-    },
-    handleSizeChange (val) {
-      this.pageSize = val
-      this.currentPage = 1
-      this.getTableData()
-    },
-    getTableData () {
-      this.loading = true
-      this.$emit('get-table-data', {
-        pageSize: this.pageSize,
-        currentPage: this.currentPage
-      }, ({ data, total }) => {
-        this.tableData = data
-        this.total = total
-        this.loading = false
-      })
     }
   },
   computed: {},

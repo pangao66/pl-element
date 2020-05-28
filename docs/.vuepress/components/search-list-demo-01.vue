@@ -24,7 +24,9 @@ export default {
       formData: {
         id: '',
         name: '',
-        birth: ''
+        birth: '',
+        sex: '',
+        job: ''
       }
     }
   },

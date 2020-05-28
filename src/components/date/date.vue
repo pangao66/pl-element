@@ -1,6 +1,10 @@
 <template>
   <el-form-item :label="label" :prop="prop" :label-width="labelWidth" v-bind="{...formItemAttrs}">
-    <el-date-picker v-model="date" v-bind="$attrs" @change="handleChange"></el-date-picker>
+    <el-date-picker
+        v-model="date"
+        v-bind="$attrs"
+        @change="handleChange"
+    ></el-date-picker>
   </el-form-item>
 </template>
 
@@ -28,6 +32,13 @@ export default {
     required: {
       type: Boolean,
       default: null
+    },
+    limit: {
+      type: Object,
+      default: () => ({})
+    },
+    pickerOptions: {
+      type: Object
     }
   },
   data () {
@@ -39,6 +50,16 @@ export default {
     handleChange (val) {
       this.$emit('change', val)
       this.$emit('input', val)
+    }
+  },
+  computed: {
+    pickerOptions () {
+      if (this.pickerOptions) {
+        return this.pickerOptions
+      }
+      return {
+        shortcuts: []
+      }
     }
   },
   watch: {
