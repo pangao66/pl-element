@@ -42,7 +42,17 @@ export default {
         { prop: 'name', label: '姓名', attrs: { width: 60 } },
         { prop: 'address', label: '地址', attrs: { minWidth: 140 } },
         { prop: 'birth', label: '生日', formatter: 'date' },
-        { prop: 'job', label: '职位', formatter: this.getJob },
+        {
+          prop: 'job', label: '职位', formatter: {
+            type: 'dict',
+            dict: {
+              designer: '设计',
+              programmer: '程序员',
+              testers: '测试',
+              product: '产品'
+            }
+          }
+        },
         { slot: 'sex', label: '性别' },
         { slot: 'handle', label: '操作', attrs: { width: 170 } }
       ]

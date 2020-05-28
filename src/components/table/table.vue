@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading">
+  <div v-loading="loading" class="pl-table-container">
     <el-table
         :data="data||tableData"
         v-on="$listeners"
@@ -50,6 +50,7 @@
 import { formatDate } from 'element-ui/lib/utils/date-util'
 // import NP from 'number-precision'
 import { getRandomKey } from '../../utils'
+import { Table } from 'element-ui'
 
 const Item2UIDMap = new WeakMap()
 export default {
@@ -216,5 +217,10 @@ export default {
 <style>
   .el-table .el-table__row td .cell:empty:before, .el-table .el-table__footer-wrapper td .cell:empty:before {
     content: "-"
+  }
+
+  .pl-table-container .el-pagination {
+    padding: 10px;
+    text-align: center;
   }
 </style>
