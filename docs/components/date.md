@@ -13,7 +13,7 @@ sidebarDepth: 2
 </demo-block>
 
 
-## 快捷方式
+## 选择控制
 
 <demo-block>
 <date-demo-02 slot="source"></date-demo-02>

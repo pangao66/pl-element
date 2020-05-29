@@ -5,6 +5,8 @@
         v-bind="$attrs"
         :picker-options="calPickerOptions"
         @change="handleChange"
+        @focus="timeArrayFocus"
+        clearable
     ></el-date-picker>
   </el-form-item>
 </template>
@@ -60,6 +62,10 @@ export default {
     handleChange (val) {
       this.$emit('change', val)
       this.$emit('input', val)
+    },
+    timeArrayFocus () {
+      this.minDate = ''
+      this.maxDate = ''
     }
   },
   computed: {
@@ -116,26 +122,47 @@ export default {
       const disableDate = this.disableDate
       return {
         shortcuts: list.length ? list : undefined,
-        disabledDate (time) {
+        onPick: ({ maxDate, minDate }) => {
+          this.maxDate = maxDate
+          this.minDate = minDate
+        },
+        disabledDate: (time) => {
+          let con1
+          let con2
+          let con3
           if (typeof disableDate === 'string') {
             switch (disableDate) {
               case 'beforeToday':
-                return time < todayTime
+                con1 = time < todayTime
+                break
               case 'afterToday':
-                return time > todayTime
+                con1 = time > todayTime
+                break
               case 'nextMonth':
-                return time > new Date().setMonth(new Date().getMonth() + 1)
+                con1 = time > new Date().setMonth(new Date().getMonth() + 1)
+                break
               case 'lastMonth':
-                return time < new Date().setMonth(new Date().getMonth() - 1)
+                con1 = time < new Date().setMonth(new Date().getMonth() - 1)
+                break
             }
           }
           if (typeof disableDate === 'number') {
             if (disableDate > 0) {
-              return time > todayTime + 3600 * 1000 * 24 * disableDate
+              con1 = time > todayTime + 3600 * 1000 * 24 * disableDate
             } else {
-              return time < todayTime + 3600 * 1000 * 24 * disableDate
+              con1 = time < todayTime + 3600 * 1000 * 24 * disableDate
             }
           }
+          if (this.between) {
+            let range = this.between * 24 * 3600 * 1000
+            if (this.maxDate) {
+              con2 = time < this.maxDate.getTime() - range || time > this.maxDate.getTime() + range
+            }
+            if (this.minDate) {
+              con3 = time > this.minDate.getTime() + range || time < this.minDate.getTime() - range
+            }
+          }
+          return con1 || con2 || con3
         }
       }
     }

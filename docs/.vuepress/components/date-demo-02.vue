@@ -7,10 +7,13 @@
              end-placeholder="结束日期"
              :shortcuts="shortcutsDate2"
     ></pl-date>
-    <pl-date v-model="form.date3" type="daterange" label="日期3" value="date3" disable-date="beforeToday"></pl-date>
-    <pl-date v-model="form.date4" type="daterange" label="日期4" value="date4" disable-date="nextMonth"></pl-date>
-    <pl-date v-model="form.date5" type="daterange" label="日期5" value="date5" :disable-date="60"></pl-date>
-    <pl-date v-model="form.date6" type="daterange" label="日期6" value="date6" :disable-date="-90"></pl-date>
+    <pl-date v-model="form.date3" type="daterange" label="日期3" value="date3" disable-date="beforeToday"
+             :between="60"></pl-date>
+    <pl-date v-model="form.date4" type="daterange" label="日期4" value="date4" disable-date="nextMonth"
+             :between="30"></pl-date>
+    <pl-date v-model="form.date5" type="daterange" label="日期5" value="date5" :disable-date="60" :between="15"></pl-date>
+    <pl-date v-model="form.date6" type="daterange" label="日期6" value="date6" :disable-date="-90"
+             :between="30"></pl-date>
   </el-form>
 </template>
 
