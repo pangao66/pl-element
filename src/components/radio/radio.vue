@@ -1,28 +1,18 @@
 <template>
-  <el-form-item :label="label" :prop="prop" :label-width="labelWidth" :rules="rules" v-bind="{...formItemAttrs}">
-    <el-radio-group v-model="selectedValue" v-on="$listeners">
-      <template v-for="item in optionsList">
-        <el-radio-button v-if="radioButton" :label="item.value" :key="item.value">{{item.label}}</el-radio-button>
-        <el-radio v-else :label="item.value" :key="item.value">{{item.label}}</el-radio>
-      </template>
-    </el-radio-group>
-  </el-form-item>
+  <el-radio-group v-model="selectedValue" v-on="$listeners">
+    <template v-for="item in optionsList">
+      <el-radio-button v-if="radioButton" :label="item.value" :key="item.value">{{item.label}}</el-radio-button>
+      <el-radio v-else :label="item.value" :key="item.value">{{item.label}}</el-radio>
+    </template>
+  </el-radio-group>
 </template>
 
 <script>
-import { isArray, isPlainObject } from '../../utils'
+import { isArray, isPlainObject } from '../../../utils'
 
 export default {
   name: 'pl-radio',
   props: {
-    label: {
-      type: String,
-      default: ''
-    },
-    prop: {
-      type: String,
-      default: ''
-    },
     value: { default: '' },
     labelWidth: {
       type: [ String, Number ],
@@ -43,12 +33,6 @@ export default {
     optionsAttr: {
       type: String,
       default: 'label,value'
-    },
-    valueKey: {
-      type: [ String, Number ]
-    },
-    valueLabel: {
-      type: [ String, Number ]
     },
     radioButton: {
       type: Boolean,

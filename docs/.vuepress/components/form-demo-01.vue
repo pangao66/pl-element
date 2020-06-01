@@ -6,7 +6,6 @@
       @submit="submit"
       class="form-demo-01"
       ref="form"
-      :rules="rules"
   >
     <template v-slot:date="{form,item}">
       <el-form-item label="活动时间">
@@ -43,25 +42,24 @@ export default {
     submit (val) {
       console.log(val)
       this.$message.success(`表单数据为:${JSON.stringify(val)}`)
-      console.log(this.$refs.form.$refs.name.resetField())
     }
   },
   computed: {
     formItems () {
       return [
-        { comp: 'pl-input', label: '活动名称', prop: 'name' },
-        { comp: 'pl-select', label: '活动区域', prop: 'region', options: this.regionOptions, required: true },
-        { slot: 'date' },
-        { comp: 'pl-switch', label: '即时配送', prop: 'delivery', required: true },
+        { comp: 'input', label: '活动名称', prop: 'name' },
+        { comp: 'select', label: '活动区域', prop: 'region', options: this.regionOptions },
+        { slotName: 'date' },
+        { comp: 'switch', label: '即时配送', prop: 'delivery' },
         {
-          comp: 'pl-checkbox',
+          comp: 'checkbox',
           label: '活动性质',
           prop: 'type',
           options: [ '美食/餐厅线上活动', '地推活动', '线下主题活动', '单纯品牌曝光' ],
           required: true
         },
-        { comp: 'pl-radio', label: '特殊资源', prop: 'resource', options: [ '线上品牌商赞助', '线下场地免费' ], required: true },
-        { comp: 'pl-input', label: '说明', prop: 'desc', type: 'textarea', required: true }
+        { comp: 'radio', label: '特殊资源', prop: 'resource', options: [ '线上品牌商赞助', '线下场地免费' ], required: true },
+        { comp: 'input', label: '说明', prop: 'desc', type: 'textarea' }
       ]
     },
     regionOptions () {
@@ -71,14 +69,6 @@ export default {
         { label: '广州', value: 'guangzhou' },
         { label: '深圳', value: 'shenzhen' }
       ]
-    },
-    rules () {
-      return {
-        name: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-        ]
-      }
     }
   }
 }

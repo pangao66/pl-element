@@ -1,8 +1,8 @@
 <template>
-  <el-form :model="form" label-position="right" label-suffix="：" label-width="120px">
-    <pl-checkbox label="城市" prop="city" :options="options2" radio-button v-model="form.city"></pl-checkbox>
-    <p>您选中城市的值是：{{form.city}}</p>
-  </el-form>
+  <div>
+    <pl-checkbox label="城市" prop="city" :options="options2" radio-button v-model="city"></pl-checkbox>
+    <p>您选中城市的值是：{{city}}</p>
+  </div>
 </template>
 
 <script>
@@ -10,9 +10,7 @@ export default {
   name: 'checkbox-demo-01',
   data () {
     return {
-      form: {
-        city: []
-      }
+      city: []
     }
   },
   computed: {

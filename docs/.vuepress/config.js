@@ -21,7 +21,7 @@ module.exports = {
     ],
     [ 'link', { rel: 'apple-touch-icon', href: '/favicon.ico' } ],
     [ 'link', { rel: 'mask-icon', href: '/favicon.ico', color: '#3eaf7c' } ],
-    [ 'link', { rel: 'stylesheet', href: 'https://unpkg.com/element-ui/lib/theme-chalk/index.css' } ],
+    [ 'link', { rel: 'stylesheet', href: 'https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/theme-chalk/index.css' } ],
     [ 'meta', { name: 'msapplication-TileImage', content: '/favicon.ico' } ],
     [ 'meta', { name: 'msapplication-TileColor', content: '#000000' } ]
     // [ 'script', { src: 'https://shadow.elemecdn.com/npm/vue@2.5.21/dist/vue.runtime.min.js' } ],

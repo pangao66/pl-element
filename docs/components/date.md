@@ -15,6 +15,11 @@ sidebarDepth: 2
 
 ## 选择控制
 
+::: tip
+快捷方式和范围限制对比`el-date-picker`有了大幅增强,下面6个示例展示了一些简化的用法
+1. 日期选择,有
+:::
+
 <demo-block>
 <date-demo-02 slot="source"></date-demo-02>
 

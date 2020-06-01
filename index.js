@@ -14,6 +14,7 @@ import PlButton from './src/components/button'
 import PlSwitch from './src/components/switch'
 import PlForm from './src/components/form'
 import PlSearchList from './src/components/search-list'
+import * as utils from './utils'
 
 const PElement = {
   install: function (Vue) {
@@ -36,3 +37,4 @@ const PElement = {
   }
 }
 export default PElement
+export { utils }

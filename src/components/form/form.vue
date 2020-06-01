@@ -1,28 +1,15 @@
 <template>
   <el-form :model="form" v-bind="$attrs" ref="plForm">
     <template v-for="(item,index) in formItems">
-      <template>
-        <form-item-grid
-            :key="index"
-            :cols="item.cols"
-            :item="item"
-        >
-          <template v-slot="{col,item}">
-            <component
-                :is="col?col.comp:item.comp"
-                v-bind="col||item"
-                v-model="form[col?col.prop:item.prop]"
-                :key="index"
-                :ref="col?col.prop:item.prop"
-            >
-            </component>
-            <slot :name="col?col.slot:item.slot" v-bind="{form,item}"></slot>
-          </template>
+      <slot :name="item.slotName" v-bind="{form,item}">
+        <pl-form-item :item="item" :form="form" :key="index" v-if="!item.cols"></pl-form-item>
+        <form-item-grid :item="item" :form="form">
+          <slot v-for="col in item.cols" :slot="col.slotName" :name="col.slotName" v-bind="{form,item:col}"></slot>
         </form-item-grid>
-      </template>
+      </slot>
     </template>
     <slot name="submit" v-bind="{form}">
-      <el-form-item >
+      <el-form-item>
         <el-button type="primary" @click="submitForm">提交</el-button>
         <el-button @click="resetForm">重置</el-button>
       </el-form-item>
@@ -32,13 +19,19 @@
 </template>
 
 <script>
-import { getRandomKey } from '../../utils'
+import { getRandomKey } from '../../../utils'
 import FormItemGrid from './form-item-grid'
+import PlFormItem from './pl-form-item'
 
 const Item2UIDMap = new WeakMap()
 export default {
   name: 'pl-form',
-  components: { FormItemGrid },
+  components: { PlFormItem, FormItemGrid },
+  provide () {
+    return {
+      plForm: this
+    }
+  },
   // model: {
   //   prop: 'defaultValue',
   //   event: 'form-change'
@@ -51,11 +44,11 @@ export default {
     value: {
       type: Object,
       default: () => ({})
-    },
+    }
   },
   data () {
     return {
-      form: this.value,
+      form: this.value
     }
   },
   created () {
@@ -73,6 +66,7 @@ export default {
       })
     },
     resetForm () {
+      console.log(this.$refs.plForm)
       this.$refs.plForm.resetFields()
     },
     getRandomKey (item) {

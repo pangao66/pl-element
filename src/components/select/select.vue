@@ -1,39 +1,17 @@
 <template>
-  <el-form-item :label="label" :prop="prop" :label-width="labelWidth" :rules="rules" v-bind="{...formItemAttrs}">
-    <el-select :value-key="valueKey" v-bind="{...defaultAttrs,...$attrs}" v-model="selectedValue"
-               @change="handleChange">
-      <el-option v-for="item in optionsList" :label="item.label" :value="item.value"></el-option>
-    </el-select>
-  </el-form-item>
+  <el-select :value-key="valueKey" v-bind="{...defaultAttrs,...$attrs}" v-model="selectedValue"
+             @change="handleChange">
+    <el-option v-for="item in optionsList" :label="item.label" :value="item.value"></el-option>
+  </el-select>
 </template>
 
 <script>
-import { isArray, isPlainObject } from '../../utils'
+import { isArray, isPlainObject } from '../../../utils'
 
 export default {
   name: 'pl-select',
   props: {
-    label: {
-      type: String,
-      default: ''
-    },
-    prop: {
-      type: String,
-      default: ''
-    },
     value: { default: '' },
-    labelWidth: {
-      type: [ String, Number ],
-      default: ''
-    },
-    formItemAttrs: {
-      type: Object,
-      default: () => ({})
-    },
-    required: {
-      type: Boolean,
-      default: null
-    },
     options: {
       type: [ Array, Object ],
       default: () => []
@@ -92,6 +70,9 @@ export default {
       }
       if (isPlainObject(this.options)) {
         let list = []
+        for (let i in this.options) {
+          console.log(i)
+        }
         Object.keys(this.options).forEach((key) => {
           list.push({
             label: this.options[key],
@@ -101,18 +82,6 @@ export default {
         return list
       }
       return this.options
-    },
-    rules () {
-      let trigger = 'change'
-      if (this.trigger) {
-        trigger = this.trigger
-      }
-      const required = this.required ?? 'no-required'
-      return required !== 'no-required' ? {
-        required: this.required,
-        message: `${this.label}不能为空`,
-        trigger
-      } : undefined
     }
   },
   watch: {

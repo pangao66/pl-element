@@ -42,7 +42,7 @@
 <script>
 import { formatDate } from 'element-ui/lib/utils/date-util'
 // import NP from 'number-precision'
-import { getRandomKey } from '../../utils'
+import { getRandomKey } from '../../../utils'
 import { Table } from 'element-ui'
 
 const Item2UIDMap = new WeakMap()
@@ -129,7 +129,7 @@ export default {
           return formatDate(cellValue, formatter.content)
         }
         if (formatter.type === 'dict') {
-          return formatter.dict[cellValue]
+
         }
       }
       return cellValue

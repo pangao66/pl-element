@@ -1,20 +1,18 @@
 <template>
-  <el-form-item :label="label" :prop="prop" :rules="mergedRules" :label-width="labelWidth" v-bind="{...formItemAttrs}">
-    <el-input
-        v-model="message"
-        v-bind="{...defaultAttrs,...$attrs}"
-        :placeholder="$attrs.placeholder||`请输入${label}`"
-        @change="handleChange"
-        @input="handleInput"
-        @blur="$emit('blur')"
-    >
-      <slot slot="suffix"></slot>
-    </el-input>
-  </el-form-item>
+  <el-input
+      v-model="message"
+      v-bind="{...defaultAttrs,...$attrs}"
+      :placeholder="$attrs.placeholder||`请输入${label}`"
+      @change="handleChange"
+      @input="handleInput"
+      @blur="$emit('blur')"
+  >
+    <slot slot="suffix"></slot>
+  </el-input>
 </template>
 
 <script>
-import { idCardReg, telReg, integerNumberReg, carNumReg, priceReg, towPointReg, percentReg } from '../../utils/regs'
+import { idCardReg, telReg, integerNumberReg, carNumReg, priceReg, towPointReg, percentReg } from '../../../utils/regs'
 import NP from 'number-precision'
 
 export default {
@@ -37,14 +35,6 @@ export default {
       default: ''
     },
     value: { default: '' },
-    labelWidth: {
-      type: [ String, Number ],
-      default: ''
-    },
-    formItemAttrs: {
-      type: Object,
-      default: () => ({})
-    },
     required: {
       type: Boolean,
       default: null
@@ -60,10 +50,6 @@ export default {
     transfer: {
       type: Function
     }
-    // attrs: {
-    //   type: Object,
-    //   default: () => ({})
-    // }
   },
   data () {
     return {

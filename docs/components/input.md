@@ -13,19 +13,6 @@ sidebarDepth: 2
 
 </demo-block>
 
-## 校验
-::: tip
-校验支持多种方式,需传入`prop`:
-- 可直接在`el-form`上传入`rules`属性,与`el-form`的原生用法一致
-- `p-input`传入`rules`属性,与`el-form-item`的`rules`属性用法一致
-- `p-input`传入 `required`属性,此时会自动校验必填
-- `p-input`传入`validation`属性,此属性为一些内置的正则校验,可传入值见下文说明
-:::
-
-<demo-block>
-<input-demo-02 slot="source"></input-demo-02>
-<<< docs/.vuepress/components/input-demo-02.vue
-</demo-block>
 
 
 ## 金额输入

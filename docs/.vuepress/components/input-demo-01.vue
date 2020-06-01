@@ -1,7 +1,5 @@
 <template>
-  <el-form :model="form" label-position="right" label-suffix="：">
-    <pl-input v-model="form.text" label="产品名称" @change="handleChange" label-width="120px"></pl-input>
-  </el-form>
+  <pl-input v-model="text" @change="handleChange"></pl-input>
 </template>
 
 <script>
@@ -9,7 +7,7 @@ export default {
   name: 'input-demo-01',
   data () {
     return {
-      form: { text: '' }
+      text: ''
     }
   },
   methods: {

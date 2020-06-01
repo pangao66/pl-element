@@ -11,21 +11,23 @@
       <el-row :gutter="10">
         <template v-for="(item,index) in formItems">
           <el-col :xl="6" :lg="8" :md="12" :sm="24" class="el-col-xll-6">
-            <component
-                :is="getComp(item.comp)"
-                v-bind="item"
-                v-model="form[item.prop]"
-                :key="getRandomKey(item)"
-                :ref="item.prop"
-            >
-            </component>
+            <el-form-item :label="item.label" :prop="item.prop">
+              <component
+                  :is="getComp(item.comp)"
+                  v-bind="item"
+                  v-model="form[item.prop]"
+                  :key="getRandomKey(item)"
+                  :ref="item.prop"
+              >
+              </component>
+            </el-form-item>
             <slot :name="item.slot" v-bind="{form,item}"></slot>
           </el-col>
         </template>
         <el-form-item style="float:right;" label-width="0">
           <el-button type="primary" @click="search">查询</el-button>
           <el-button @click="resetForm">重置</el-button>
-          <a @click="toggleAdvanced" style="margin-left: 8px" class="advance-toggle-btn">
+          <a @click="toggleAdvanced" style="margin-left: 8px;cursor:pointer;" class="advance-toggle-btn">
             {{ advanced ? '展开' : '收起' }}
             <i class="el-icon-arrow-down"/>
           </a>
@@ -59,7 +61,7 @@
 </template>
 
 <script>
-import { getRandomKey } from '../../utils'
+import { getRandomKey } from '../../../utils'
 
 const Item2UIDMap = new WeakMap()
 export default {
@@ -115,12 +117,17 @@ export default {
       tableData: []
     }
   },
+  created () {
+    this.search()
+  },
   methods: {
     search () {
       this.getTableData()
     },
     resetForm () {
       this.$refs.plForm.resetFields()
+      this.currentPage = 1
+      this.search()
     },
     getRandomKey (item) {
       const persistedUID = Item2UIDMap.get(item)

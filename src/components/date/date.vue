@@ -1,14 +1,12 @@
 <template>
-  <el-form-item :label="label" :prop="prop" :label-width="labelWidth" v-bind="{...formItemAttrs}">
-    <el-date-picker
-        v-model="date"
-        v-bind="$attrs"
-        :picker-options="calPickerOptions"
-        @change="handleChange"
-        @focus="timeArrayFocus"
-        clearable
-    ></el-date-picker>
-  </el-form-item>
+  <el-date-picker
+      v-model="date"
+      v-bind="$attrs"
+      :picker-options="calPickerOptions"
+      @change="handleChange"
+      @focus="timeArrayFocus"
+      clearable
+  ></el-date-picker>
 </template>
 
 <script>
@@ -51,6 +49,12 @@ export default {
     },
     between: {
       type: [ Number, String ]
+    },
+    dateRangeKeys: {
+      type: Array
+    },
+    form: {
+      type: Object
     }
   },
   data () {
@@ -60,12 +64,29 @@ export default {
   },
   methods: {
     handleChange (val) {
+      const valueFormat = this.$attrs.valueFormat || this.$attrs['value-format']
+      console.log(valueFormat)
+      // 如果结果格式化为时间戳并且是范围选择,首日期应为当日0时,末日期应为当日23时59分59秒
+      if (valueFormat === 'timestamp' && this.date instanceof Array) {
+        if (val.length) {
+          val[1] = new Date(new Date(new Date(val[1]).toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1).getTime()
+        }
+      }
+      console.log(val)
       this.$emit('change', val)
       this.$emit('input', val)
+      if (this.dateRangeKeys && this.dateRangeKeys.length && this.date instanceof Array) {
+        const [ start, end ] = this.dateRangeKeys
+        if (this.form) {
+          this.$set(this.form, end, this.date[1])
+          this.$set(this.form, start, this.date[0])
+        }
+      }
     },
     timeArrayFocus () {
       this.minDate = ''
       this.maxDate = ''
+      this.$emit('focus')
     }
   },
   computed: {

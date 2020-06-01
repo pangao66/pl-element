@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { debounce } from '../../utils'
+import { debounce } from '../../../utils'
 import { Loading } from 'element-ui'
 
 let loadingInstance = null

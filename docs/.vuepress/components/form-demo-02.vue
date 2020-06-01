@@ -30,14 +30,14 @@ export default {
           comp: 'grid',
           cols: [
             { span: 12, comp: 'pl-input', label: '活动名称', prop: 'name' },
-            { span: 12, comp: 'pl-select', label: '活动区域', prop: 'region', options: this.regionOptions, required: true }
+            { span: 12, comp: 'pl-select', label: '活动区域', prop: 'region', options: this.regionOptions }
           ]
         },
         {
           comp: 'grid',
           cols: [
-            { span: 12, slot: 'date' },
-            { span: 12, comp: 'pl-switch', label: '即时配送', prop: 'delivery', required: true }
+            { span: 12, slotName: 'date' },
+            { span: 12, comp: 'pl-switch', label: '即时配送', prop: 'delivery' }
           ]
         },
         {
@@ -45,17 +45,15 @@ export default {
           label: '活动性质',
           prop: 'type',
           options: [ '美食/餐厅线上活动', '地推活动', '线下主题活动', '单纯品牌曝光' ],
-          required: true
         },
-        { comp: 'pl-radio', label: '特殊资源', prop: 'resource', options: [ '线上品牌商赞助', '线下场地免费' ], required: true },
+        { comp: 'pl-radio', label: '特殊资源', prop: 'resource', options: [ '线上品牌商赞助', '线下场地免费' ]},
         {
           comp: 'grid',
           cols: [
             {
               span: 16, comp: 'pl-input', label: '说明', prop: 'desc', type: 'textarea',
               maxlength: 300,
-              'show-word-limit': true,
-              required: true
+              'show-word-limit': true
             }
           ]
         }

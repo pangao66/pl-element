@@ -10,12 +10,17 @@
 
 <script>
 import axios from 'axios'
+import { filterNullValue } from '../../../utils'
 
 const jobDict = {
   designer: '设计',
   programmer: '程序员',
   testers: '测试',
   product: '产品'
+}
+const sexDict = {
+  0: '女',
+  1: '男'
 }
 export default {
   name: 'search-list-demo-01',
@@ -31,12 +36,12 @@ export default {
     }
   },
   methods: {
-    async getTableData ({ currentPage, pageSize, ...val }, done) {
-      console.log(val)
-      let res = await axios.post('/page-table', {
+    async getTableData ({ currentPage, pageSize, sex, ...val }, done) {
+      let res = await axios.post('/search-table', filterNullValue({
         currentPage, pageSize,
+        sex: sex ? parseInt(sex) : '',
         ...val
-      })
+      }))
       if (res.status === 200) {
         res = res.data
         done({
@@ -63,7 +68,13 @@ export default {
           formType: 'select',
           options: jobDict
         },
-        { prop: 'sex', label: '性别', formType: 'select', options: { 1: '男', 0: '女' } },
+        {
+          prop: 'sex',
+          label: '性别',
+          formType: 'select',
+          options: sexDict,
+          formatter: { type: 'dict', dict: sexDict }
+        },
         { slot: 'handle', label: '操作', attrs: { width: 170 } }
       ]
     },
