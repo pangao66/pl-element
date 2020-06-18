@@ -40,8 +40,9 @@
           <template v-if="col.actions&&col.actions.length">
             <template v-for="item in col.actions">
               <pl-button v-if="item.confirmType||item.confirm" :confirm-type="item.confirmType||'confirm'"
-                         type="primary"
-                         @confirm="item.confirm({row:scope.row,col,index})">
+                         @confirm="item.confirm({row:scope.row,col,index})"
+                         v-bind="item.btnConfig"
+              >
                 {{item.text}}
               </pl-button>
               <pl-button v-else @click="item.onClick({row:scope.row,col,index})">{{item.text}}</pl-button>

@@ -4,6 +4,7 @@
       :form-items="formItems"
       @get-table-data="getTableData"
       v-model="formData"
+      ref="plSearchList"
   >
     <template #handle="{row}">
       <pl-button>fjoaj</pl-button>
@@ -52,6 +53,13 @@ export default {
           total: res.total
         })
       }
+    },
+    async deleteData (row) {
+      let res = await axios.post('/delete-user', { id: row.id })
+      if (res.status === 200) {
+        this.$message.success('删除成功')
+        this.$refs.plSearchList.search()
+      }
     }
   },
   computed: {
@@ -83,8 +91,9 @@ export default {
             {
               action: 'del',
               text: '删除',
+              btnConfig: { type: 'danger' },
               confirm: ({ row, col, index }) => {
-                this.$message.success(`删除id为:${row.id}这一行`)
+                this.deleteData(row)
               }
             },
             {
@@ -92,9 +101,15 @@ export default {
               onClick: ({ row, col, index }) => {
                 this.$message.success(JSON.stringify(row))
               }
+            },
+            {
+              text: '编辑',
+              onClick: ({ row, col, index }) => {
+
+              }
             }
           ],
-          label: '操作', attrs: { width: 170 }
+          label: '操作', attrs: { minWidth: 180 }
         }
       ]
     },
