@@ -4,11 +4,15 @@
     <template v-slot:date="{form,item}">
       <el-form-item label="活动时间" class="form-demo-02-date-item">
         <el-col :span="11">
-          <pl-date v-model="form.date1" prop="date1" value-format="timestamp"></pl-date>
+          <el-form-item prop="date1">
+            <pl-date v-model="form.date1" prop="date1" value-format="timestamp"></pl-date>
+          </el-form-item>
         </el-col>
         <el-col class="line" :span="2" style="text-align:center;">-</el-col>
         <el-col :span="11">
-          <pl-date v-model="form.date2" prop="date2"></pl-date>
+          <el-form-item prop="date2">
+            <pl-time v-model="form.date2" prop="date2"></pl-time>
+          </el-form-item>
         </el-col>
       </el-form-item>
     </template>
@@ -20,7 +24,16 @@ export default {
   name: 'form-demo-02',
   data () {
     return {
-      form: {}
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      }
     }
   },
   computed: {
@@ -44,9 +57,9 @@ export default {
           comp: 'pl-checkbox',
           label: '活动性质',
           prop: 'type',
-          options: [ '美食/餐厅线上活动', '地推活动', '线下主题活动', '单纯品牌曝光' ],
+          options: [ '美食/餐厅线上活动', '地推活动', '线下主题活动', '单纯品牌曝光' ]
         },
-        { comp: 'pl-radio', label: '特殊资源', prop: 'resource', options: [ '线上品牌商赞助', '线下场地免费' ]},
+        { comp: 'pl-radio', label: '特殊资源', prop: 'resource', options: [ '线上品牌商赞助', '线下场地免费' ] },
         {
           comp: 'grid',
           cols: [

@@ -59,14 +59,14 @@ export default {
   methods: {
     submitForm () {
       this.$refs.plForm.validate().then(() => {
-        this.$emit('submit', this.form)
+        this.$emit('submit', { ...this.form })
         Promise.resolve(this.form)
       }).catch(() => {
         Promise.reject()
       })
     },
     resetForm () {
-      console.log(this.$refs.plForm)
+      // console.log(this.$refs.plForm)
       this.$refs.plForm.resetFields()
     },
     getRandomKey (item) {
@@ -88,6 +88,18 @@ export default {
         'switch': 'pl-switch'
       }
       return map[comp] || comp
+    },
+    validate (...args) {
+      return this.$refs.plForm.validate()
+    },
+    validateField (...args) {
+      this.$refs.plForm.validateField()
+    },
+    resetFields (...args) {
+      this.$refs.plForm.resetFields()
+    },
+    clearValidate (...args) {
+      this.$refs.plForm.clearValidate(...args)
     }
   },
   computed: {

@@ -57,7 +57,8 @@ module.exports = {
           '/components/date',
           '/components/form',
           '/components/table',
-          '/components/search-list'
+          '/components/search-list',
+          '/components/dialog',
           // '/components/pe-page-table',
           // '/components/tabs',
           // '/components/input',

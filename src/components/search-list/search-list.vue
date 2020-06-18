@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pl-search-list">
     <el-form
         :model="form"
         v-on="$listeners"
@@ -34,7 +34,17 @@
         </el-form-item>
       </el-row>
     </el-form>
-    <slot name="form-after"></slot>
+    <slot name="form-after">
+      <div class="pl-search-list-menu">
+        <div>
+
+        </div>
+        <div>
+          <el-button icon="el-icon-refresh" circle @click="search"></el-button>
+          <el-button icon="el-icon-menu" circle></el-button>
+        </div>
+      </div>
+    </slot>
     <pl-table
         :columns="columns"
         :data="tableData"
@@ -186,9 +196,15 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+  .pl-search-list {
+    >>> .el-pagination {
+      padding: 15px
+      text-align: center;
+    }
+  }
   .pl-search-list-form {
-    .el-input {
+    >>> .el-input {
       width: 100%;
     }
     .el-select {
@@ -266,5 +282,10 @@ export default {
         }
       }
     }
+  }
+  .pl-search-list-menu {
+    margin-bottom: 5px
+    display: flex;
+    justify-content space-between;
   }
 </style>

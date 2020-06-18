@@ -1,7 +1,5 @@
 <template>
-  <el-form-item :label="label" :prop="prop" :label-width="labelWidth" :rules="rules" v-bind="{...formItemAttrs}">
-    <el-switch v-model="switchValue" @change="valueChange"></el-switch>
-  </el-form-item>
+  <el-switch v-model="switchValue" @change="valueChange"></el-switch>
 </template>
 
 <script>
@@ -12,14 +10,6 @@ export default {
     event: 'change'
   },
   props: {
-    label: {
-      type: String,
-      default: ''
-    },
-    prop: {
-      type: String,
-      default: ''
-    },
     value: { default: '' },
     labelWidth: {
       type: [ String, Number ],
@@ -29,10 +19,6 @@ export default {
       type: Object,
       default: () => ({})
     },
-    required: {
-      type: Boolean,
-      default: null
-    }
   },
   data () {
     return {

@@ -36,10 +36,10 @@ sidebarDepth: 2
 ## 格式化内容
 `pl-table`组件内置一些常用的格式化工具,增强了`el-table`自带的`formatter`功能,只需给`columns`该项传递`formatter`属性即可
 ::: tip
-- 空数据单元格显示'-' 短横杠
 - `formatter`属性可以传递一个函数,这时与`el-table-column`的`formatter`基本一致,只是返回值多个参数形式变成了对象解构形式
-- 内置了日期格式化,可传递`formatter`为`date`返回`yyyy-MM-dd`,传`datetime`返回`yyyy-MM-dd HH:mm:ss`,传`time`返回`    HH:mm:ss`,另可自定义格式,传递对象如:`{type:'data',content:'yyyy年MM月dd日 HH时mm分ss秒'}`,注意:`type`必须指定为`date`
-- `formatter`属性可传递一个对象,用于数据字典对象形式格式化,如:`{type:'dict',dict:{1:'男',0:'女'}}`
+- 内置了日期格式化,可传递`formatter`为`date`返回`yyyy-MM-dd`,传`datetime`返回`yyyy-MM-dd HH:mm:ss`,传`time`返回`    HH:mm:ss`,另可自定义格式,传递对象如:`{type:'data',content:'yyyy年MM月dd日 HH时mm分ss秒'}`,注意:`type`必须指定为`date`, 如下例中`出生日期`列
+- 可直接传入一个字典对象，如下例中`性别`列
+- tag标签格式化,如下例中`状态`列,可根据状态展示对应文案和tag的颜色
 - 单元格没有内容默认展示`-` 短横杠
 :::
 <demo-block>
@@ -60,9 +60,3 @@ sidebarDepth: 2
 
 ## 分页异步数据
 
-<demo-block>
-<table-demo-05 slot="source"></table-demo-05>
-
-<<< docs/.vuepress/components/table-demo-05.vue
-
-</demo-block>

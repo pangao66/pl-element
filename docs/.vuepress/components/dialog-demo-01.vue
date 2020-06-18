@@ -1,10 +1,12 @@
 <template>
+  <pl-dialog >
 
+  </pl-dialog>
 </template>
 
 <script>
 export default {
-  name: 'form-demo-05'
+    name: 'dialog-demo-01'
 }
 </script>
 

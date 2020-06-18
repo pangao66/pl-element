@@ -8,13 +8,14 @@
     >
       <el-table-column
           v-for="(col,index) in columns"
-          v-bind="col"
+          v-bind="col.attrs"
           :key="getRandomKey(col)"
           :prop="col.prop"
           :label="col.label"
           show-overflow-tooltip
-          :formatter="col.formatter?(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter,col):undefined"
+          :formatter="col.formatter||col.dict?(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter,col):undefined"
       >
+        <!--自定义列header-->
         <template v-slot:header="scope" v-if="col.headerSlot || col.tip">
           <template v-if="col.tip">
             {{col.label}}
@@ -24,15 +25,29 @@
           </template>
           <slot :name="col.headerSlot" v-bind="scope" v-if="col.headerSlot"></slot>
         </template>
-        <template v-slot="scope" v-if="col.slotName||col.customerRender||col.customerRenderText">
-          <slot :name="col.slotName" v-bind="scope" v-if="col.slotName"></slot>
+        <!--自定义列 -->
+        <template v-slot="scope" v-if="showSlot(col)">
+          <slot :name="col.slotName" v-bind="scope"></slot>
+          <el-tag :type="col.tagMap[scope.row[col.prop]].type" v-if="col.tagMap">
+            {{col.tagMap[scope.row[col.prop]].text}}
+          </el-tag>
+          <template v-if="col.type==='index'">
+            <slot name="index" v-bind="scope"></slot>
+          </template>
           <template v-if="col.customerRenderText">
             {{col.customerRenderText(scope)}}
           </template>
+          <template v-if="col.actions&&col.actions.length">
+            <template v-for="item in col.actions">
+              <pl-button v-if="item.confirmType||item.confirm" :confirm-type="item.confirmType||'confirm'"
+                         type="primary"
+                         @confirm="item.confirm({row:scope.row,col,index})">
+                {{item.text}}
+              </pl-button>
+              <pl-button v-else @click="item.onClick({row:scope.row,col,index})">{{item.text}}</pl-button>
+            </template>
+          </template>
           <VNodes v-if="col.customerRender" :vnodes="col.customerRender(scope)"></VNodes>
-        </template>
-        <template v-slot="scope" v-if="col.type==='index'">
-          <slot name="index" v-bind="scope"></slot>
         </template>
       </el-table-column>
     </el-table>
@@ -41,7 +56,7 @@
 
 <script>
 import { formatDate } from 'element-ui/lib/utils/date-util'
-// import NP from 'number-precision'
+import NP from 'number-precision'
 import { getRandomKey } from '../../../utils'
 import { Table } from 'element-ui'
 
@@ -100,6 +115,9 @@ export default {
   },
   methods: {
     formatCell (row, column, cellValue, index, formatter, col) {
+      if (col.dict) {
+        return col.dict[cellValue]
+      }
       const type = typeof formatter
       if (type === 'function') {
         return formatter({ row, column, cellValue, index })
@@ -115,11 +133,11 @@ export default {
           case 'money': // 金额三位分割
             return cellValue.toLocaleString()
           case 'point2': // 保留两位小数
-          // return NP.round(cellValue, 2).toFixed(2)
+            return NP.round(cellValue, 2).toFixed(2)
           case 'rmb': // 人民币分变成元
-          // return NP.round(NP.divide(cellValue, 100), 2)
+            return NP.round(NP.divide(cellValue, 100), 2)
           case 'percent': // 小数转百分比
-          // return NP.round(NP.times(cellValue, 100), 2)
+            return NP.round(NP.times(cellValue, 100), 2)
           default :
             return cellValue
         }
@@ -127,9 +145,6 @@ export default {
       if (type === 'object') {
         if (formatter.type && formatter.type === 'date') {
           return formatDate(cellValue, formatter.content)
-        }
-        if (formatter.type === 'dict') {
-
         }
       }
       return cellValue
@@ -159,6 +174,9 @@ export default {
         return getRandomKey()
       }
       return persistedUID
+    },
+    showSlot (col) {
+      return col.slotName || col.customerRender || col.customerRenderText || col.tagMap || col.type === 'index' || col.actions
     }
   },
   computed: {},
@@ -168,7 +186,8 @@ export default {
       props: {
         vnodes: {
           type: Function,
-          default: () => {}
+          default: () => {
+          }
         }
       },
       render: (h, ctx) => {

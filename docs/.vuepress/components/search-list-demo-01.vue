@@ -5,6 +5,9 @@
       @get-table-data="getTableData"
       v-model="formData"
   >
+    <template #handle="{row}">
+      <pl-button>fjoaj</pl-button>
+    </template>
   </pl-search-list>
 </template>
 
@@ -61,10 +64,7 @@ export default {
         { prop: 'birth', label: '生日', formatter: 'date', formType: 'date' },
         {
           prop: 'job', label: '职位',
-          formatter: {
-            type: 'dict',
-            dict: jobDict
-          },
+          dict: jobDict,
           formType: 'select',
           options: jobDict
         },
@@ -73,9 +73,29 @@ export default {
           label: '性别',
           formType: 'select',
           options: sexDict,
-          formatter: { type: 'dict', dict: sexDict }
+          tagMap: {
+            1: { text: '男', type: 'primary' },
+            0: { text: '女', type: 'success' }
+          }
         },
-        { slot: 'handle', label: '操作', attrs: { width: 170 } }
+        {
+          actions: [
+            {
+              action: 'del',
+              text: '删除',
+              confirm: ({ row, col, index }) => {
+                this.$message.success(`删除id为:${row.id}这一行`)
+              }
+            },
+            {
+              text: '查看',
+              onClick: ({ row, col, index }) => {
+                this.$message.success(JSON.stringify(row))
+              }
+            }
+          ],
+          label: '操作', attrs: { width: 170 }
+        }
       ]
     },
     formItems () {
