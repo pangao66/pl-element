@@ -190,8 +190,8 @@ export default {
   methods: {
     scrollHandler () {
       const { top, bottom, left } = this.$refs.meta.getBoundingClientRect()
-      this.fixedControl = bottom > document.documentElement.clientHeight &&
-        top + 44 <= document.documentElement.clientHeight
+      // this.fixedControl = bottom > document.documentElement.clientHeight &&
+      //   top + 44 <= document.documentElement.clientHeight
       this.$refs.control.style.left = this.fixedControl ? `${left}px` : '0'
     },
 
