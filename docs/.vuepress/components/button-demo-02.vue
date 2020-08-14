@@ -17,7 +17,7 @@ export default {
     handleClick (done) {
       setTimeout(() => {
         // do something
-        done()
+        done()  // done控制loading关闭
       }, 1000)
     }
   }

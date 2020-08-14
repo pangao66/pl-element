@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <pl-table
-        :data="tableData"
-        :columns="columns"
-    >
-    </pl-table>
-  </div>
+  <pl-table
+    :data="tableData"
+    :columns="columns"
+  >
+  </pl-table>
 </template>
 <script>
 export default {

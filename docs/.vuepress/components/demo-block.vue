@@ -270,6 +270,7 @@ export default {
         highlight.borderRight = 'none'
       }
       const highlight2 = this.$slots.default
+      console.log(highlight)
       if (highlight2 && highlight2[0]) {
         let code = ''
         let cur = highlight2[2]

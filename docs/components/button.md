@@ -2,7 +2,6 @@
 title: button
 sidebarDepth: 2
 ---
-
 ## 防抖
 
 禁止用户频繁点击，多用于频繁点击操作，500ms之内重复点击只会执行一次
@@ -16,7 +15,7 @@ sidebarDepth: 2
 
 ## 自动loading
 
-自动添加loading效果,方便点击处理事件
+自动添加loading效果,方便点击处理事件,会通过参数 done 函数待 ajax等返回后控制loading关闭
 
 <demo-block>
 <button-demo-02 slot="source"></button-demo-02>
@@ -45,9 +44,9 @@ sidebarDepth: 2
 | confirmType | 操作按钮确认方式,可自动渲染`el-popconfirm`或`element-ui`的`confirm`弹窗 | pop/confirm | — | — |
 | popConfig | 当传入confirmType为pop时,`el-popconfirm`属性的对象,可传入`el-popconfirm`组件支持的所有属性值           | object  | — | — |
 | confirmConfig      | 当传入confirmType为confirm时,`element-ui`的`Messagebox.confirm`的属性值对象            | —  | — | —   |
-
+::: tip  温馨提示
 除以上列出的为本组件封装的新属性,其他`el-input`的任何属性均可直接继承
-
+::: 
 ## Events
 | 事件名 | 描述 | 参数 |
 |----| ----| ----|
