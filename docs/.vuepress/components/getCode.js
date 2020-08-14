@@ -46,7 +46,6 @@ export default {
       input.setAttribute('name', 'data')
       input.setAttribute('type', 'hidden')
       input.setAttribute('value', JSON.stringify(data))
-      console.log(data)
       form.appendChild(input)
       document.body.appendChild(form)
 

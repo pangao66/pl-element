@@ -273,7 +273,6 @@ export default {
       if (highlight2 && highlight2[0]) {
         let code = ''
         let cur = highlight2[2]
-        console.log(cur.elm.children[0].innerText)
         if (cur.elm && cur.elm.children[0]) {
           code = cur.elm.children[0].innerText
         }
@@ -281,7 +280,6 @@ export default {
           this.codepen.html = stripTemplate(code)
           this.codepen.script = stripScript(code)
           this.codepen.style = stripStyle(code)
-          console.log(this.codepen)
         }
       }
     })
