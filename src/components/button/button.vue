@@ -1,29 +1,35 @@
 <template>
   <!--popConfirm形式-->
   <el-popconfirm
-      v-if="confirmType==='pop'"
-      v-bind="popConfig"
-      @onConfirm="confirm"
-      @onCancel="$emit('cancel')"
-      v-loading.fullscreen.lock="fullscreenLoadingStatus"
+    v-if="confirmType==='pop'"
+    v-loading.fullscreen.lock="fullscreenLoadingStatus"
+    v-bind="popConfig"
+    @onConfirm="confirm"
+    @onCancel="$emit('cancel')"
   >
     <el-button slot="reference" v-bind="$attrs">
-      <slot></slot>
+      <slot/>
     </el-button>
   </el-popconfirm>
-  <el-button v-else v-bind="$attrs" @click="handleClick" :loading="loadingStatus"
-             v-loading.fullscreen.lock="fullscreenLoadingStatus">
-    <slot></slot>
+  <el-button
+    v-else
+    v-loading.fullscreen.lock="fullscreenLoadingStatus"
+    v-bind="$attrs"
+    :loading="loadingStatus"
+    @click="handleClick"
+  >
+    <slot/>
   </el-button>
 </template>
 
 <script>
-import { debounce } from '../../../utils'
-import { Loading } from 'element-ui'
+import { debounce } from '../../utils'
+// import { Loading } from 'element-ui'
 
-let loadingInstance = null
+// eslint-disable-next-line no-unused-vars
+// const loadingInstance = null
 export default {
-  name: 'pl-button',
+  name: 'PlButton',
   props: {
     debounce: {
       type: Boolean,

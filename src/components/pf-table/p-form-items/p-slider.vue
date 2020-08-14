@@ -9,7 +9,7 @@ import pFormItemMixin from 'components/pf-table/src/components/pf-table/p-form-i
 
 export default {
   name: 'p-slider',
-  mixins: [pFormItemMixin],
+  mixins: [pFormItemMixin]
 }
 </script>
 

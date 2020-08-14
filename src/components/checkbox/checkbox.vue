@@ -1,20 +1,20 @@
 <template>
   <el-checkbox-group v-model="selectedValue" v-on="$listeners">
     <template v-for="item in optionsList">
-      <el-checkbox-button v-if="radioButton" :label="item.value" :key="item.value">{{item.label}}</el-checkbox-button>
-      <el-checkbox v-else :label="item.value" :key="item.value">{{item.label}}</el-checkbox>
+      <el-checkbox-button v-if="radioButton" :label="item.value" :key="item.value">{{ item.label }}</el-checkbox-button>
+      <el-checkbox v-else :label="item.value" :key="item.value">{{ item.label }}</el-checkbox>
     </template>
   </el-checkbox-group>
 </template>
 <script>
-import { isArray, isPlainObject } from '../../../utils'
+import { isArray, isPlainObject } from '../../utils'
 
 export default {
   name: 'pl-checkbox',
   props: {
     value: { default: '' },
     options: {
-      type: [ Array, Object ],
+      type: [Array, Object],
       default: () => []
     },
     optionsAttr: {
@@ -22,7 +22,7 @@ export default {
       default: 'label,value'
     },
     valueLabel: {
-      type: [ String, Number ]
+      type: [String, Number]
     },
     radioButton: {
       type: Boolean,
@@ -52,8 +52,8 @@ export default {
     optionsList () {
       // 数组类型
       if (isArray(this.options)) {
-        let [ label, value ] = this.optionsAttr.split(',')
-        let list = []
+        const [label, value] = this.optionsAttr.split(',')
+        const list = []
         this.options.map((item) => {
           // 如果每项是对象形式
           if (isPlainObject(item)) {
@@ -65,7 +65,7 @@ export default {
         return list
       }
       if (isPlainObject(this.options)) {
-        let list = []
+        const list = []
         Object.keys(this.options).forEach((key) => {
           list.push({
             label: this.options[key],
@@ -87,4 +87,3 @@ export default {
   }
 }
 </script>
-

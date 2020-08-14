@@ -6,17 +6,17 @@
       <el-option v-for="opt in item.options" :label="opt.label" :value="opt.value" :key="opt.value"/>
     </el-select>
     <el-date-picker
-        v-if="item.type==='date'"
-        v-model="form[item.prop]"
-        v-bind="item.attrs"
-        :type="item.dateType"
-        clearable
+      v-if="item.type==='date'"
+      v-model="form[item.prop]"
+      v-bind="item.attrs"
+      :type="item.dateType"
+      clearable
     >
     </el-date-picker>
     <el-time-select
-        v-if="item.type==='time'"
-        v-model="form[item.prop]"
-        v-bind="item.attrs"/>
+      v-if="item.type==='time'"
+      v-model="form[item.prop]"
+      v-bind="item.attrs"/>
   </el-form-item>
 </template>
 
@@ -26,7 +26,7 @@ export default {
   props: {
     item: {
       type: Object,
-      default: ()=>({})
+      default: () => ({})
     },
     form: Object
   }

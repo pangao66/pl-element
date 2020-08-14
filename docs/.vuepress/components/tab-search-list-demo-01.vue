@@ -1,12 +1,14 @@
 <template>
-  <pl-search-list
-      :columns="columns"
-      :form-items="formItems"
-      @get-table-data="getTableData"
-      v-model="formData"
-      ref="plSearchList"
+  <pl-search-tab-list
+    :tabs="tabs"
+    v-model="formData"
+    :form-items="formItems"
+    :columns="columns"
+    :active-tab.sync="activeTab"
+    @get-table-data="getTableData"
+    ref="plTabTable"
   >
-  </pl-search-list>
+  </pl-search-tab-list>
 </template>
 
 <script>
@@ -24,28 +26,24 @@ const sexDict = {
   1: '男'
 }
 export default {
-  name: 'search-list-demo-01',
+  name: 'tab-search-list-demo-01',
   data () {
     return {
-      formData: {
-        id: '',
-        name: '',
-        birth: '',
-        sex: '',
-        job: ''
-      }
+      formData: {},
+      activeTab: 'designer'
     }
   },
   methods: {
-    async getTableData ({ currentPage, pageSize, sex, ...val }, done) {
-      let res = await axios.post('/search-table', filterNullValue({
+    async getTableData ({ currentPage, pageSize, sex, tabName, ...val }, done) {
+      const query = {
+        ...val,
         currentPage, pageSize,
-        sex: sex ? parseInt(sex) : '',
-        ...val
-      }))
+        job: tabName,
+        sex: sex ? parseInt(sex) : ''
+      }
+      let res = await axios.post('/search-table', filterNullValue(query))
       if (res.status === 200) {
         res = res.data
-        console.log(res)
         done({
           data: res.list,
           total: res.total
@@ -56,11 +54,19 @@ export default {
       let res = await axios.post('/delete-user', { id: row.id })
       if (res.status === 200) {
         this.$message.success('删除成功')
-        this.$refs.plSearchList.search()
+        this.$refs.plTabTable.search()
       }
     }
   },
   computed: {
+    tabs () {
+      return [
+        { label: '设计', name: 'designer' },
+        { label: '程序员', name: 'programmer' },
+        { label: '测试', name: 'testers' },
+        { label: '产品', name: 'product' }
+      ]
+    },
     columns () {
       return [
         { prop: 'index', label: '序号', type: 'index' },
@@ -70,9 +76,7 @@ export default {
         { prop: 'birth', label: '生日', formatter: 'date', formType: 'date' },
         {
           prop: 'job', label: '职位',
-          dict: jobDict,
-          formType: 'select',
-          options: jobDict
+          dict: jobDict
         },
         {
           prop: 'sex',

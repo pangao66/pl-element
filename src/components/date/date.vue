@@ -1,17 +1,22 @@
 <template>
   <el-date-picker
-      v-model="date"
-      v-bind="$attrs"
-      :picker-options="calPickerOptions"
-      @change="handleChange"
-      @focus="timeArrayFocus"
-      clearable
-  ></el-date-picker>
+    v-model="date"
+    value-format="yyyy-MM-dd"
+    :picker-options="calPickerOptions"
+    clearable
+    range-separator="至"
+    start-placeholder="开始日期"
+    end-placeholder="结束日期"
+    placeholder="请选择日期"
+    v-bind="$attrs"
+    @change="handleChange"
+    @focus="timeArrayFocus"
+  />
 </template>
 
 <script>
 export default {
-  name: 'pl-date',
+  name: 'PlDate',
   props: {
     label: {
       type: String,
@@ -23,7 +28,7 @@ export default {
     },
     value: { default: '' },
     labelWidth: {
-      type: [ String, Number ],
+      type: [String, Number],
       default: ''
     },
     formItemAttrs: {
@@ -45,16 +50,17 @@ export default {
       type: Array
     },
     disableDate: {
-      type: [ String, Number ]
+      type: [String, Number]
     },
     between: {
-      type: [ Number, String ]
+      type: [Number, String]
     },
     dateRangeKeys: {
       type: Array
     },
     form: {
-      type: Object
+      type: Object,
+      default: () => ({})
     }
   },
   data () {
@@ -62,40 +68,13 @@ export default {
       date: ''
     }
   },
-  methods: {
-    handleChange (val) {
-      const valueFormat = this.$attrs.valueFormat || this.$attrs['value-format']
-      console.log(valueFormat)
-      // 如果结果格式化为时间戳并且是范围选择,首日期应为当日0时,末日期应为当日23时59分59秒
-      if (valueFormat === 'timestamp' && this.date instanceof Array) {
-        if (val.length) {
-          val[1] = new Date(new Date(new Date(val[1]).toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1).getTime()
-        }
-      }
-      console.log(val)
-      this.$emit('change', val)
-      this.$emit('input', val)
-      if (this.dateRangeKeys && this.dateRangeKeys.length && this.date instanceof Array) {
-        const [ start, end ] = this.dateRangeKeys
-        if (this.form) {
-          this.$set(this.form, end, this.date[1])
-          this.$set(this.form, start, this.date[0])
-        }
-      }
-    },
-    timeArrayFocus () {
-      this.minDate = ''
-      this.maxDate = ''
-      this.$emit('focus')
-    }
-  },
   computed: {
     calPickerOptions () {
       if (this.pickerOptions) {
         return this.pickerOptions
       }
-      const shortcuts = this.shortcuts
-      let list = []
+      const shortcuts = this.shortcuts || []
+      const list = []
       const today = new Date()
       const todayTime = today.getTime()
       const map = {
@@ -133,16 +112,46 @@ export default {
             const { text, end, start, time } = map[item]
             list.push({
               text,
-              onClick (picker) {
-                picker.$emit('pick', time || [ start, end ])
+              onClick: (picker) => {
+                if (time) {
+                  picker.$emit('pick', new Date(time))
+                } else {
+                  picker.$emit('pick', [new Date(start), new Date(end)])
+                }
               }
             })
           }
         })
       }
       const disableDate = this.disableDate
+      console.log(list)
       return {
-        shortcuts: list.length ? list : undefined,
+        shortcuts: list.length ? list : null,
+        // shortcuts: [{
+        //   text: '最近一周',
+        //   onClick (picker) {
+        //     const end = new Date()
+        //     const start = new Date()
+        //     start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+        //     picker.$emit('pick', [start, end])
+        //   }
+        // }, {
+        //   text: '最近一个月',
+        //   onClick (picker) {
+        //     const end = new Date()
+        //     const start = new Date()
+        //     start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+        //     picker.$emit('pick', [start, end])
+        //   }
+        // }, {
+        //   text: '最近三个月',
+        //   onClick (picker) {
+        //     const end = new Date()
+        //     const start = new Date()
+        //     start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+        //     picker.$emit('pick', [start, end])
+        //   }
+        // }],
         onPick: ({ maxDate, minDate }) => {
           this.maxDate = maxDate
           this.minDate = minDate
@@ -175,7 +184,7 @@ export default {
             }
           }
           if (this.between) {
-            let range = this.between * 24 * 3600 * 1000
+            const range = this.between * 24 * 3600 * 1000
             if (this.maxDate) {
               con2 = time < this.maxDate.getTime() - range || time > this.maxDate.getTime() + range
             }
@@ -195,6 +204,32 @@ export default {
       handler (val) {
         this.date = val
       }
+    }
+  },
+  methods: {
+    handleChange (val) {
+      // const valueFormat = this.$attrs.valueFormat || this.$attrs['value-format']
+      // // console.log(valueFormat)
+      // // 如果结果格式化为时间戳并且是范围选择,首日期应为当日0时,末日期应为当日23时59分59秒
+      // if (valueFormat === 'timestamp' && this.date instanceof Array) {
+      //   if (val.length) {
+      //     val[1] = new Date(new Date(new Date(val[1]).toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1).getTime()
+      //   }
+      // }
+      this.$emit('change', val)
+      this.$emit('input', val)
+      // if (this.dateRangeKeys && this.dateRangeKeys.length && this.date instanceof Array) {
+      //   const [start, end] = this.dateRangeKeys
+      //   if (this.form) {
+      //     this.$set(this.form, end, val[1])
+      //     this.$set(this.form, start, val[0])
+      //   }
+      // }
+    },
+    timeArrayFocus () {
+      this.minDate = ''
+      this.maxDate = ''
+      this.$emit('focus')
     }
   }
 }

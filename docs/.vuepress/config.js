@@ -58,25 +58,8 @@ module.exports = {
           '/components/form',
           '/components/table',
           '/components/search-list',
-          '/components/dialog',
-          // '/components/pe-page-table',
-          // '/components/tabs',
-          // '/components/input',
-          // '/components/grid',
-          // '/components/layout',
-          // '/components/toast',
-          // '/components/popover',
-          // '/components/collapse',
-          // '/components/slides',
-          // '/components/cascader',
-          // '/components/date-picker',
-          // '/components/sticky',
-          // '/components/pager',
-          // '/components/nav',
-          // '/components/uploader',
-          // '/components/validate',
-          // '/components/scroll',
-          // '/components/table'
+          // '/components/dialog',
+          '/components/tab-search-list'
         ]
       }
     ]

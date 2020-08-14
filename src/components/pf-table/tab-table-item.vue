@@ -6,12 +6,12 @@
       </template>
     </p-table>
     <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :total="total"
-        v-bind="pageInfo"
-        style="text-align:center;"
-        v-if="pagination"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :total="total"
+      v-bind="pageInfo"
+      style="text-align:center;"
+      v-if="pagination"
     >
       <slot name="pagination-slot"></slot>
     </el-pagination>
@@ -62,7 +62,7 @@ export default {
         layout: 'total, sizes, prev, pager, next, jumper',
         pageSize: 10,
         currentPage: 1,
-        pageSizes: [ 10, 20, 50, 100 ],
+        pageSizes: [10, 20, 50, 100],
         background: true
       },
       tableData: [],

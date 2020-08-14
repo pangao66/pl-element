@@ -1,10 +1,10 @@
 <template>
-  <pl-button v-bind="config">{{config.text}}</pl-button>
+  <pl-button v-bind="config">{{ config.text }}</pl-button>
 </template>
 
 <script>
 export default {
-  name: 'pl-action-button',
+  name: 'PlActionButton',
   props: {
     action: {
       type: String
@@ -14,12 +14,6 @@ export default {
     }
   },
   computed: {
-    type () {
-      const action = this.action
-      const typeMap = {
-        del: 'danger'
-      }
-    },
     config () {
       const map = {
         del: { type: 'danger', text: '删除' },

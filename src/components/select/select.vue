@@ -1,19 +1,24 @@
 <template>
-  <el-select :value-key="valueKey" v-bind="{...defaultAttrs,...$attrs}" v-model="selectedValue"
-             @change="handleChange">
-    <el-option v-for="item in optionsList" :label="item.label" :value="item.value"></el-option>
+  <el-select
+    v-model="selectedValue"
+    value-key="id"
+    v-bind="attrs"
+    @change="handleChange"
+    :placeholder="`请选择${label}`"
+  >
+    <el-option v-for="(item,index) in optionsList" :key="index" :label="item.label" :value="item.value"/>
   </el-select>
 </template>
 
 <script>
-import { isArray, isPlainObject } from '../../../utils'
+import { isArray, isPlainObject } from '../../utils'
 
 export default {
-  name: 'pl-select',
+  name: 'PlSelect',
   props: {
-    value: { default: '' },
+    value: { default: '', type: [Array, Object, String, Number] },
     options: {
-      type: [ Array, Object ],
+      type: [Array, Object],
       default: () => []
     },
     optionsAttr: {
@@ -21,10 +26,16 @@ export default {
       default: 'label,value'
     },
     valueKey: {
-      type: [ String, Number ]
+      type: [String, Number],
+      default: ''
     },
     valueLabel: {
-      type: [ String, Number ]
+      type: [String, Number],
+      default: ''
+    },
+    label: {
+      type: String,
+      default: ''
     }
   },
   data () {
@@ -37,30 +48,22 @@ export default {
       }
     }
   },
-  methods: {
-    handleChange (val) {
-      this.$emit('change', val)
-      this.$emit('input', val)
-    },
-    init () {
-      this.selectedValue = this.value
-    }
-  },
   computed: {
+    attrs () {
+      return { ...this.$PlElement.selectConfig, ...this.$attrs }
+    },
     optionsList () {
       if (isArray(this.options)) {
         if (this.valueKey) {
-          const list = this.options.map((item) => {
-            console.log({ ...item })
+          return this.options.map((item) => {
             return {
               label: item[this.valueLabel],
               value: { ...item }
             }
           })
-          return list
         }
         if (this.optionsAttr) {
-          let [ label, value ] = this.optionsAttr.split(',')
+          const [label, value] = this.optionsAttr.split(',')
           this.options.forEach((item) => {
             item.label = item[label]
             item.value = item[value]
@@ -69,10 +72,7 @@ export default {
         return this.options
       }
       if (isPlainObject(this.options)) {
-        let list = []
-        for (let i in this.options) {
-          console.log(i)
-        }
+        const list = []
         Object.keys(this.options).forEach((key) => {
           list.push({
             label: this.options[key],
@@ -91,7 +91,15 @@ export default {
         this.init()
       }
     }
+  },
+  methods: {
+    handleChange (val) {
+      this.$emit('change', val)
+      this.$emit('input', val)
+    },
+    init () {
+      this.selectedValue = this.value
+    }
   }
 }
 </script>
-

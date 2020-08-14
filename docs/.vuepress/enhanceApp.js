@@ -1,7 +1,7 @@
 // import VueHighlightJS from 'vue-highlight.js'
 // import 'highlight.js/styles/atom-one-dark.css'
 import Element from 'element-ui'
-import PElement from '../../index'
+import PlElement from '../../index'
 import DemoBlock from './components/demo-block'
 // import 'element-ui/lib/theme-chalk/index.css'
 import './mock'
@@ -19,9 +19,37 @@ export default (
     size: 'small'
   })
   // Vue.use(VueHighlightJS)
-  Vue.use(PElement)
+  Vue.use(PlElement, {
+    tableConfig: {
+      stripe: true,
+      border: true,
+      highlightCurrentRow: true
+    },
+    selectConfig: {
+      filterable: true,
+      clearable: true,
+      'default-first-option': true
+    },
+    inputConfig: {
+      clearable: true
+    },
+    pageConfig: {
+      background: true,
+      layout: 'total, sizes, prev, pager, next, jumper',
+      'page-sizes': [10, 20, 50, 100],
+      pageSize: 10
+    },
+    formConfig: {
+      'label-position': 'right',
+      'label-width': '120px',
+      'label-suffix': '：'
+    },
+    dateConfig: {
+      format: 'yyyy-MM-dd'
+    }
+  })
   Vue.mixin({
-    mounted() {
+    mounted () {
       Mock.setup({
         timeout: '800-1300'
       })

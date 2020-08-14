@@ -10,7 +10,7 @@ export default {
   //   event: 'change'
   // },
   props: {
-    value: { default: '' },
+    value: { default: '' }
   },
   data () {
     return {
@@ -37,4 +37,3 @@ export default {
 <style scoped>
 
 </style>
-

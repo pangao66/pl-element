@@ -10,30 +10,12 @@ sidebarDepth: 2
 <demo-block>
 <button-demo-01 slot="source"></button-demo-01>
 
+
 <<< docs/.vuepress/components/button-demo-01.vue
 
 </demo-block>
 
-## 自动loading
 
-自动添加loading效果,方便点击处理事件
-
-<demo-block>
-<button-demo-02 slot="source"></button-demo-02>
-
-<<< docs/.vuepress/components/button-demo-02.vue
-
-</demo-block>
-
-## 操作确认
-有时候我们点击按钮需弹窗确认后方可继续,`pl-button`封装了这个步骤
-
-<demo-block>
-<button-demo-03 slot="source"></button-demo-03>
-
-<<< docs/.vuepress/components/button-demo-03.vue
-
-</demo-block>
 
 ## Attributes
 

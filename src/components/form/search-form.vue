@@ -3,17 +3,17 @@
     <template v-for="(item,index) in formItems">
       <template>
         <form-item-grid
-            :key="index"
-            :cols="item.cols"
-            :item="item"
+          :key="index"
+          :cols="item.cols"
+          :item="item"
         >
           <template v-slot="{col,item}">
             <component
-                :is="col?col.comp:item.comp"
-                v-bind="col||item"
-                v-model="form[col?col.prop:item.prop]"
-                :key="index"
-                :ref="col?col.prop:item.prop"
+              :is="col?col.comp:item.comp"
+              v-bind="col||item"
+              v-model="form[col?col.prop:item.prop]"
+              :key="index"
+              :ref="col?col.prop:item.prop"
             >
             </component>
             <slot :name="col?col.slot:item.slot" v-bind="{form,item}"></slot>
@@ -34,6 +34,7 @@
 <script>
 // import { getRandomKey } from '../../utils'
 import FormItemGrid from './form-item-grid'
+
 export default {
   name: 'pl-search-form',
   components: { FormItemGrid },

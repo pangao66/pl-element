@@ -12,13 +12,13 @@ export default {
   props: {
     value: { default: '' },
     labelWidth: {
-      type: [ String, Number ],
+      type: [String, Number],
       default: ''
     },
     formItemAttrs: {
       type: Object,
       default: () => ({})
-    },
+    }
   },
   data () {
     return {

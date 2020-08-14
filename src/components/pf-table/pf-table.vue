@@ -1,16 +1,16 @@
 <template>
   <div>
     <p-form
-        v-if="formItems.length"
-        v-bind="formOptions"
-        :form-items="formItems"
-        :is-search-form="true"
-        @search="search"
-        @reset="reset"
-        @form-change="formChange"
-        :origin-data="originData"
-        :form-options="{inline:true}"
-        :rules="rules"
+      v-if="formItems.length"
+      v-bind="formOptions"
+      :form-items="formItems"
+      :is-search-form="true"
+      @search="search"
+      @reset="reset"
+      @form-change="formChange"
+      :origin-data="originData"
+      :form-options="{inline:true}"
+      :rules="rules"
     >
       <template v-for="item in formSlots" v-slot:[item]="scope">
         <slot :name="item" v-bind="scope"></slot>
@@ -21,25 +21,25 @@
     </p-form>
     <slot name="form-after"></slot>
     <p-table
-        v-loading="loading"
-        :data="data"
-        :columns="columns"
-        v-on="$listeners"
-        v-bind="$attrs"
-        :class="tableClass"
-        :style="tableStyle"
+      v-loading="loading"
+      :data="data"
+      :columns="columns"
+      v-on="$listeners"
+      v-bind="$attrs"
+      :class="tableClass"
+      :style="tableStyle"
     >
       <template v-for="item in columnSlots" v-slot:[item]="scope">
         <slot :name="item" v-bind="{...scope}"></slot>
       </template>
     </p-table>
     <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :total="total"
-        v-bind="pageInfo"
-        style="text-align:center;"
-        v-if="pagination"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :total="total"
+      v-bind="pageInfo"
+      style="text-align:center;"
+      v-if="pagination"
     >
       <slot name="pagination-slot"></slot>
     </el-pagination>
@@ -66,10 +66,10 @@ export default {
       default: () => []
     },
     tableClass: {
-      type: [ String, Array, Object, Function ]
+      type: [String, Array, Object, Function]
     },
     tableStyle: {
-      type: [ String, Array, Object, Function ]
+      type: [String, Array, Object, Function]
     },
     formItems: {
       type: Array,
@@ -80,7 +80,7 @@ export default {
       default: () => ({})
     },
     rules: {
-      type: [ Object, Array ],
+      type: [Object, Array],
       default: () => ({})
     },
     pagination: {
@@ -118,7 +118,7 @@ export default {
         layout: 'total, sizes, prev, pager, next, jumper',
         pageSize: 10,
         currentPage: 1,
-        pageSizes: [ 10, 20, 50, 100 ],
+        pageSizes: [10, 20, 50, 100],
         background: true
       },
       searchQuery: {},
@@ -183,7 +183,7 @@ export default {
       return this.syncFormQuery ? this.formData : this.searchQuery
     },
     formSlots () {
-      let list = []
+      const list = []
       this.formItems.forEach((item) => {
         if (item.slot) {
           list.push(item.slot)

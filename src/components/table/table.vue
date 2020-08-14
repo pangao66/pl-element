@@ -1,54 +1,59 @@
 <template>
   <div v-loading="loading" class="pl-table-container">
     <el-table
-        :data="data"
-        v-on="$listeners"
-        v-bind="{...defaultTableAttrs,...tableConfig}"
-        @cell-dblclick="copy"
+      :data="data"
+      v-bind="attrs"
+      v-on="$listeners"
+      @cell-dblclick="copy"
     >
       <el-table-column
-          v-for="(col,index) in columns"
-          v-bind="col.attrs"
-          :key="getRandomKey(col)"
-          :prop="col.prop"
-          :label="col.label"
-          show-overflow-tooltip
-          :formatter="col.formatter||col.dict?(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter,col):undefined"
+        v-for="(col,index) in columns"
+        :key="getRandomKey(col)"
+        v-bind="col.attrs"
+        :prop="col.prop"
+        :label="col.label"
+        show-overflow-tooltip
+        :formatter="col.formatter||col.dict?(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter,col):undefined"
       >
         <!--自定义列header-->
-        <template v-slot:header="scope" v-if="col.headerSlot || col.tip">
+        <template v-if="col.headerSlot || col.tip" v-slot:header="scope">
           <template v-if="col.tip">
-            {{col.label}}
+            {{ col.label }}
             <el-tooltip class="item" effect="dark" :content="col.tip" placement="top">
-              <i class="el-icon-question"></i>
+              <i class="el-icon-question"/>
             </el-tooltip>
           </template>
-          <slot :name="col.headerSlot" v-bind="scope" v-if="col.headerSlot"></slot>
+          <slot v-if="col.headerSlot" :name="col.headerSlot" v-bind="scope"/>
         </template>
         <!--自定义列 -->
-        <template v-slot="scope" v-if="showSlot(col)">
-          <slot :name="col.slotName" v-bind="scope"></slot>
-          <el-tag :type="col.tagMap[scope.row[col.prop]].type" v-if="col.tagMap">
-            {{col.tagMap[scope.row[col.prop]].text}}
-          </el-tag>
+        <template v-if="showSlot(col)" v-slot="scope">
+          <slot :name="col.slotName" v-bind="scope"/>
+          <template v-if="col.tagMap">
+            <template v-if="scope.row[col.prop]===undefined||scope.row[col.prop]==null">-</template>
+            <el-tag v-else :type="col.tagMap[scope.row[col.prop]].type">
+              {{ col.tagMap[scope.row[col.prop]].text }}
+            </el-tag>
+          </template>
           <template v-if="col.type==='index'">
-            <slot name="index" v-bind="scope"></slot>
+            <slot name="index" v-bind="scope"/>
           </template>
           <template v-if="col.customerRenderText">
-            {{col.customerRenderText(scope)}}
+            {{ col.customerRenderText(scope) }}
           </template>
           <template v-if="col.actions&&col.actions.length">
             <template v-for="item in col.actions">
-              <pl-button v-if="item.confirmType||item.confirm" :confirm-type="item.confirmType||'confirm'"
-                         @confirm="item.confirm({row:scope.row,col,index})"
-                         v-bind="item.btnConfig"
+              <pl-button
+                v-if="item.confirmType||item.confirm"
+                :confirm-type="item.confirmType||'confirm'"
+                v-bind="item.btnConfig"
+                @confirm="item.confirm({row:scope.row,col,index})"
               >
-                {{item.text}}
+                {{ item.text }}
               </pl-button>
-              <pl-button v-else @click="item.onClick({row:scope.row,col,index})">{{item.text}}</pl-button>
+              <pl-button v-else @click="item.onClick({row:scope.row,col,index})">{{ item.text }}</pl-button>
             </template>
           </template>
-          <VNodes v-if="col.customerRender" :vnodes="col.customerRender(scope)"></VNodes>
+          <VNodes v-if="col.customerRender" :vnodes="col.customerRender(scope)"/>
         </template>
       </el-table-column>
     </el-table>
@@ -58,19 +63,35 @@
 <script>
 import { formatDate } from 'element-ui/lib/utils/date-util'
 import NP from 'number-precision'
-import { getRandomKey } from '../../../utils'
-import { Table } from 'element-ui'
+import { getRandomKey } from '../../utils'
 
 const Item2UIDMap = new WeakMap()
 export default {
-  name: 'pl-table',
+  name: 'PlTable',
+  components: {
+    VNodes: {
+      functional: true,
+      props: {
+        vnodes: {
+          type: Function,
+          default: () => {
+          }
+        }
+      },
+      render: (h, ctx) => {
+        return ctx.props.vnodes
+      }
+    }
+  },
   props: {
     columns: {
       required: true,
+      type: Array,
       default: () => []
     },
     data: {
       required: true,
+      type: Array,
       default: () => []
     },
     dbClickCopy: {
@@ -107,6 +128,11 @@ export default {
       },
       tableData: [],
       loading: false
+    }
+  },
+  computed: {
+    attrs () {
+      return { ...this.$PlElement.tableConfig, ...this.tableConfig }
     }
   },
   created () {
@@ -150,8 +176,11 @@ export default {
       }
       return cellValue
     },
-    copy (row, column, cell, event) {
-      if (this.dbClickCopy && column.property) {
+    copy (row, column, cell) {
+      if (!this.dbClickCopy || !this.tableConfig.dbClickCopy) {
+        return
+      }
+      if (column.property) {
         const val = cell.querySelector('.cell').innerHTML
         this.copyToClipboard(val)
       }
@@ -178,22 +207,6 @@ export default {
     },
     showSlot (col) {
       return col.slotName || col.customerRender || col.customerRenderText || col.tagMap || col.type === 'index' || col.actions
-    }
-  },
-  computed: {},
-  components: {
-    VNodes: {
-      functional: true,
-      props: {
-        vnodes: {
-          type: Function,
-          default: () => {
-          }
-        }
-      },
-      render: (h, ctx) => {
-        return ctx.props.vnodes
-      }
     }
   }
 }

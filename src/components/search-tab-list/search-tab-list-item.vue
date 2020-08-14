@@ -1,0 +1,112 @@
+<template>
+  <div>
+    <pl-table
+      v-loading="loading"
+      :columns="columns"
+      :data="tableData"
+      :table-config="tableConfig"
+      v-bind="$attrs"
+      v-on="$listeners"
+    >
+      <template v-for="item in columns">
+        <slot :slot="item.slotName" :name="item.slotName" v-bind="item"/>
+      </template>
+      <template v-slot:index="{row,$index}">
+        {{ (currentPage - 1) * pageSize + $index + 1 }}
+      </template>
+    </pl-table>
+    <el-pagination
+      v-if="showPager"
+      :total="total"
+      v-bind="pageAttrs"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'SearchTabListItem',
+  props: {
+    columns: {
+      type: Array,
+      default: () => []
+    },
+    showPager: {
+      type: Boolean,
+      default: true
+    },
+    pageConfig: {
+      type: Object,
+      default: null
+    },
+    form: {
+      type: Object,
+      default: () => ({})
+    },
+    tableConfig: {
+      type: Object,
+      default: null
+    },
+    tabInfo: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  data () {
+    return {
+      tableData: [],
+      loading: false,
+      pageSize: 10,
+      pageSizes: [],
+      currentPage: 1,
+      total: 10
+    }
+  },
+  computed: {
+    pageAttrs () {
+      return { ...this.$PlElement.pageConfig, ...this.pageConfig }
+    }
+  },
+  created () {
+    const pageConfig = this.pageConfig || this.$PlElement.pageConfig
+    if (pageConfig) {
+      const pageSizes = pageConfig.pageSizes || pageConfig['page-sizes']
+      const pageSize = pageConfig.pageSize || pageConfig['page-size']
+      if (pageSizes) {
+        this.pageSizes = pageSizes
+      }
+      if (pageSize) {
+        this.pageSize = pageSize
+      }
+    }
+    this.getTableData()
+  },
+  methods: {
+    handleCurrentChange (val) {
+      this.currentPage = val
+      this.getTableData()
+    },
+    handleSizeChange (val) {
+      this.pageSize = val
+      this.currentPage = 1
+      this.getTableData()
+    },
+    getTableData () {
+      this.loading = true
+      console.log(this.pageSize)
+      this.$emit('get-table-data', {
+        pageSize: this.pageSize,
+        currentPage: this.currentPage,
+        ...this.form,
+        tabName: this.tabInfo.name
+      }, ({ data, total }) => {
+        this.tableData = data
+        this.total = total
+        this.loading = false
+      })
+    }
+  }
+}
+</script>

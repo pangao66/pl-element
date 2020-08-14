@@ -11,20 +11,21 @@
       <el-row :gutter="10">
         <template v-for="(item,index) in formItems">
           <el-col :key="index" :xl="6" :lg="8" :md="12" :sm="24" class="el-col-xll-6">
-            <el-form-item :label="item.label" :prop="item.prop">
+            <el-form-item v-if="!item.slotName" :label="item.label" :prop="item.prop">
               <component
                 :is="getComp(item.comp)"
                 :key="getRandomKey(item)"
                 :ref="item.prop"
                 v-model="form[item.prop]"
+                :form="form"
                 v-bind="item"
               />
             </el-form-item>
-            <slot :name="item.slot" v-bind="{form,item}"/>
+            <slot v-if="item.slotName" :name="item.slotName" v-bind="{form,item}"/>
           </el-col>
         </template>
         <el-form-item style="float:right;" label-width="0">
-          <el-button type="primary" @click="search">查询</el-button>
+          <pl-button debounce type="primary" @click="search">查询</pl-button>
           <el-button @click="resetForm">重置</el-button>
           <a style="margin-left: 8px;cursor:pointer;" class="advance-toggle-btn" @click="toggleAdvanced">
             {{ advanced ? '展开' : '收起' }}
@@ -33,50 +34,65 @@
         </el-form-item>
       </el-row>
     </el-form>
-    <slot name="form-after">
-      <div class="pl-search-list-menu">
-        <div/>
+    <div class="search-list-tab-container">
+      <div class="pl-search-tab-list-menu">
         <div>
-          <pl-button icon="el-icon-refresh" circle debounce @click="search"/>
+          <slot name="menu-handle"/>
+          <pl-button debounce icon="el-icon-refresh" circle @click="search"/>
           <el-button icon="el-icon-menu" circle/>
         </div>
       </div>
-    </slot>
-    <pl-table
-      v-loading="loading"
-      :columns="columns"
-      :data="tableData"
-      :table-config="tableConfig"
-      :page-config="pageConfig"
-      v-on="$listeners"
-    >
-      <template v-for="item in columns">
-        <slot :slot="item.slotName" :name="item.slotName" v-bind="item"/>
-      </template>
-      <template v-slot:index="{row,$index}">
-        {{ (currentPage - 1) * pageSize + $index + 1 }}
-      </template>
-    </pl-table>
-    <el-pagination
-      v-if="showPager"
-      :total="total"
-      v-bind="pageAttrs"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
+      <el-tabs v-model="activeName" type="card" @tab-click="tabClick">
+        <el-tab-pane
+          v-for="item in tabs"
+          :key="`${item.name}${keyDate}`"
+          :label="item.label"
+          :name="item.name"
+        >
+          <template v-slot:label>
+            <span>{{ item.label }}</span>
+            <span v-if="item.num">({{ item.num }})</span>
+            <slot name="tab-label" v-bind="{...item}"/>
+          </template>
+          <keep-alive>
+            <tab-table-item
+              v-if="activeName===item.name"
+              ref="tab-table-item"
+              :tab-info="item"
+              :columns="item.columns||columns"
+              v-bind="$attrs"
+              :table-config="tableConfig"
+              :page-config="pageConfig"
+              :form="form"
+              v-on="$listeners"
+            >
+              <template v-for="item in columnSlots" v-slot:[item]="scope">
+                <slot :name="item.slotName" v-bind="{...scope}"/>
+              </template>
+              <template v-slot:pagination-slot>
+                <slot name="pagination-slot"/>
+              </template>
+            </tab-table-item>
+          </keep-alive>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
-
 <script>
 import { getRandomKey } from '../../utils'
+import TabTableItem from './search-tab-list-item'
 
 const Item2UIDMap = new WeakMap()
 export default {
-  name: 'PlSearchList',
+  name: 'PlSearchTabList',
+  components: {
+    TabTableItem
+  },
   props: {
     formItems: {
       type: Array,
-      default: () => []
+      default: null
     },
     columns: {
       type: Array,
@@ -101,25 +117,27 @@ export default {
     showPager: {
       type: Boolean,
       default: true
+    },
+    tabs: {
+      type: Array,
+      default: () => []
+    },
+    activeTab: {
+      type: String,
+      default: ''
     }
   },
   data () {
     return {
       form: this.value,
       advanced: false,
-      pageSize: 10,
-      currentPage: 1,
-      total: 10,
-      loading: false,
-      tableData: []
+      activeName: '',
+      keyDate: ''
     }
   },
   computed: {
     formAttrs () {
       return { ...this.$PlElement.formConfig, ...this.formConfig }
-    },
-    pageAttrs () {
-      return { ...this.$PlElement.pageConfig, ...this.pageConfig }
     },
     hasChildClass () {
       let length = this.formItems.length
@@ -127,25 +145,39 @@ export default {
         length = 5
       }
       return `has-items-gt-${length}`
+    },
+    columnSlots () {
+      if (!this.columns.length) {
+        return this.tabs.forEach((item) => {
+          return item.columns.filter((c) => c.slot).map((c) => c.slot)
+        })
+      }
+      return this.columns.filter((c) => c.slot).map((c) => c.slot)
+    }
+  },
+  watch: {
+    activeTab: {
+      immediate: true,
+      handler (val) {
+        this.activeName = val || this.tabs[0].name
+      }
     }
   },
   created () {
-    const pageConfig = this.pageConfig || this.$PlElement.pageConfig
-    if (pageConfig) {
-      const pageSizes = pageConfig.pageSizes || pageConfig['page-sizes']
-      const pageSize = pageConfig.pageSize || pageConfig['page-size']
-      if (pageSizes) {
-        this.pageSizes = pageSizes
-      }
-      if (pageSize) {
-        this.pageSize = pageSize
-      }
-    }
-    this.search()
+    this.keyDate = new Date().getTime()
+    this.setKeyValue(this.formItems)
   },
   methods: {
+    setKeyValue (list) {
+      list.forEach((item) => {
+        if (item.prop && typeof this.form[item.prop] === 'undefined') {
+          this.$set(this.form, item.prop, '')
+        }
+      })
+    },
     search () {
-      this.getTableData()
+      this.keyDate = new Date().getTime()
+      // this.getTableData()
     },
     resetForm () {
       this.$refs.plForm.resetFields()
@@ -175,14 +207,8 @@ export default {
       }
       return map[comp] || comp
     },
-    handleCurrentChange (val) {
-      this.currentPage = val
-      this.getTableData()
-    },
-    handleSizeChange (val) {
-      this.pageSize = val
-      this.currentPage = 1
-      this.getTableData()
+    tabClick () {
+      this.$emit('update:activeTab', this.activeName)
     },
     getTableData () {
       this.loading = true
@@ -199,3 +225,24 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus">
+  .search-list-tab-container {
+    position: relative;
+  }
+  .pl-search-tab-list-menu {
+    position: absolute;
+    z-index 2
+    right: 10px
+    > i {
+    }
+  }
+  .advance-toggle-btn {
+    color: #409EFF;
+  }
+  .pl-search-list-form {
+    .el-input__inner {
+      width: 100%;
+    }
+  }
+</style>

@@ -1,5 +1,10 @@
 <template>
-  <pl-button type="primary" debounce @click="handleClick">debounce</pl-button>
+  <pl-button
+    type="primary"
+    debounce
+    @click="handleClick"
+  >debounce
+  </pl-button>
 </template>
 
 <script>
@@ -12,4 +17,8 @@ export default {
   }
 }
 </script>
-
+<style>
+  .a {
+    background: red
+  }
+</style>

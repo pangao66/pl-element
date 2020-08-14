@@ -9,12 +9,12 @@
 
 <script>
 export default {
-    name: 'pl-dialog',
-    data() {
-        return {
-            fullscreen: false
-        }
+  name: 'pl-dialog',
+  data () {
+    return {
+      fullscreen: false
     }
+  }
 }
 </script>
 

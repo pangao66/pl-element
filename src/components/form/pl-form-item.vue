@@ -1,29 +1,28 @@
 <template>
   <el-form-item
-      :label="item.label"
-      :prop="item.prop"
-      v-if="!item.cols"
-      :rules="getRules(item)"
+    v-if="!item.cols"
+    :label="item.label"
+    :prop="item.prop"
+    :rules="getRules(item)"
   >
     <component
-        :is="getComp(item.comp)"
-        v-bind="item"
-        v-model="form[item.prop]"
-        :ref="item.prop"
-    >
-    </component>
+      :is="getComp(item.comp)"
+      :ref="item.prop"
+      v-model="form[item.prop]"
+      v-bind="item"
+    />
   </el-form-item>
-  <form-item-grid v-else></form-item-grid>
+  <form-item-grid v-else/>
 </template>
 
 <script>
 import FormItemGrid from './form-item-grid'
-import { carNumReg, idCardReg, integerNumberReg, percentReg, priceReg, telReg, towPointReg } from '../../../utils/regs'
+import { carNumReg, idCardReg, integerNumberReg, percentReg, priceReg, telReg, towPointReg } from '../../utils/regs'
 
 export default {
-  name: 'pl-form-item',
+  name: 'PlFormItem',
   components: { FormItemGrid },
-  inject: [ 'plForm' ],
+  inject: ['plForm'],
   props: {
     item: {},
     form: {
@@ -44,7 +43,7 @@ export default {
         checkbox: 'pl-checkbox',
         date: 'pl-date',
         time: 'pl-time',
-        'switch': 'pl-switch'
+        switch: 'pl-switch'
         // 'grid': 'FormItemGrid'
       }
       return map[comp] || comp
@@ -61,7 +60,7 @@ export default {
       } else {
         handleWayText = '请选择'
       }
-      let trigger = item.trigger || 'blur'
+      const trigger = item.trigger || 'blur'
       const required = item.required ?? 'no-required'
       const validation = item.validation
       const map = {
@@ -82,9 +81,9 @@ export default {
         map[validation]
       ]
       if (item.rules && item.rules instanceof Array) {
-        rules = [ ...rules, ...item.rules ]
+        rules = [...rules, ...item.rules]
       } else {
-        rules = [ ...rules, item.rules ]
+        rules = [...rules, item.rules]
       }
       rules = rules.filter(v => v)
       return rules.length ? rules : undefined

@@ -3,10 +3,10 @@
     <div>
       <div class="pe-search-table-tools">
         <el-popover
-            placement="top-start"
-            title="标题"
-            width="500"
-            trigger="click"
+          placement="top-start"
+          title="标题"
+          width="500"
+          trigger="click"
         >
           <div>
             <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选
@@ -14,7 +14,7 @@
             <div style="margin: 15px 0;">
               <el-checkbox-group v-model="columnsShowList" @change="columnsShowChange">
                 <div v-for="item in columns" class="search-table-column-config-item">
-                  <el-checkbox :label="item.label" :key="item.label">{{item.label}}</el-checkbox>
+                  <el-checkbox :label="item.label" :key="item.label">{{ item.label }}</el-checkbox>
                   <fix-btn direction="left"></fix-btn>
                   <fix-btn direction="right"></fix-btn>
                 </div>
@@ -30,9 +30,9 @@
         </template>
       </pl-table>
       <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          v-bind="{...defaultPageConfig,...pageConfig}"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        v-bind="{...defaultPageConfig,...pageConfig}"
       ></el-pagination>
     </div>
   </div>
@@ -72,7 +72,7 @@ export default {
       columnsShowList: [],
       defaultPageConfig: {
         layout: 'total, sizes, prev, pager, next, jumper',
-        pageSizes: [ 10, 20, 50, 100 ],
+        pageSizes: [10, 20, 50, 100],
         background: true
       },
       pageSize: 10,
@@ -96,7 +96,7 @@ export default {
       this.isIndeterminate = false
     },
     columnsShowChange (value) {
-      let checkedCount = value.length
+      const checkedCount = value.length
       this.checkAll = checkedCount === this.columns.length
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.columns.length
     },
@@ -107,7 +107,7 @@ export default {
       }
     },
     getRandomKey () {
-      let list = []
+      const list = []
       for (let i = 0; i < 5; i++) {
         list.push(Math.ceil(Math.random() * 10000))
       }

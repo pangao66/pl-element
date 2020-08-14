@@ -1,10 +1,10 @@
 <template>
-  <el-form :model="form" v-bind="$attrs" ref="plForm">
+  <el-form ref="plForm" :model="form" v-bind="attrs">
     <template v-for="(item,index) in formItems">
       <slot :name="item.slotName" v-bind="{form,item}">
-        <pl-form-item :item="item" :form="form" :key="index" v-if="!item.cols"></pl-form-item>
+        <pl-form-item v-if="!item.cols" :key="index" :item="item" :form="form"/>
         <form-item-grid :item="item" :form="form">
-          <slot v-for="col in item.cols" :slot="col.slotName" :name="col.slotName" v-bind="{form,item:col}"></slot>
+          <slot v-for="col in item.cols" :slot="col.slotName" :name="col.slotName" v-bind="{form,item:col}"/>
         </form-item-grid>
       </slot>
     </template>
@@ -14,18 +14,18 @@
         <el-button @click="resetForm">重置</el-button>
       </el-form-item>
     </slot>
-    <slot></slot>
+    <slot/>
   </el-form>
 </template>
 
 <script>
-import { getRandomKey } from '../../../utils'
+import { getRandomKey } from '../../utils'
 import FormItemGrid from './form-item-grid'
 import PlFormItem from './pl-form-item'
 
 const Item2UIDMap = new WeakMap()
 export default {
-  name: 'pl-form',
+  name: 'PlForm',
   components: { PlFormItem, FormItemGrid },
   provide () {
     return {
@@ -51,6 +51,12 @@ export default {
       form: this.value
     }
   },
+  computed: {
+    attrs () {
+      return { ...this.$PlElement.formConfig, ...this.$attrs }
+    }
+  },
+  watch: {},
   created () {
     this.formItems.forEach((item) => {
 
@@ -85,7 +91,7 @@ export default {
         checkbox: 'pl-checkbox',
         date: 'pl-date',
         time: 'pl-time',
-        'switch': 'pl-switch'
+        switch: 'pl-switch'
       }
       return map[comp] || comp
     },
@@ -101,27 +107,6 @@ export default {
     clearValidate (...args) {
       this.$refs.plForm.clearValidate(...args)
     }
-  },
-  computed: {
-    // getRandomKey () {
-    //   return getRandomKey()
-    // }
-  },
-  watch: {
-    // value: {
-    //   immediate: true,
-    //   deep: true,
-    //   handler (val) {
-    //     this.form = { ...this.form, ...val }
-    //   }
-    // },
-    // form: {
-    //   deep: true,
-    //   handler (val) {
-    //     // this.$emit('input', val)
-    //     this.$emit('change', val)
-    //   }
-    // }
   }
 }
 </script>

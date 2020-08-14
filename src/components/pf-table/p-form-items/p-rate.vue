@@ -7,7 +7,7 @@ import pFormItemMixin from 'components/pf-table/src/components/pf-table/p-form-i
 
 export default {
   name: 'p-rate',
-  mixins: [pFormItemMixin],
+  mixins: [pFormItemMixin]
 }
 </script>
 

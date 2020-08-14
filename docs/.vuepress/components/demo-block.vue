@@ -1,36 +1,35 @@
 <template>
-  <div class="demo-block"
-       :class="[blockClass, { 'hover': hovering }]"
-       @mouseenter="hovering = true"
-       @mouseleave="hovering = false">
+  <div
+    class="demo-block"
+    :class="[blockClass, { 'hover': hovering }]"
+    @mouseenter="hovering = true"
+    @mouseleave="hovering = false">
     <div class="source">
       <slot name="source"></slot>
     </div>
-    <div class="meta"
-         ref="meta">
-      <div class="description"
-           v-if="$slots.default">
+    <div class="meta" ref="meta">
+      <div class="description" v-if="$slots.default">
         <slot></slot>
       </div>
       <div class="highlight">
         <slot name="highlight"></slot>
       </div>
     </div>
-    <div class="demo-block-control"
-         ref="control"
-         :class="{ 'is-fixed': fixedControl }"
-         @click="isExpanded = !isExpanded">
+    <div
+      class="demo-block-control"
+      ref="control"
+      :class="{ 'is-fixed': fixedControl }"
+      @click="isExpanded = !isExpanded">
       <transition name="arrow-slide">
         <i :class="[iconClass, { 'hovering': hovering }]"></i>
       </transition>
       <transition name="text-slide">
         <span v-show="hovering">{{ controlText }}</span>
       </transition>
-      <!-- <el-tooltip effect="dark"
-        :content="langConfig['tooltip-text']"
-        placement="right">
+      <el-tooltip effect="dark" :content="langConfig['tooltip-text']" placement="right">
         <transition name="text-slide">
-          <el-button v-show="hovering || isExpanded"
+          <el-button
+            v-show="hovering || isExpanded"
             size="small"
             type="text"
             class="control-button"
@@ -38,19 +37,18 @@
             {{ langConfig['button-text'] }}
           </el-button>
         </transition>
-      </el-tooltip> -->
+      </el-tooltip>
     </div>
   </div>
 </template>
 
-<style lang="stylus" >
+<style lang="stylus">
   .demo-block {
     border: solid 1px #ebebeb;
     border-radius: 3px;
-    transition: 0.2s;
+    transition: .2s;
     &.hover {
-      box-shadow: 0 0 8px 0 rgba(232, 237, 250, 0.6),
-          0 2px 4px 0 rgba(232, 237, 250, 0.5);
+      box-shadow: 0 0 8px 0 rgba(232, 237, 250, .6), 0 2px 4px 0 rgba(232, 237, 250, .5);
     }
     code {
       font-family: Menlo, Monaco, Consolas, Courier, monospace;
@@ -66,7 +64,7 @@
       border-top: solid 1px #eaeefb;
       overflow: hidden;
       height: 0;
-      transition: height 0.2s;
+      transition: height .2s;
     }
     .description {
       padding: 20px;
@@ -124,13 +122,12 @@
       &.is-fixed {
         position: fixed;
         bottom: 0;
-        width: 718px;
-        z-index: 1;
+        width: 868px;
       }
       i {
         font-size: 16px;
         line-height: 44px;
-        transition: 0.3s;
+        transition: .3s;
         &.hovering {
           transform: translateX(-40px);
         }
@@ -140,11 +137,11 @@
         transform: translateX(-30px);
         font-size: 14px;
         line-height: 44px;
-        transition: 0.3s;
+        transition: .3s;
         display: inline-block;
       }
       &:hover {
-        color: #409eff;
+        color: #409EFF;
         background-color: #f9fafc;
       }
       & .text-slide-enter,
@@ -162,35 +159,18 @@
         padding-right: 25px;
       }
     }
-    table {
-      margin: 0;
-      display: table;
-    }
-    th,
-    td,
-    tr {
-      /*border: 0;*/
-    }
-  }
-  .el-popper {
-    table {
-      margin: 0;
-      display: table;
-    }
-    th,
-    td,
-    tr {
-      border: 0;
-    }
-    tr:nth-child(2n) {
-      background: none;
-    }
   }
 </style>
 
 <script type="text/babel">
+// import compoLang from '../i18n/component.json';
+// import Element from 'main/index.js';
+import Element from 'element-ui'
+import { stripScript, stripStyle, stripTemplate } from '../util.js'
+
+const { version } = Element
+
 export default {
-  name: 'DemoBlock',
   data () {
     return {
       codepen: {
@@ -204,87 +184,181 @@ export default {
       scrollParent: null
     }
   },
+
   methods: {
     goCodepen () {
+      // since 2.6.2 use code rather than jsfiddle https://blog.codepen.io/documentation/api/prefill/
+      const { script, html, style } = this.codepen
+      console.log(html)
+      const resourcesTpl = `
+<script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.min.js"><\/script>
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<link rel="stylesheet" href="https://oss.noob6.com/pl-element/pl-element.css">
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"><\/script>
+<script src="https://oss.noob6.com/pl-element/pl-element.umd.min.js"><\/script>
+<div id="app">
+   ${html}
+</div>
+      `
+      let jsTpl = (script || '').replace(/export default/, 'var Main =').trim()
+      // let htmlTpl = `${resourcesTpl}\n<div id="app">\n${html.trim()}\n</div>`
+      // let cssTpl = `@import url("//unpkg.com/element-ui@${version}/lib/theme-chalk/index.css");\n${(style || '').trim()}\n  @import url("https://oss.noob6.com/pl-element/pl-element.css");\\n${(style || '').trim()}\n`
+      jsTpl = jsTpl
+        ? jsTpl + '\nvar Ctor = Vue.extend(Main)\nnew Ctor().$mount(\'#app\')'
+        : 'new Vue().$mount(\'#app\')'
+      const data = {
+        js: jsTpl,
+        css: (style || ''),
+        html: resourcesTpl
+      }
+      const form = document.getElementById('fiddle-form') || document.createElement('form')
+      while (form.firstChild) {
+        form.removeChild(form.firstChild)
+      }
+      form.method = 'POST'
+      form.action = 'https://codepen.io/pen/define/'
+      form.target = '_blank'
+      form.style.display = 'none'
 
+      const input = document.createElement('input')
+      input.setAttribute('name', 'data')
+      input.setAttribute('type', 'hidden')
+      input.setAttribute('value', JSON.stringify(data))
+      console.log(data)
+      form.appendChild(input)
+      document.body.appendChild(form)
+
+      form.submit()
     },
-    scrollHandler () {
-      const { top, bottom, left } = this.$refs.meta.getBoundingClientRect()
-      this.fixedControl = bottom > document.documentElement.clientHeight &&
-        top + 44 <= document.documentElement.clientHeight
-      // this.$refs.control.style.left = this.fixedControl ? `${left}px` : '0'
-    },
-    removeScrollHandler () {
-      this.scrollParent && this.scrollParent.removeEventListener('scroll', this.scrollHandler)
-    }
-  },
-  computed: {
-    // lang () {
-    //   return this.$route.path.split('/')[1]
-    // },
-    // langConfig () {
-    //   return compoLang.filter(config => config.lang === this.lang)[0]['demo-block']
-    // },
-    blockClass () {
-      return `demo-zh demo-${this.$router.currentRoute.path.split('/').pop()}`
-    },
-    iconClass () {
-      return this.isExpanded ? 'el-icon-caret-top' : 'el-icon-caret-bottom'
-    },
-    controlText () {
-      return this.isExpanded ? '隐藏代码' : '显示代码'
-    },
-    codeArea () {
-      return this.$el.getElementsByClassName('meta')[0]
-    },
-    codeAreaHeight () {
-      if (this.$el.getElementsByClassName('description').length > 0) {
-        return this.$el.getElementsByClassName('description')[0].clientHeight +
-          this.$el.getElementsByClassName('highlight')[0].clientHeight + 20
+
+      scrollHandler()
+      {
+        const { top, bottom, left } = this.$refs.meta.getBoundingClientRect()
+        this.fixedControl = bottom > document.documentElement.clientHeight &&
+          top + 44 <= document.documentElement.clientHeight
+        this.$refs.control.style.left = this.fixedControl ? `${left}px` : '0'
       }
-      return this.$el.getElementsByClassName('highlight')[0].clientHeight
-    }
-  },
-  watch: {
-    isExpanded (val) {
-      this.codeArea.style.height = val ? `${this.codeAreaHeight + 1}px` : '0'
-      if (!val) {
-        this.fixedControl = false
-        // this.$refs.control.style.left = '0'
-        this.removeScrollHandler()
-        return
+    ,
+
+      removeScrollHandler()
+      {
+        this.scrollParent && this.scrollParent.removeEventListener('scroll', this.scrollHandler)
       }
-      setTimeout(() => {
-        this.scrollParent = window
-        this.scrollParent && this.scrollParent.addEventListener('scroll', this.scrollHandler)
-        this.scrollHandler()
-      }, 200)
-    }
-  },
-  created () {
-    const highlight = this.$slots.highlight
-    if (highlight && highlight[0]) {
-      let code = ''
-      let cur = highlight[0]
-      if (cur.tag === 'pre' && (cur.children && cur.children[0])) {
-        cur = cur.children[0]
-        if (cur.tag === 'code') {
-          code = cur.children[0].text
+    },
+
+      computed: {
+        lang()
+        {
+          return this.$route.path.split('/')[1]
+        }
+      ,
+
+        langConfig()
+        {
+          // return compoLang.filter(config => config.lang === this.lang)[0]['demo-block'];
+          return {
+            'hide-text': '隐藏代码',
+            'show-text': '显示代码',
+            'button-text': '在线运行',
+            'tooltip-text': '前往 codepen.io 运行此示例'
+          }
+        }
+      ,
+
+        blockClass()
+        {
+          return `demo-${this.lang} demo-${this.$router.currentRoute.path.split('/').pop()}`
+        }
+      ,
+
+        iconClass()
+        {
+          return this.isExpanded ? 'el-icon-caret-top' : 'el-icon-caret-bottom'
+        }
+      ,
+
+        controlText()
+        {
+          return this.isExpanded ? this.langConfig['hide-text'] : this.langConfig['show-text']
+        }
+      ,
+
+        codeArea()
+        {
+          return this.$el.getElementsByClassName('meta')[0]
+        }
+      ,
+
+        codeAreaHeight()
+        {
+          if (this.$el.getElementsByClassName('description').length > 0) {
+            return this.$el.getElementsByClassName('description')[0].clientHeight +
+              this.$el.getElementsByClassName('highlight')[0].clientHeight + 20
+          }
+          return this.$el.getElementsByClassName('highlight')[0].clientHeight
         }
       }
-    }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      let highlight = this.$el.getElementsByClassName('highlight')[0]
-      if (this.$el.getElementsByClassName('description').length === 0) {
-        highlight.style.width = '100%'
-        highlight.borderRight = 'none'
+    ,
+
+      watch: {
+        isExpanded(val)
+        {
+          this.codeArea.style.height = val ? `${this.codeAreaHeight + 1}px` : '0'
+          if (!val) {
+            this.fixedControl = false
+            this.$refs.control.style.left = '0'
+            this.removeScrollHandler()
+            return
+          }
+          setTimeout(() => {
+            this.scrollParent = document.querySelector('.page-component__scroll > .el-scrollbar__wrap')
+            this.scrollParent && this.scrollParent.addEventListener('scroll', this.scrollHandler)
+            this.scrollHandler()
+          }, 200)
+        }
       }
-    })
-  },
-  beforeDestroy () {
-    this.removeScrollHandler()
-  }
-}
+    ,
+
+      created()
+      {
+        // const highlight = this.$slots.highlight
+        const highlight = this.$slots.default
+        if (highlight && highlight[0]) {
+          let code = ''
+          let cur = highlight[2]
+          setTimeout(() => {
+            console.log(cur.elm.children[0].innerText)
+            if (cur.elm && cur.elm.children[0]) {
+              code = cur.elm.children[0].innerText
+            }
+            if (code) {
+              this.codepen.html = stripTemplate(code)
+              this.codepen.script = stripScript(code)
+              this.codepen.style = stripStyle(code)
+              console.log(this.codepen)
+            }
+          }, 5000)
+        }
+      }
+    ,
+
+      mounted()
+      {
+        this.$nextTick(() => {
+          let highlight = this.$el.getElementsByClassName('highlight')[0]
+          if (this.$el.getElementsByClassName('description').length === 0) {
+            highlight.style.width = '100%'
+            highlight.borderRight = 'none'
+          }
+        })
+      }
+    ,
+
+      beforeDestroy()
+      {
+        this.removeScrollHandler()
+      }
+    }
 </script>

@@ -1,29 +1,25 @@
 <template>
   <el-input
-      v-model="message"
-      v-bind="{...defaultAttrs,...$attrs}"
-      :placeholder="$attrs.placeholder||`请输入${label}`"
-      @change="handleChange"
-      @input="handleInput"
-      @blur="$emit('blur')"
+    v-model="message"
+    v-bind="attrs"
+    :placeholder="$attrs.placeholder||`请输入${label}`"
+    @change="handleChange"
+    @input="handleInput"
+    @blur="$emit('blur')"
   >
-    <slot slot="suffix"></slot>
+    <slot slot="suffix"/>
   </el-input>
 </template>
 
 <script>
-import { idCardReg, telReg, integerNumberReg, carNumReg, priceReg, towPointReg, percentReg } from '../../../utils/regs'
+import { idCardReg, telReg, integerNumberReg, carNumReg, priceReg, towPointReg, percentReg } from '../../utils/regs'
 import NP from 'number-precision'
 
 export default {
   name: 'PlInput',
-  // model: {
-  //   event: 'input',
-  //   prop: 'value'
-  // },
   props: {
     rules: {
-      type: [ Object, Array ],
+      type: [Object, Array],
       default: () => []
     },
     label: {
@@ -34,7 +30,7 @@ export default {
       type: String,
       default: ''
     },
-    value: { default: '' },
+    value: { default: '', type: [String, Number] },
     required: {
       type: Boolean,
       default: null
@@ -48,7 +44,12 @@ export default {
       default: false
     },
     transfer: {
-      type: Function
+      type: Function,
+      default: null
+    },
+    form: {
+      type: Object,
+      default: () => ({})
     }
   },
   data () {
@@ -59,30 +60,10 @@ export default {
       }
     }
   },
-  methods: {
-    isNaN (num) {
-      return Number.isNaN(parseFloat(num))
-    },
-    handleChange (val) {
-      this.$emit('input', this.calValue)
-      this.$nextTick(() => {
-        this.$emit('change', this.message)
-      })
-    },
-    handleInput (val) {
-      if (!this.cent) {
-        this.$emit('input', val)
-      }
-    },
-    init () {
-      if (this.cent) {
-        this.calValue = NP.divide(this.value, 100) || 0
-      } else {
-        this.message = this.value
-      }
-    }
-  },
   computed: {
+    attrs () {
+      return { ...this.$PlElement.inputConfig, ...this.$attrs }
+    },
     mergedRules () {
       // const triggerMessage = item.type === 'input' ? '请输入' : '请选择'
       let trigger = 'blur'
@@ -109,9 +90,9 @@ export default {
         map[validation]
       ]
       if (this.rules && this.rules instanceof Array) {
-        rules = [ ...rules, ...this.rules ]
+        rules = [...rules, ...this.rules]
       } else {
-        rules = [ ...rules, this.rules ]
+        rules = [...rules, this.rules]
       }
       rules = rules.filter(v => v)
       return rules.length ? rules : undefined
@@ -134,6 +115,29 @@ export default {
       immediate: true,
       handler (val) {
         this.init()
+      }
+    }
+  },
+  methods: {
+    isNaN (num) {
+      return Number.isNaN(parseFloat(num))
+    },
+    handleChange (val) {
+      this.$emit('input', this.calValue)
+      this.$nextTick(() => {
+        this.$emit('change', this.message)
+      })
+    },
+    handleInput (val) {
+      if (!this.cent) {
+        this.$emit('input', val)
+      }
+    },
+    init () {
+      if (this.cent) {
+        this.calValue = NP.divide(this.value, 100) || 0
+      } else {
+        this.message = this.value
       }
     }
   }

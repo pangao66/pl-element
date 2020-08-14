@@ -1,15 +1,15 @@
 <template>
   <el-dialog
-      :title="title"
-      visible
-      center
-      v-on="$listeners"
-      v-bind="dialogConfig"
-      :close-on-click-modal="false"
-      :append-to-body="$attrs['append-to-body']"
-      :close-on-press-escape="false"
-      :custom-class="customClass"
-      :width="width"
+    :title="title"
+    visible
+    center
+    v-on="$listeners"
+    v-bind="dialogConfig"
+    :close-on-click-modal="false"
+    :append-to-body="$attrs['append-to-body']"
+    :close-on-press-escape="false"
+    :custom-class="customClass"
+    :width="width"
   >
     <p-form v-bind="$attrs" v-on="$listeners" :form-options="formOptions" :form-items="formItems" :rules="rules"
             ref="form"
@@ -60,15 +60,15 @@ export default {
     },
     formOptions: {
       type: Object,
-      default: ()=>({})
+      default: () => ({})
     },
     rules: {
       type: [Object, Array],
-      default: ()=>({})
+      default: () => ({})
     },
     originData: {
       type: [Object, Array],
-      default: ()=>({})
+      default: () => ({})
     },
     width: {
       type: String
@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     async confirm () {
-      let res = await this.$refs.form.validate()
+      const res = await this.$refs.form.validate()
       if (res) {
         let loadingInstance = null
         if (this.autoLoading) {
@@ -101,7 +101,7 @@ export default {
   },
   computed: {
     formSlots () {
-      let list = []
+      const list = []
       this.formItems.forEach((item) => {
         if (item.slot) {
           list.push(item.slot)

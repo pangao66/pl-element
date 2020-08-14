@@ -1,25 +1,25 @@
 <template>
   <el-table
-      :data="data"
-      v-on="$listeners"
-      v-bind="{...defaultTableAttrs,...$attrs}"
-      :class="tableClass"
-      :style="tableStyle"
-      @cell-dblclick="copy"
+    :data="data"
+    v-on="$listeners"
+    v-bind="{...defaultTableAttrs,...$attrs}"
+    :class="tableClass"
+    :style="tableStyle"
+    @cell-dblclick="copy"
   >
     <template v-for="(col,index) in tableColumns">
       <!-- 无列slot情况-->
       <el-table-column
-          v-if="!col.slot"
-          :key="index"
-          :prop="col.prop"
-          :label="col.label"
-          v-bind="col.attrs||{}"
-          show-overflow-tooltip
-          :formatter="(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter)"
+        v-if="!col.slot"
+        :key="index"
+        :prop="col.prop"
+        :label="col.label"
+        v-bind="col.attrs||{}"
+        show-overflow-tooltip
+        :formatter="(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter)"
       >
         <template v-slot:header="scope">
-          {{col.label}}
+          {{ col.label }}
           <template v-if="col.headerSlot || col.tip">
             <template v-if="col.tip">
               <el-tooltip class="item" effect="dark" :content="col.tip" placement="top">
@@ -32,11 +32,11 @@
       </el-table-column>
       <!--有列slot情况-->
       <el-table-column
-          v-else
-          :key="index"
-          :label="col.label"
-          v-bind="col.attrs||{}"
-          :formatter="(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter)"
+        v-else
+        :key="index"
+        :label="col.label"
+        v-bind="col.attrs||{}"
+        :formatter="(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter)"
       >
         <template v-slot="scope">
           <!--自定义列 模板写法-->
@@ -45,13 +45,13 @@
           </template>
           <!--自定义列 render写法-->
           <template v-else>
-            {{col.slot.renderFn(scope)}}
+            {{ col.slot.renderFn(scope) }}
             <!--            <VNodes :vnodes="col.slot.renderFn(scope)"></VNodes>-->
           </template>
         </template>
         <!-- 列头部slot-->
         <template v-slot:header="scope">
-          {{col.label}}
+          {{ col.label }}
           <template v-if="col.headerSlot || col.tip">
             <template v-if="col.tip">
               <el-tooltip class="item" effect="dark" :content="col.tip" placement="top">
@@ -82,10 +82,10 @@ export default {
       default: () => []
     },
     tableClass: {
-      type: [ String, Array, Object, Function ]
+      type: [String, Array, Object, Function]
     },
     tableStyle: {
-      type: [ String, Array, Object, Function ]
+      type: [String, Array, Object, Function]
     },
     dbClickCopy: {
       type: Boolean,

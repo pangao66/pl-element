@@ -1,41 +1,41 @@
 <template>
   <el-form
-      :model="form"
-      v-bind="{...defaultFormOptions,...$attrs,...formOptions}"
-      :rules="rules"
-      v-on="$listeners"
-      ref="form"
-      :class="formClass"
+    :model="form"
+    v-bind="{...defaultFormOptions,...$attrs,...formOptions}"
+    :rules="rules"
+    v-on="$listeners"
+    ref="form"
+    :class="formClass"
   >
     <template v-for="item in formItems">
       <template v-if="item.slot">
         <template>
           <slot
-              :name="item.slot"
-              v-bind="{form,item}"
+            :name="item.slot"
+            v-bind="{form,item}"
           />
         </template>
       </template>
       <template v-else>
         <template v-if="item.type&&item.type!=='grid'">
           <el-form-item
-              :label="item.label"
-              :prop="item.prop"
-              v-bind="{...item.formItemAttrs}"
-              :rules="getRules(item)"
+            :label="item.label"
+            :prop="item.prop"
+            v-bind="{...item.formItemAttrs}"
+            :rules="getRules(item)"
           >
             <component
-                :is="getType(item.type)"
-                v-model.trim="form[item.prop]"
-                :item="item"
-                v-if="item.type==='input'&&item.trim"
+              :is="getType(item.type)"
+              v-model.trim="form[item.prop]"
+              :item="item"
+              v-if="item.type==='input'&&item.trim"
             >
             </component>
             <component
-                v-else
-                :is="getType(item.type)"
-                v-model="form[item.prop]"
-                :item="item"
+              v-else
+              :is="getType(item.type)"
+              v-model="form[item.prop]"
+              :item="item"
             >
             </component>
           </el-form-item>
@@ -43,32 +43,32 @@
         <el-row v-else>
           <el-col v-for="(col,index) in item.columns" :key="index" :span="col.span">
             <el-form-item
-                v-if="!col.slot"
-                :label="col.label"
-                :prop="col.prop"
-                v-bind="{...col.formItemAttrs}"
-                :rules="getRules(col)"
+              v-if="!col.slot"
+              :label="col.label"
+              :prop="col.prop"
+              v-bind="{...col.formItemAttrs}"
+              :rules="getRules(col)"
             >
               <component
-                  :is="getType(col.type)"
-                  v-model.trim="form[col.prop]"
-                  :item="col"
-                  v-if="item.type==='input'&&item.trim"
+                :is="getType(col.type)"
+                v-model.trim="form[col.prop]"
+                :item="col"
+                v-if="item.type==='input'&&item.trim"
               >
               </component>
               <component
-                  v-else
-                  :is="getType(col.type)"
-                  v-model="form[col.prop]"
-                  :item="col"
+                v-else
+                :is="getType(col.type)"
+                v-model="form[col.prop]"
+                :item="col"
               >
               </component>
             </el-form-item>
             <template v-else>
               <template>
                 <slot
-                    :name="col.slot"
-                    v-bind="{form,col}"
+                  :name="col.slot"
+                  v-bind="{form,col}"
                 />
               </template>
             </template>
@@ -111,6 +111,7 @@ import {
 } from 'components/pf-table/src/utils/regs'
 // import { debounce } from 'throttle-debounce'
 import NP from 'number-precision'
+
 export default {
   name: 'p-form',
   components: {
@@ -133,11 +134,11 @@ export default {
   props: {
     formOptions: {
       type: Object,
-      default: ()=>({})
+      default: () => ({})
     },
     originData: {
       type: [Object, Array],
-      default: ()=>({})
+      default: () => ({})
     },
     isSearchForm: {
       type: Boolean,
@@ -152,11 +153,11 @@ export default {
       required: true
     },
     formClass: {
-      type: [String,Array,Object,Function]
+      type: [String, Array, Object, Function]
     },
     rules: {
       type: [Object, Array],
-      default: ()=>({})
+      default: () => ({})
     },
     autoFormatPrice: {
       type: Boolean,
@@ -248,7 +249,7 @@ export default {
       }
     },
     async submit () {
-      let valid = await this.validate()
+      const valid = await this.validate()
       return new Promise((resolve, reject) => {
         if (valid) {
           const result = this.getResult()
@@ -260,15 +261,15 @@ export default {
     },
     getType (type) {
       const map = {
-        'input': 'p-input',
-        'select': 'p-select',
-        'checkbox': 'p-checkbox-group',
-        'date': 'p-date-picker',
-        'radio': 'p-radio-group',
-        'rate': 'p-rate',
-        'slider': 'p-slider',
-        'switch': 'p-switch',
-        'time': 'p-time-picker',
+        input: 'p-input',
+        select: 'p-select',
+        checkbox: 'p-checkbox-group',
+        date: 'p-date-picker',
+        radio: 'p-radio-group',
+        rate: 'p-rate',
+        slider: 'p-slider',
+        switch: 'p-switch',
+        time: 'p-time-picker',
         'input-number': 'p-input-number'
       }
       return map[type]

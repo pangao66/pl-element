@@ -1,8 +1,8 @@
 <template>
   <el-input
-      v-bind="{...defaultAttrs,...$attrs,...item.attrs}"
-      v-on="$listeners"
-      @change="handleChange"
+    v-bind="{...defaultAttrs,...$attrs,...item.attrs}"
+    v-on="$listeners"
+    @change="handleChange"
   />
 </template>
 
