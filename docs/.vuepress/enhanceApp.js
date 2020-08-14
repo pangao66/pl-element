@@ -49,7 +49,7 @@ export default (
     }
   })
   Vue.mixin({
-    mounted () {
+    mounted() {
       Mock.setup({
         timeout: '800-1300'
       })

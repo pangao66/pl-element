@@ -17,8 +17,4 @@ export default {
   }
 }
 </script>
-<style>
-  .a {
-    background: red
-  }
-</style>
+

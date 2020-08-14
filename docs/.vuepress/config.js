@@ -59,7 +59,7 @@ module.exports = {
           '/components/table',
           '/components/search-list',
           // '/components/dialog',
-          '/components/tab-search-list'
+          '/components/tab-search-list',
         ]
       }
     ]

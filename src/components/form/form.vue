@@ -2,9 +2,9 @@
   <el-form ref="plForm" :model="form" v-bind="attrs">
     <template v-for="(item,index) in formItems">
       <slot :name="item.slotName" v-bind="{form,item}">
-        <pl-form-item v-if="!item.cols" :key="index" :item="item" :form="form"/>
+        <pl-form-item v-if="!item.cols" :key="index" :item="item" :form="form" />
         <form-item-grid :item="item" :form="form">
-          <slot v-for="col in item.cols" :slot="col.slotName" :name="col.slotName" v-bind="{form,item:col}"/>
+          <slot v-for="col in item.cols" :slot="col.slotName" :name="col.slotName" v-bind="{form,item:col}" />
         </form-item-grid>
       </slot>
     </template>
@@ -14,7 +14,7 @@
         <el-button @click="resetForm">重置</el-button>
       </el-form-item>
     </slot>
-    <slot/>
+    <slot />
   </el-form>
 </template>
 
