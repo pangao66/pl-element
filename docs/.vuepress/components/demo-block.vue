@@ -20,6 +20,9 @@
       ref="control"
       :class="{ 'is-fixed': fixedControl }"
       @click="isExpanded = !isExpanded">
+      <transition name="text-slide">
+        <span v-show="isExpanded" @click.stop="copyCode" style="position:absolute; left: 0;transform:translateX(10px);">复制代码</span>
+      </transition>
       <transition name="arrow-slide">
         <i :class="[iconClass, { 'hovering': hovering }]"></i>
       </transition>
@@ -197,6 +200,23 @@ export default {
 
     removeScrollHandler () {
       this.scrollParent && this.scrollParent.removeEventListener('scroll', this.scrollHandler)
+    },
+    copyCode () {
+      if (this.code) {
+        this.copyToClipboard(this.code)
+      }
+    },
+    copyToClipboard (textToCopy) {
+      if (!textToCopy || textToCopy === '-') {
+        return
+      }
+      const textArea = document.createElement('textarea')
+      document.body.appendChild(textArea)
+      textArea.value = textToCopy
+      textArea.select()
+      document.execCommand('Copy')
+      textArea.remove()
+      this.$message.success('代码已复制到剪切板')
     }
   },
 
@@ -276,6 +296,7 @@ export default {
         let cur = highlight2[2]
         if (cur.elm && cur.elm.children[0]) {
           code = cur.elm.children[0].innerText
+          this.code = code
         }
         if (code) {
           this.codepen.html = stripTemplate(code)
@@ -291,3 +312,5 @@ export default {
   }
 }
 </script>
+
+
