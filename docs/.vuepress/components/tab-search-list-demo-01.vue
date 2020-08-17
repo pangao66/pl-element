@@ -13,7 +13,7 @@
 
 <script>
 import axios from 'axios'
-import { filterNullValue } from '../../../utils'
+import { filterNullValue } from '../../../src/utils'
 
 const jobDict = {
   designer: '设计',

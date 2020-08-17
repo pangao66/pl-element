@@ -1,10 +1,10 @@
 <template>
   <div>
     <pl-input cent v-model="amt" @change="change">
-      <i name="suffix">元</i>
+      <template #append>元</template>
     </pl-input>
-    <p>传入后台金额：{{amt}}分</p>
-    <p>实际金额：{{realMoney}}元</p>
+    <p>传入后台金额：{{ amt }}分</p>
+    <p>实际金额：{{ realMoney }}元</p>
   </div>
 </template>
 

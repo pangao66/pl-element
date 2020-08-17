@@ -1,5 +1,6 @@
 <template>
   <div class="pl-search-list">
+    <div v-for="slot in Object.keys($slots)">{{ slot }}1</div>
     <el-form
       ref="plForm"
       :model="form"
@@ -11,7 +12,7 @@
       <el-row :gutter="10">
         <template v-for="(item,index) in formItems">
           <el-col :key="index" :xl="6" :lg="8" :md="12" :sm="24" class="el-col-xll-6">
-            <el-form-item :label="item.label" :prop="item.prop">
+            <el-form-item v-if="!item.slotName" :label="item.label" :prop="item.prop">
               <component
                 :is="getComp(item.comp)"
                 :key="getRandomKey(item)"
@@ -20,7 +21,7 @@
                 v-bind="item"
               />
             </el-form-item>
-            <slot :name="item.slot" v-bind="{form,item}"/>
+            <slot v-if="item.slotName" :name="item.slotName" v-bind="{form,item}"/>
           </el-col>
         </template>
         <el-form-item style="float:right;" label-width="0">
@@ -50,8 +51,8 @@
       :page-config="pageConfig"
       v-on="$listeners"
     >
-      <template v-for="item in columns">
-        <slot :slot="item.slotName" :name="item.slotName" v-bind="item"/>
+      <template v-for="slot in Object.keys($scopedSlots)" v-slot:[slot]="scope">
+        <slot :name="slot" v-bind="scope"/>
       </template>
       <template v-slot:index="{row,$index}">
         {{ (currentPage - 1) * pageSize + $index + 1 }}
