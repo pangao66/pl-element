@@ -21,7 +21,9 @@
       :class="{ 'is-fixed': fixedControl }"
       @click="isExpanded = !isExpanded">
       <transition name="text-slide">
-        <span v-show="isExpanded" @click.stop="copyCode" style="position:absolute; left: 0;transform:translateX(10px);">复制代码</span>
+        <el-button size="small" class="copy-code-button"
+                   type="text" v-show="isExpanded || isExpanded" @click.stop="copyCode" >复制代码
+        </el-button>
       </transition>
       <transition name="arrow-slide">
         <i :class="[iconClass, { 'hovering': hovering }]"></i>
@@ -158,6 +160,15 @@
         top: 0;
         right: 0;
         font-size: 14px;
+        padding-left: 5px;
+        padding-right: 25px;
+      }
+      .copy-code-button {
+        position: absolute;
+        left: 0;
+        transform: translateX(10px);
+        font-size: 14px;
+        line-height: 26px;
         padding-left: 5px;
         padding-right: 25px;
       }
