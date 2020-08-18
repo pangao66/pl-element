@@ -230,12 +230,14 @@ export default {
       return cellValue
     },
     copy (row, column, cell) {
-      if (!this.dbClickCopy || !this.tableConfig.dbClickCopy) {
+      if (this.tableConfig && (this.tableConfig.dbClickCopy === false)) {
         return
       }
-      if (column.property) {
-        const val = cell.querySelector('.cell').innerHTML
-        this.copyToClipboard(val)
+      if (this.$PlElement.tableConfig.dbClickCopy) {
+        if (column.property) {
+          const val = cell.querySelector('.cell').innerText
+          this.copyToClipboard(val)
+        }
       }
     },
     copyToClipboard (textToCopy) {
