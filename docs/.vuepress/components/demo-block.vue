@@ -22,7 +22,7 @@
       @click="isExpanded = !isExpanded">
       <transition name="text-slide">
         <el-button size="small" class="copy-code-button"
-                   type="text" v-show="isExpanded || isExpanded" @click.stop="copyCode" >复制代码
+                   type="text" v-show="isExpanded || isExpanded" @click.stop="copyCode">复制代码
         </el-button>
       </transition>
       <transition name="arrow-slide">
@@ -127,7 +127,8 @@
       &.is-fixed {
         position: fixed;
         bottom: 0;
-        width: 868px;
+        width: 1198px;
+        z-index 1000
       }
       i {
         font-size: 16px;
@@ -204,8 +205,9 @@ export default {
   methods: {
     scrollHandler () {
       const { top, bottom, left } = this.$refs.meta.getBoundingClientRect()
-      // this.fixedControl = bottom > document.documentElement.clientHeight &&
-      //   top + 44 <= document.documentElement.clientHeight
+      this.fixedControl = bottom > document.documentElement.clientHeight &&
+        top + 44 <= document.documentElement.clientHeight
+      console.log(this.fixedControl)
       this.$refs.control.style.left = this.fixedControl ? `${left}px` : '0'
     },
 
@@ -281,8 +283,10 @@ export default {
         return
       }
       setTimeout(() => {
-        this.scrollParent = document.querySelector('.page-component__scroll > .el-scrollbar__wrap')
-        this.scrollParent && this.scrollParent.addEventListener('scroll', this.scrollHandler)
+        // this.scrollParent = document.querySelector('.page-component__scroll > .el-scrollbar__wrap')
+        // console.log(this.scrollParent)
+        // this.scrollParent && this.scrollParent.addEventListener('scroll', this.scrollHandler)
+        window.addEventListener('scroll', this.scrollHandler)
         this.scrollHandler()
       }, 200)
     }
@@ -301,7 +305,6 @@ export default {
         highlight.borderRight = 'none'
       }
       const highlight2 = this.$slots.default
-      console.log(highlight)
       if (highlight2 && highlight2[0]) {
         let code = ''
         let cur = highlight2[2]
