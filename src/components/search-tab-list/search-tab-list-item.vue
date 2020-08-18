@@ -5,8 +5,10 @@
       :columns="columns"
       :data="tableData"
       :table-config="tableConfig"
+      :auto-height="true"
       v-bind="$attrs"
       v-on="$listeners"
+      ref="table"
     >
       <template v-for="item in columns">
         <slot :slot="item.slotName" :name="item.slotName" v-bind="item"/>
@@ -95,7 +97,6 @@ export default {
     },
     getTableData () {
       this.loading = true
-      console.log(this.pageSize)
       this.$emit('get-table-data', {
         pageSize: this.pageSize,
         currentPage: this.currentPage,
@@ -106,6 +107,9 @@ export default {
         this.total = total
         this.loading = false
       })
+    },
+    setHeight () {
+      this.$refs.table.setHeight()
     }
   }
 }

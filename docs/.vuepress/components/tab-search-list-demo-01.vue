@@ -1,14 +1,20 @@
 <template>
-  <pl-search-tab-list
-    :tabs="tabs"
-    v-model="formData"
-    :form-items="formItems"
-    :columns="columns"
-    :active-tab.sync="activeTab"
-    @get-table-data="getTableData"
-    ref="plTabTable"
-  >
-  </pl-search-tab-list>
+  <div >
+    <el-dialog :visible="visible" @close="visible=false" fullscreen>
+      <pl-search-tab-list
+        :tabs="tabs"
+        v-model="formData"
+        :form-items="formItems"
+        :columns="columns"
+        :active-tab.sync="activeTab"
+        @get-table-data="getTableData"
+        ref="plTabTable"
+      >
+      </pl-search-tab-list>
+    </el-dialog>
+    <el-alert type="warning" :closable="false" center>此例请全屏查看</el-alert>
+    <el-button @click="visible=true">全屏展示</el-button>
+  </div>
 </template>
 
 <script>
@@ -30,7 +36,8 @@ export default {
   data () {
     return {
       formData: {},
-      activeTab: 'designer'
+      activeTab: 'designer',
+      visible: false
     }
   },
   methods: {

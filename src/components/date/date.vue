@@ -1,7 +1,6 @@
 <template>
   <el-date-picker
     v-model="date"
-    value-format="yyyy-MM-dd"
     :picker-options="calPickerOptions"
     clearable
     range-separator="至"
@@ -73,7 +72,7 @@ export default {
       if (this.pickerOptions) {
         return this.pickerOptions
       }
-      const shortcuts = this.shortcuts || []
+      let shortcuts = this.shortcuts || []
       const list = []
       const today = new Date()
       const todayTime = today.getTime()
@@ -106,6 +105,9 @@ export default {
           start: new Date().setMonth(new Date().getMonth() - 3)
         }
       }
+      if (this.$attrs.type && this.$attrs.type === 'daterange') {
+        shortcuts = ['recentWeek', 'recentMonth', 'recentThreeMonth']
+      }
       if (shortcuts && shortcuts.length) {
         shortcuts.forEach((item) => {
           if (map[item]) {
@@ -124,34 +126,8 @@ export default {
         })
       }
       const disableDate = this.disableDate
-      console.log(list)
       return {
         shortcuts: list.length ? list : null,
-        // shortcuts: [{
-        //   text: '最近一周',
-        //   onClick (picker) {
-        //     const end = new Date()
-        //     const start = new Date()
-        //     start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-        //     picker.$emit('pick', [start, end])
-        //   }
-        // }, {
-        //   text: '最近一个月',
-        //   onClick (picker) {
-        //     const end = new Date()
-        //     const start = new Date()
-        //     start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-        //     picker.$emit('pick', [start, end])
-        //   }
-        // }, {
-        //   text: '最近三个月',
-        //   onClick (picker) {
-        //     const end = new Date()
-        //     const start = new Date()
-        //     start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-        //     picker.$emit('pick', [start, end])
-        //   }
-        // }],
         onPick: ({ maxDate, minDate }) => {
           this.maxDate = maxDate
           this.minDate = minDate

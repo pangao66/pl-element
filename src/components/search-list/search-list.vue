@@ -49,7 +49,9 @@
       :data="tableData"
       :table-config="tableConfig"
       :page-config="pageConfig"
+      :auto-height="autoHeight"
       v-on="$listeners"
+      ref="table"
     >
       <template v-for="slot in Object.keys($scopedSlots)" v-slot:[slot]="scope">
         <slot :name="slot" v-bind="scope"/>
@@ -100,6 +102,10 @@ export default {
       default: () => ({})
     },
     showPager: {
+      type: Boolean,
+      default: true
+    },
+    autoHeight: {
       type: Boolean,
       default: true
     }
@@ -163,6 +169,9 @@ export default {
     },
     toggleAdvanced () {
       this.advanced = !this.advanced
+      this.$nextTick(() => {
+        this.$refs.table.setHeight()
+      })
     },
     getComp (comp) {
       const map = {

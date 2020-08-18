@@ -1,30 +1,37 @@
 <template>
-  <pl-search-list
-    :columns="columns"
-    :form-items="formItems"
-    @get-table-data="getTableData"
-    v-model="formData"
-    ref="plSearchList"
-  >
-    <template #test-form-item="{form,item}">
-      <el-form-item label="测试slot" prop="testValue">
-        <el-cascader
-          v-model="form.testValue"
-          :options="options"
-          clearable
-          @change="handleChange"></el-cascader>
-      </el-form-item>
-    </template>
-    <template #name="{row}">
-      <el-popover trigger="hover" placement="top">
-        <p>姓名: {{ row.name }}</p>
-        <p>住址: {{ row.address }}</p>
-        <div class="name-wrapper" slot="reference">
-          <el-tag size="medium">{{ row.name }}</el-tag>
-        </div>
-      </el-popover>
-    </template>
-  </pl-search-list>
+  <div>
+    <el-dialog :visible="visible" @close="visible=false" fullscreen>
+      <pl-search-list
+        :columns="columns"
+        :form-items="formItems"
+        @get-table-data="getTableData"
+        v-model="formData"
+        ref="plSearchList"
+      >
+        <template #test-form-item="{form,item}">
+          <el-form-item label="测试slot" prop="testValue">
+            <el-cascader
+              style="width:100%"
+              v-model="form.testValue"
+              :options="options"
+              clearable
+              @change="handleChange"></el-cascader>
+          </el-form-item>
+        </template>
+        <template #name="{row}">
+          <el-popover trigger="hover" placement="top">
+            <p>姓名: {{ row.name }}</p>
+            <p>住址: {{ row.address }}</p>
+            <div class="name-wrapper" slot="reference">
+              <el-tag size="medium">{{ row.name }}</el-tag>
+            </div>
+          </el-popover>
+        </template>
+      </pl-search-list>
+    </el-dialog>
+    <el-alert  type="warning" :closable="false" center>此例请全屏查看</el-alert>
+    <el-button @click="visible=true">全屏展示</el-button>
+  </div>
 </template>
 
 <script>
@@ -52,7 +59,8 @@ export default {
         sex: '',
         job: '',
         testValue: []
-      }
+      },
+      visible: false
     }
   },
   methods: {
@@ -61,7 +69,7 @@ export default {
         currentPage, pageSize,
         ...val,
         sex: sex ? parseInt(sex) : '',
-        testValue: undefined,
+        testValue: undefined
       }))
       if (res.status === 200) {
         res = res.data

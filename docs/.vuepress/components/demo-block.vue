@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="block"
     class="demo-block"
     :class="[blockClass, { 'hover': hovering }]"
     @mouseenter="hovering = true"
@@ -19,6 +20,7 @@
       class="demo-block-control"
       ref="control"
       :class="{ 'is-fixed': fixedControl }"
+      :style="{width:width+'px'}"
       @click="isExpanded = !isExpanded">
       <transition name="text-slide">
         <el-button size="small" class="copy-code-button"
@@ -52,6 +54,7 @@
     border: solid 1px #ebebeb;
     border-radius: 3px;
     transition: .2s;
+    width: 100%;
     &.hover {
       box-shadow: 0 0 8px 0 rgba(232, 237, 250, .6), 0 2px 4px 0 rgba(232, 237, 250, .5);
     }
@@ -127,7 +130,6 @@
       &.is-fixed {
         position: fixed;
         bottom: 0;
-        width: 1198px;
         z-index 1000
       }
       i {
@@ -182,9 +184,9 @@
 // import Element from 'main/index.js';
 import Element from 'element-ui'
 import { stripScript, stripStyle, stripTemplate } from '../util.js'
+import getCodeMixin from './getCode'
 
 const { version } = Element
-import getCodeMixin from './getCode'
 
 export default {
   mixins: [getCodeMixin],
@@ -198,16 +200,19 @@ export default {
       hovering: false,
       isExpanded: false,
       fixedControl: false,
-      scrollParent: null
+      scrollParent: null,
+      width: ''
     }
   },
 
   methods: {
     scrollHandler () {
+      if (!this.$refs.meta) {
+        return
+      }
       const { top, bottom, left } = this.$refs.meta.getBoundingClientRect()
       this.fixedControl = bottom > document.documentElement.clientHeight &&
         top + 44 <= document.documentElement.clientHeight
-      console.log(this.fixedControl)
       this.$refs.control.style.left = this.fixedControl ? `${left}px` : '0'
     },
 
@@ -284,7 +289,6 @@ export default {
       }
       setTimeout(() => {
         // this.scrollParent = document.querySelector('.page-component__scroll > .el-scrollbar__wrap')
-        // console.log(this.scrollParent)
         // this.scrollParent && this.scrollParent.addEventListener('scroll', this.scrollHandler)
         window.addEventListener('scroll', this.scrollHandler)
         this.scrollHandler()
@@ -299,6 +303,7 @@ export default {
 
   mounted () {
     this.$nextTick(() => {
+      this.width = this.$refs.block.clientWidth
       let highlight = this.$el.getElementsByClassName('highlight')[0]
       if (this.$el.getElementsByClassName('description').length === 0) {
         highlight.style.width = '100%'

@@ -194,6 +194,9 @@ export default {
     },
     toggleAdvanced () {
       this.advanced = !this.advanced
+      this.$nextTick(() => {
+        this.$refs['tab-table-item'][0].setHeight()
+      })
     },
     getComp (comp) {
       const map = {
