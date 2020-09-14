@@ -38,8 +38,23 @@
       <div class="pl-search-list-menu">
         <div/>
         <div>
-          <pl-button icon="el-icon-refresh" circle debounce @click="search"/>
-          <el-button icon="el-icon-menu" circle/>
+          <pl-tip-button content="刷新" debounce icon="el-icon-refresh" circle @click="search"/>
+          <el-dropdown @command="toggleSize" :hide-on-click="false" style="margin-left: 6px;margin-right: 6px;">
+            <pl-tip-button content="密度" circle>
+              <svg-icon class-name="full-screen" icon-class="midu"></svg-icon>
+            </pl-tip-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                v-for="item in sizeList"
+                :command="item.value"
+                :class="{active:size===item.value}"
+              >{{ item.label }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <pl-tip-button :content="isFullscreen?'退出全屏':'全屏'" circle @click="toggleFullScreen">
+            <svg-icon class-name="full-screen" :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'"></svg-icon>
+          </pl-tip-button>
         </div>
       </div>
     </slot>
@@ -72,10 +87,12 @@
 
 <script>
 import { getRandomKey } from '../../utils'
+import searchListMixin from '../../mixins/search-list'
 
 const Item2UIDMap = new WeakMap()
 export default {
   name: 'PlSearchList',
+  mixins: [searchListMixin],
   props: {
     formItems: {
       type: Array,
@@ -148,11 +165,23 @@ export default {
         this.pageSize = pageSize
       }
     }
+    this.setKeyValue(this.formItems)
     this.search()
   },
   methods: {
     search () {
       this.getTableData()
+    },
+    setKeyValue (list) {
+      list.forEach((item) => {
+        if (item.prop && typeof this.form[item.prop] === 'undefined') {
+          if (item.type === 'daterange') {
+            this.$set(this.form, item.prop, [])
+          } else {
+            this.$set(this.form, item.prop, '')
+          }
+        }
+      })
     },
     resetForm () {
       this.$refs.plForm.resetFields()

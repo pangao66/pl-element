@@ -11,6 +11,7 @@ import PlRadio from './src/components/radio'
 import PlCheckbox from './src/components/checkbox'
 import PlDate from './src/components/date'
 import PlButton, { PlActionBtn } from './src/components/button'
+import PlTipButton from './src/components/tip-button'
 import PlSwitch from './src/components/switch'
 import PlTime from './src/components/time'
 import PlForm from './src/components/form'
@@ -33,6 +34,7 @@ const PElement = {
     Vue.component('pl-time', PlTime)
     Vue.component('pl-form', PlForm)
     Vue.component('pl-button', PlButton)
+    Vue.component('pl-tip-button', PlTipButton)
     Vue.component('pl-action-btn', PlActionBtn)
     Vue.component('pl-search-list', PlSearchList)
     Vue.component('pl-search-tab-list', PlSearchTabList)

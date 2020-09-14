@@ -4,14 +4,15 @@
       v-loading="loading"
       :columns="columns"
       :data="tableData"
+      :size="size"
       :table-config="tableConfig"
       :auto-height="true"
       v-bind="$attrs"
       v-on="$listeners"
       ref="table"
     >
-      <template v-for="item in columns">
-        <slot :slot="item.slotName" :name="item.slotName" v-bind="item"/>
+      <template v-for="slot in Object.keys($scopedSlots)" v-slot:[slot]="scope">
+        <slot :name="slot" v-bind="scope"/>
       </template>
       <template v-slot:index="{row,$index}">
         {{ (currentPage - 1) * pageSize + $index + 1 }}
@@ -28,6 +29,8 @@
 </template>
 
 <script>
+
+
 export default {
   name: 'SearchTabListItem',
   props: {
@@ -54,6 +57,9 @@ export default {
     tabInfo: {
       type: Object,
       default: () => ({})
+    },
+    size: {
+      type: String
     }
   },
   data () {

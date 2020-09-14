@@ -2,12 +2,7 @@
   <el-date-picker
     v-model="date"
     :picker-options="calPickerOptions"
-    clearable
-    range-separator="至"
-    start-placeholder="开始日期"
-    end-placeholder="结束日期"
-    placeholder="请选择日期"
-    v-bind="$attrs"
+    v-bind="attrs"
     @change="handleChange"
     @focus="timeArrayFocus"
   />
@@ -68,6 +63,9 @@ export default {
     }
   },
   computed: {
+    attrs () {
+      return { ...this.$PlElement.dateConfig, ...this.$attrs }
+    },
     calPickerOptions () {
       if (this.pickerOptions) {
         return this.pickerOptions
@@ -179,6 +177,7 @@ export default {
       deep: true,
       handler (val) {
         this.date = val
+        this.handleChange(val)
       }
     }
   },
@@ -194,13 +193,13 @@ export default {
       // }
       this.$emit('change', val)
       this.$emit('input', val)
-      // if (this.dateRangeKeys && this.dateRangeKeys.length && this.date instanceof Array) {
-      //   const [start, end] = this.dateRangeKeys
-      //   if (this.form) {
-      //     this.$set(this.form, end, val[1])
-      //     this.$set(this.form, start, val[0])
-      //   }
-      // }
+      if (this.dateRangeKeys && this.dateRangeKeys.length && this.date instanceof Array) {
+        const [start, end] = this.dateRangeKeys
+        if (this.form) {
+          this.$set(this.form, end, val[1])
+          this.$set(this.form, start, val[0])
+        }
+      }
     },
     timeArrayFocus () {
       this.minDate = ''

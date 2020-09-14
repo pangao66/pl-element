@@ -67,7 +67,7 @@ import { formatDate } from 'element-ui/lib/utils/date-util'
 import NP from 'number-precision'
 import { getRandomKey } from '../../utils'
 // import './autoheight'
-import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event'
+import { addResizeListener, removeResizeListener } from 'element-ui/lib/utils/resize-event'
 
 const Item2UIDMap = new WeakMap()
 export default {
@@ -136,7 +136,10 @@ export default {
     },
     bottomOffset: {
       type: Number,
-      default: 100
+      default: 80
+    },
+    size: {
+      type: String
     }
   },
   data () {
@@ -152,7 +155,11 @@ export default {
   },
   computed: {
     attrs () {
-      return { ...this.$PlElement.tableConfig, ...this.tableConfig }
+      return {
+        ...this.$PlElement.tableConfig,
+        ...this.tableConfig,
+        size: this.size
+      }
     }
   },
   created () {

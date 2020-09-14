@@ -50,7 +50,10 @@ export default {
   },
   computed: {
     attrs () {
-      return { ...this.$PlElement.selectConfig, ...this.$attrs }
+      return {
+        ...this.$PlElement.selectConfig,
+        ...this.$attrs
+      }
     },
     optionsList () {
       if (isArray(this.options)) {

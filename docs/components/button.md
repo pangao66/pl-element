@@ -24,6 +24,17 @@ sidebarDepth: 2
 
 </demo-block>
 
+## tip button
+
+`pl-tip-button`用于给按钮添加tip说明,包含`pl-button`的所有功能
+
+<demo-block>
+<button-demo-04 slot="source"></button-demo-04>
+
+<<< docs/.vuepress/components/button-demo-04.vue
+
+</demo-block>
+
 ## 操作确认
 有时候我们点击按钮需弹窗确认后方可继续,`pl-button`封装了这个步骤
 
