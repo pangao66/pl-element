@@ -3,7 +3,7 @@ import Mock from 'mockjs'
 import { Random } from 'mockjs'
 
 let List = []
-const count = 2000
+const count = 20000
 for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
     id: Mock.Random.guid(),

@@ -11,6 +11,7 @@
 <script>
 export default {
   name: 'PlDate',
+  inheritAttrs: false,
   props: {
     label: {
       type: String,
@@ -64,7 +65,10 @@ export default {
   },
   computed: {
     attrs () {
-      return { ...this.$PlElement.dateConfig, ...this.$attrs }
+      return {
+        ...this.$PlElement.dateConfig,
+        ...this.$attrs.attrs
+      }
     },
     calPickerOptions () {
       if (this.pickerOptions) {
@@ -103,7 +107,7 @@ export default {
           start: new Date().setMonth(new Date().getMonth() - 3)
         }
       }
-      if (this.$attrs.type && this.$attrs.type === 'daterange') {
+      if (this.$attrs.attrs && this.$attrs.attrs.type && this.$attrs.attrs.type === 'daterange') {
         shortcuts = ['recentWeek', 'recentMonth', 'recentThreeMonth']
       }
       if (shortcuts && shortcuts.length) {

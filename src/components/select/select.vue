@@ -52,7 +52,7 @@ export default {
     attrs () {
       return {
         ...this.$PlElement.selectConfig,
-        ...this.$attrs
+        ...this.$attrs.attrs
       }
     },
     optionsList () {

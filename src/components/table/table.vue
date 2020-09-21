@@ -1,12 +1,12 @@
 <template>
   <div v-loading="loading" class="pl-table-container">
     <el-table
-      :data="data"
+      :data="tableData"
       v-bind="attrs"
       v-on="$listeners"
       @cell-dblclick="copy"
       :height=" autoHeight ? '300px' : $attrs.height"
-      ref="multipleTable"
+      ref="table"
     >
       <el-table-column
         v-for="(col,index) in columns"
@@ -18,12 +18,19 @@
         :formatter="col.formatter||col.dict?(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter,col):undefined"
       >
         <!--自定义列header-->
-        <template v-if="col.headerSlot || col.tip" v-slot:header="scope">
+        <template v-if="col.headerSlot || col.tip ||col.type==='selection'" v-slot:header="scope">
           <template v-if="col.tip">
             {{ col.label }}
             <el-tooltip class="item" effect="dark" :content="col.tip" placement="top">
               <i class="el-icon-question"/>
             </el-tooltip>
+          </template>
+          <template v-if="col.type==='selection'">
+            <el-checkbox
+              :indeterminate="isIndeterminate"
+              :checked="checkedItems.length"
+              @change="handleCheckAllChange"
+            ></el-checkbox>
           </template>
           <slot v-if="col.headerSlot" :name="col.headerSlot" v-bind="scope"/>
         </template>
@@ -56,6 +63,9 @@
             </template>
           </template>
           <VNodes v-if="col.customerRender" :vnodes="col.customerRender(scope)"/>
+          <template v-if="col.type==='selection'">
+            <el-checkbox v-model="scope.row.selected" @change="handleItemCheckedChange"></el-checkbox>
+          </template>
         </template>
       </el-table-column>
     </el-table>
@@ -68,6 +78,7 @@ import NP from 'number-precision'
 import { getRandomKey } from '../../utils'
 // import './autoheight'
 import { addResizeListener, removeResizeListener } from 'element-ui/lib/utils/resize-event'
+import { throttle, debounce } from 'throttle-debounce'
 
 const Item2UIDMap = new WeakMap()
 export default {
@@ -77,9 +88,7 @@ export default {
       functional: true,
       props: {
         vnodes: {
-          type: Function,
-          default: () => {
-          }
+          type: Function
         }
       },
       render: (h, ctx) => {
@@ -139,18 +148,18 @@ export default {
       default: 80
     },
     size: {
-      type: String
+      type: String,
+      default: 'small'
     }
   },
   data () {
     return {
-      defaultTableAttrs: {
-        border: true,
-        stripe: true,
-        'highlight-current-row': true
-      },
-      tableData: [],
-      loading: false
+      loading: false,
+      scrollTop: 0,
+      selectedAllStatus: false,
+      indeterminate: false,
+      isIndeterminate: false,
+      checkAll: false
     }
   },
   computed: {
@@ -160,28 +169,56 @@ export default {
         ...this.tableConfig,
         size: this.size
       }
+    },
+    startIndex () {
+      const itemSize = this.itemSize
+      let startIndex = ~~(this.scrollTop / itemSize)
+      startIndex < 0 && (startIndex = 0)
+      return startIndex
+    },
+    virtualRows () {
+      return this.data.slice(this.startIndex, this.startIndex + this.bufferCount)
+    },
+    checkedItems () {
+      return this.data.filter((item) => {
+        return !!item.selected
+      })
+    },
+    tableData () {
+      return this.virtualScroll ? this.virtualRows : this.data
+    },
+    virtualScroll () {
+      const tableConfig = this.tableConfig || {}
+      return tableConfig.virtualScroll || false
+    },
+    bufferCount () {
+      const tableConfig = this.tableConfig || {}
+      return tableConfig.bufferCount || 20
+    },
+    itemSize () {
+      const map = {
+        mini: 36,
+        small: 40,
+        medium: 44,
+        default: 48
+      }
+      return map[this.size]
     }
-  },
-  created () {
-    // if (this.autoLoad) {
-    //   this.getTableData()
-    // }
   },
   mounted () {
-    if (this.keepPosition) {
-      this.listScroll()
-    }
     this.$nextTick(() => {
       if (this.autoHeight) {
-        // this.setHeight()
         addResizeListener(window.document.body, this.setHeight)
-        addResizeListener(this.$refs.multipleTable.$el, this.setHeight)
+        addResizeListener(this.$refs.table.$el, this.setHeight)
+      }
+      if (this.keepPosition || this.virtualScroll) {
+        this.addListeners()
       }
     })
   },
   activated () {
     if (this.keepPosition) {
-      const table = this.$refs.multipleTable
+      const table = this.$refs.table
       const rowKey = this.rowKey
       if (table) {
         const isTree = this.$attrs.treeProps || this.$attrs['tree-props']
@@ -268,29 +305,110 @@ export default {
       return persistedUID
     },
     showSlot (col) {
-      return col.slotName || col.customerRender || col.customerRenderText || col.tagMap || col.type === 'index' || col.actions
+      return col.slotName || col.customerRender || col.customerRenderText || col.tagMap || col.type === 'index' || col.actions || col.type === 'selection'
     },
-    listScroll () {
-      this.$nextTick(() => {
-        this.dom = this.$refs.multipleTable.bodyWrapper
-        this.dom.addEventListener('scroll', (e) => {
-          // 滚动距离
-          this.scrollTop = e.target.scrollTop
-        })
-      })
-    },
+    listenScroll: throttle(20, true, function (e) {
+      this.scrollTop = e.target.scrollTop
+      if (this.virtualScroll) {
+        const bufferCount = this.bufferCount
+        const count = this.data.length
+        const itemSize = this.itemSize
+        const height = count * itemSize
+        const scrollTop = this.scrollTop
+        if (this.startIndex + bufferCount >= count) {
+          // 由于el-table 在滚动到最后时，会出现抖动，因此增加判断，单独设置属性
+          this.tables.forEach((item) => {
+            const table = item.querySelector('.el-table__body')
+            table.style.paddingTop = scrollTop - itemSize + 'px'
+            table.style.paddingBottom = 0
+          })
+        } else {
+          this.tables.forEach((item) => {
+            const table = item.querySelector('.el-table__body')
+            table.style.paddingTop = scrollTop + 'px'
+            table.style.paddingBottom = height - scrollTop - bufferCount * itemSize + 'px'
+          })
+        }
+      }
+    }),
     setHeight () {
-      const $table = this.$refs.multipleTable
+      const $table = this.$refs.table
       const bottomOffset = (this.bottomOffset) || 30
       if (!$table) return
       // 计算列表高度并设置
       const height = window.innerHeight - $table.$el.getBoundingClientRect().top - bottomOffset
       $table.layout.setHeight(height)
       $table.doLayout()
+    },
+    toTop () {
+      const table = this.$refs.table
+      table.bodyWrapper.scrollTop = 0
+    },
+    addListeners () {
+      this.bodyWrapper = this.$refs.table.bodyWrapper
+      if (!this.bodyWrapper) {
+        return
+      }
+      if (this.virtualScroll) {
+        this.initHeight()
+      }
+      this.bodyWrapper.addEventListener('scroll', this.listenScroll)
+    },
+    removeListeners () {
+      if (!this.bodyWrapper) {
+        return
+      }
+      this.bodyWrapper.removeEventListener('scroll', this.listenScroll)
+    },
+    handleCheckAllChange (val) {
+      this.selectedAllStatus = val
+      for (let i = 0; i < this.data.length; i++) {
+        this.$set(this.data[i], 'selected', val)
+      }
+      this.isIndeterminate = false
+    },
+    handleItemCheckedChange () {
+      this.$nextTick(() => {
+        if (this.checkedItems.length) {
+          this.isIndeterminate = this.checkedItems.length !== this.data.length
+        } else {
+          this.isIndeterminate = false
+        }
+      })
+    },
+    initHeight () {
+      // 初始化高度
+      if (this.virtualScroll) {
+        this.scrollTop = 0
+        this.bodyWrapper.scrollTop = this.scrollTop
+        const bufferCount = this.bufferCount
+        const count = this.data.length
+        const itemSize = this.itemSize
+        const height = count * itemSize
+        const tables = [
+          this.$refs.table.bodyWrapper,
+          this.$refs.table.$refs.fixedBodyWrapper,
+          this.$refs.table.$refs.rightFixedBodyWrapper
+        ].filter((item) => !!item)
+        this.tables = tables
+        tables.forEach((item) => {
+          const table = item.querySelector('.el-table__body')
+          table.style.height = height + 'px'
+          table.style.paddingTop = this.scrollTop + 'px'
+          table.style.paddingBottom = height - this.scrollTop - bufferCount * itemSize + 'px'
+        })
+      }
     }
   },
   beforeDestroy () {
-    removeResizeListener(this.$refs.multipleTable.$el, this.setHeight())
+    removeResizeListener(this.$refs.table.$el, this.setHeight())
+  },
+  watch: {
+    size () {
+      if (this.virtualScroll) {
+        this.initHeight()
+      }
+    }
   }
 }
 </script>

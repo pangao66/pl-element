@@ -28,6 +28,7 @@ export function debounce (fn, wait = 500, isImmediate = true) {
     return function () {
       clearTimeout(timerId)
       if (flag) {
+        // eslint-disable-next-line prefer-rest-params
         fn.apply(this, arguments)
         flag = false
       }
@@ -37,6 +38,7 @@ export function debounce (fn, wait = 500, isImmediate = true) {
   return function () {
     clearTimeout(timerId)
     timerId = setTimeout(() => {
+      // eslint-disable-next-line prefer-rest-params
       fn.apply(this, arguments)
     }, wait)
   }

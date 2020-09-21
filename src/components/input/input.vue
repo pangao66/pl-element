@@ -61,7 +61,10 @@ export default {
   },
   computed: {
     attrs () {
-      return { ...this.$PlElement.inputConfig, ...this.$attrs }
+      return {
+        ...this.$PlElement.inputConfig,
+        ...this.$attrs.attrs
+      }
     },
     calValue: {
       set (val) {

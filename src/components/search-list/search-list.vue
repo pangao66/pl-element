@@ -46,6 +46,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
                 v-for="item in sizeList"
+                :key="item.value"
                 :command="item.value"
                 :class="{active:size===item.value}"
               >{{ item.label }}
@@ -233,6 +234,7 @@ export default {
         this.tableData = data
         this.total = total
         this.loading = false
+        this.$refs.table.toTop()
       })
     }
   }

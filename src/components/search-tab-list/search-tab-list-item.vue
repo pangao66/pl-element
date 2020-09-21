@@ -29,8 +29,6 @@
 </template>
 
 <script>
-
-
 export default {
   name: 'SearchTabListItem',
   props: {
@@ -112,6 +110,9 @@ export default {
         this.tableData = data
         this.total = total
         this.loading = false
+        this.$nextTick(() => {
+          this.$refs.table.toTop()
+        })
       })
     },
     setHeight () {

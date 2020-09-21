@@ -18,6 +18,19 @@ sidebarDepth: 2
 ::: tip 提示
 `pl-search-list`由`el-form`,`el-table`,`el-pagnation`三个组件组合而成,使得写业务的时候告别重复的查询表格,直接配置相关的项即可.对于不能使用简单的字段描述的表格项和表单项,可配置slotName,在模板中使用slot则可以写出任意组合的组件了,如本例中,form中的`测试slot`项,table中`姓名`一列,使用的slot.
 :::
+### 虚拟滚动
+ 有些场景需要大数据不分页,原本的`el-table`在数据为1000条以上的时候就很卡了,本组件封装了虚拟滚动,10000条以上的数据也不卡
+ 
+<demo-block>
+
+<search-list-demo-02 slot="source"></search-list-demo-02>
+
+
+<<< docs/.vuepress/components/search-list-demo-02.vue
+
+
+</demo-block>
+
 
 ### 特色功能
 - 表单查询项使用响应式布局,目前内置4个响应点:

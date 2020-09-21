@@ -16,6 +16,7 @@
     v-loading.fullscreen.lock="fullscreenLoadingStatus"
     v-bind="$attrs"
     :loading="loadingStatus"
+    :type="type"
     @click="handleClick"
   >
     <slot/>
@@ -23,11 +24,8 @@
 </template>
 
 <script>
-import { debounce } from '../../utils'
-// import { Loading } from 'element-ui'
+import { debounce } from 'throttle-debounce'
 
-// eslint-disable-next-line no-unused-vars
-// const loadingInstance = null
 export default {
   name: 'PlButton',
   props: {
@@ -50,6 +48,9 @@ export default {
     popConfig: {
       type: Object,
       default: () => ({ title: '确定删除吗？' })
+    },
+    type: {
+      type: String
     },
     confirmConfig: {
       type: Object,
@@ -108,9 +109,9 @@ export default {
         this.fullscreenLoadingStatus = false
       })
     },
-    debounceClick: debounce(function () {
+    debounceClick: debounce(500, true, function () {
       this.$emit('click')
-    }, 500)
+    })
   }
 }
 </script>

@@ -57,7 +57,6 @@ export default {
         res = res.data
         this.tableData = res.list
         this.total = res.total
-        console.log(res.list)
       }
       done()
     },

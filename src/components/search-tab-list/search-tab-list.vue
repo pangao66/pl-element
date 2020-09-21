@@ -37,26 +37,26 @@
       </el-form>
     </div>
     <div class="search-list-tab-container">
-      <div class="pl-tab-search-list-menu">
+      <div class="pl-search-list-menu">
         <div>
           <slot name="menu-handle"/>
           <pl-tip-button content="刷新" debounce icon="el-icon-refresh" circle @click="search"/>
           <el-dropdown @command="toggleSize" :hide-on-click="false" style="margin-left: 6px;margin-right: 6px;">
-            <pl-tip-button content="密度" circle icon="el-icon-s-tools">
-<!--              <svg-icon class-name="full-screen" icon-class="midu"></svg-icon>-->
+            <pl-tip-button content="密度" circle>
+              <svg-icon class-name="full-screen" icon-class="midu"></svg-icon>
             </pl-tip-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
                 v-for="item in sizeList"
+                :key="item.value"
                 :command="item.value"
                 :class="{active:size===item.value}"
               >{{ item.label }}
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <pl-tip-button :content="isFullscreen?'退出全屏':'全屏'" circle @click="toggleFullScreen" icon="el-icon-rank">
-
-<!--            <svg-icon class-name="full-screen" :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'"></svg-icon>-->
+          <pl-tip-button :content="isFullscreen?'退出全屏':'全屏'" circle @click="toggleFullScreen">
+            <svg-icon class-name="full-screen" :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'"></svg-icon>
           </pl-tip-button>
           <!--          <el-button icon="el-icon-menu" circle/>-->
         </div>
@@ -211,7 +211,6 @@ export default {
     },
     resetForm () {
       this.$refs.plForm.resetFields()
-      console.log(this.form)
       this.currentPage = 1
       this.search()
     },
@@ -264,7 +263,7 @@ export default {
   .search-list-tab-container {
     position: relative;
   }
-  .pl-tab-search-list-menu {
+  .pl-search-list-menu {
     position: absolute;
     z-index 2
     right: 24px
