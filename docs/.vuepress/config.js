@@ -49,6 +49,7 @@ module.exports = {
         title: '组件',
         collapsable: true,
         children: [
+          '/components/安装使用',
           '/components/button',
           '/components/input',
           '/components/select',
