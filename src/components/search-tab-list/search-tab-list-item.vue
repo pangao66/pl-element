@@ -14,8 +14,13 @@
       <template v-for="slot in Object.keys($scopedSlots)" v-slot:[slot]="scope">
         <slot :name="slot" v-bind="scope"/>
       </template>
-      <template v-slot:index="{row,$index}">
-        {{ (currentPage - 1) * pageSize + $index + 1 }}
+      <template v-slot:index="{row,$index,virtualScroll,startIndex}">
+        <template v-if="virtualScroll">
+          {{ (currentPage - 1) * pageSize + $index + 1 + startIndex }}
+        </template>
+        <template v-else>
+          {{ (currentPage - 1) * pageSize + $index + 1 }}
+        </template>
       </template>
     </pl-table>
     <el-pagination
@@ -110,9 +115,7 @@ export default {
         this.tableData = data
         this.total = total
         this.loading = false
-        this.$nextTick(() => {
-          this.$refs.table.toTop()
-        })
+        this.$refs.table && this.$refs.table.toTop()
       })
     },
     setHeight () {

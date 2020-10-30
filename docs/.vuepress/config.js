@@ -11,19 +11,19 @@ module.exports = {
     }
   },
   head: [
-    [ 'link', { rel: 'icon', href: '/favicon.ico' } ],
+    ['link', { rel: 'icon', href: '/favicon.ico' }],
     // ['link', { rel: 'manifest', href: '/manifest.json' }],
-    [ 'meta', { name: 'theme-color', content: '#3eaf7c' } ],
-    [ 'meta', { name: 'apple-mobile-web-app-capable', content: 'yes' } ],
+    ['meta', { name: 'theme-color', content: '#3eaf7c' }],
+    ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
     [
       'meta',
       { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }
     ],
-    [ 'link', { rel: 'apple-touch-icon', href: '/favicon.ico' } ],
-    [ 'link', { rel: 'mask-icon', href: '/favicon.ico', color: '#3eaf7c' } ],
-    [ 'link', { rel: 'stylesheet', href: 'https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/theme-chalk/index.css' } ],
-    [ 'meta', { name: 'msapplication-TileImage', content: '/favicon.ico' } ],
-    [ 'meta', { name: 'msapplication-TileColor', content: '#000000' } ]
+    ['link', { rel: 'apple-touch-icon', href: '/favicon.ico' }],
+    ['link', { rel: 'mask-icon', href: '/favicon.ico', color: '#3eaf7c' }],
+    ['link', { rel: 'stylesheet', href: 'https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/theme-chalk/index.css' }],
+    ['meta', { name: 'msapplication-TileImage', content: '/favicon.ico' }],
+    ['meta', { name: 'msapplication-TileColor', content: '#000000' }]
     // [ 'script', { src: 'https://shadow.elemecdn.com/npm/vue@2.5.21/dist/vue.runtime.min.js' } ],
     // [ 'script', { src: 'https://shadow.elemecdn.com/npm/vue-router@3.0.1/dist/vue-router.min.js' } ],
     // [ 'script', { src: 'https://unpkg.com/element-ui/lib/index.js' } ]
@@ -60,7 +60,7 @@ module.exports = {
           '/components/table',
           '/components/search-list',
           // '/components/dialog',
-          '/components/tab-search-list',
+          '/components/tab-search-list'
         ]
       }
     ]
@@ -96,6 +96,6 @@ module.exports = {
       // 'element-ui': 'ELEMENT'
       // 'mock': 'Mock'
     }
-  },
+  }
   // evergreen: true
 }

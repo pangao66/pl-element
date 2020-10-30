@@ -18,28 +18,30 @@ import PlForm from './components/form'
 import PlSearchList from './components/search-list'
 import PlSearchTabList from './components/search-tab-list'
 import PlDialog from './components/dialog'
+import PlDialogFrom from './components/dialog-form'
 import * as utils from './utils'
 import './styles/index.styl'
 
 const PElement = {
-  install: function ({ component, prototype }, opts = {}) {
-    component('pl-table', PlTable)
-    component('p-search-table', PSearchTable)
-    component('pl-input', PlInput)
-    component('pl-select', PlSelect)
-    component('pl-radio', PlRadio)
-    component('pl-checkbox', PlCheckbox)
-    component('pl-date', PlDate)
-    component('pl-switch', PlSwitch)
-    component('pl-time', PlTime)
-    component('pl-form', PlForm)
-    component('pl-button', PlButton)
-    component('pl-tip-button', PlTipButton)
-    component('pl-action-btn', PlActionBtn)
-    component('pl-search-list', PlSearchList)
-    component('pl-search-tab-list', PlSearchTabList)
-    component('pl-dialog', PlDialog)
-    prototype.$PlElement = {
+  install: function (Vue, opts = {}) {
+    Vue.component('pl-table', PlTable)
+    Vue.component('p-search-table', PSearchTable)
+    Vue.component('pl-input', PlInput)
+    Vue.component('pl-select', PlSelect)
+    Vue.component('pl-radio', PlRadio)
+    Vue.component('pl-checkbox', PlCheckbox)
+    Vue.component('pl-date', PlDate)
+    Vue.component('pl-switch', PlSwitch)
+    Vue.component('pl-time', PlTime)
+    Vue.component('pl-form', PlForm)
+    Vue.component('pl-button', PlButton)
+    Vue.component('pl-tip-button', PlTipButton)
+    Vue.component('pl-action-btn', PlActionBtn)
+    Vue.component('pl-search-list', PlSearchList)
+    Vue.component('pl-search-tab-list', PlSearchTabList)
+    Vue.component('pl-dialog', PlDialog)
+    Vue.component('pl-dialog-form', PlDialogFrom)
+    Vue.prototype.$PlElement = {
       tableConfig: opts.tableConfig,
       pageConfig: opts.pageConfig,
       selectConfig: opts.selectConfig,

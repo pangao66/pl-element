@@ -197,11 +197,12 @@ export default {
       // }
       this.$emit('change', val)
       this.$emit('input', val)
-      if (this.dateRangeKeys && this.dateRangeKeys.length && this.date instanceof Array) {
+      if (this.dateRangeKeys && this.dateRangeKeys.length) {
         const [start, end] = this.dateRangeKeys
+        const [startTime, endTime] = this.date || []
         if (this.form) {
-          this.$set(this.form, end, val[1])
-          this.$set(this.form, start, val[0])
+          this.$set(this.form, end, endTime)
+          this.$set(this.form, start, startTime)
         }
       }
     },

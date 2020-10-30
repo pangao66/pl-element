@@ -2,12 +2,11 @@
   <!--popConfirm形式-->
   <el-popconfirm
     v-if="confirmType==='pop'"
-    v-loading.fullscreen.lock="fullscreenLoadingStatus"
     v-bind="popConfig"
     @onConfirm="confirm"
     @onCancel="$emit('cancel')"
   >
-    <el-button slot="reference" v-bind="$attrs">
+    <el-button slot="reference" v-loading.fullscreen.lock="fullscreenLoadingStatus" v-bind="$attrs" :type="type">
       <slot/>
     </el-button>
   </el-popconfirm>
@@ -54,12 +53,7 @@ export default {
     },
     confirmConfig: {
       type: Object,
-      default: () => ({
-        message: '此操作将永久删除该数据, 是否继续?',
-        title: '提示',
-        confirmButtonText: '确定',
-        cancelButtonText: '取消'
-      })
+      default: () => ({})
     }
   },
   data () {
@@ -90,11 +84,17 @@ export default {
       this.debounceClick()
     },
     messageConfirm () {
-      const { message, title, confirmButtonText, cancelButtonText } = this.confirmConfig
+      const {
+        message = '此操作将永久删除该数据, 是否继续?',
+        title = '提示',
+        confirmButtonText = '确定',
+        cancelButtonText = '取消',
+        type = 'warning'
+      } = this.confirmConfig
       this.$confirm(message, title, {
         confirmButtonText,
         cancelButtonText,
-        type: 'warning'
+        type
       }).then(() => {
         this.confirm()
       }).catch(() => {

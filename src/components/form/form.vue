@@ -1,20 +1,25 @@
 <template>
-  <el-form ref="plForm" :model="form" v-bind="attrs">
+  <el-form ref="plForm" :model="form" :rules="rules" v-bind="attrs">
     <template v-for="(item,index) in formItems">
       <slot :name="item.slotName" v-bind="{form,item}">
-        <pl-form-item v-if="!item.cols" :key="index" :item="item" :form="form" />
-        <form-item-grid :item="item" :form="form">
-          <slot v-for="col in item.cols" :slot="col.slotName" :name="col.slotName" v-bind="{form,item:col}" />
+        <pl-form-item
+          v-if="!item.cols"
+          :key="index"
+          v-bind="item"
+          :form="form"
+        />
+        <form-item-grid v-else :item="item" :form="form">
+          <slot v-for="col in item.cols" :slot="col.slotName" :name="col.slotName" v-bind="{form,item:col}"/>
         </form-item-grid>
       </slot>
     </template>
-    <slot name="submit" v-bind="{form}">
-      <el-form-item>
+    <slot/>
+    <slot name="submit" v-bind="{form}" v-if="showSubmit">
+      <el-form-item style="margin-top: 20px;">
         <el-button type="primary" @click="submitForm">提交</el-button>
         <el-button @click="resetForm">重置</el-button>
       </el-form-item>
     </slot>
-    <slot />
   </el-form>
 </template>
 
@@ -26,6 +31,7 @@ import PlFormItem from './pl-form-item'
 const Item2UIDMap = new WeakMap()
 export default {
   name: 'PlForm',
+  inheritAttrs: false,
   components: { PlFormItem, FormItemGrid },
   provide () {
     return {
@@ -44,6 +50,13 @@ export default {
     value: {
       type: Object,
       default: () => ({})
+    },
+    rules: {
+      type: [Object, Array]
+    },
+    showSubmit: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -58,21 +71,32 @@ export default {
   },
   watch: {},
   created () {
-    this.formItems.forEach((item) => {
-
-    })
+    this.setKeyValue(this.formItems)
   },
   methods: {
-    submitForm () {
-      this.$refs.plForm.validate().then(() => {
-        this.$emit('submit', { ...this.form })
-        Promise.resolve(this.form)
-      }).catch(() => {
-        Promise.reject()
+    setKeyValue (list) {
+      list.forEach((item) => {
+        if (item.prop && typeof this.form[item.prop] === 'undefined') {
+          if (item.attrs && item.attrs.multiple) {
+            this.$set(this.form, item.prop, [])
+          } else if (item.comp === 'date' && item.attrs && item.attrs.type === 'daterange') {
+            this.$set(this.form, item.prop, [])
+          } else {
+            this.$set(this.form, item.prop, '')
+          }
+        }
       })
     },
+    async submitForm () {
+      try {
+        await this.$refs.plForm.validate()
+        this.$emit('submit', this.form)
+        return Promise.resolve({ ...this.form })
+      } catch (e) {
+        return Promise.reject(e)
+      }
+    },
     resetForm () {
-      // console.log(this.$refs.plForm)
       this.$refs.plForm.resetFields()
     },
     getRandomKey (item) {

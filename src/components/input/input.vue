@@ -7,6 +7,7 @@
     @input="handleInput"
     @blur="$emit('blur')"
   >
+    <svg-icon v-if="icon" :class-name="icon" :slot="iconPosition"></svg-icon>
     <slot v-for="slot in Object.keys($slots)" :name="slot" :slot="slot"/>
   </el-input>
 </template>
@@ -43,12 +44,19 @@ export default {
       default: false
     },
     transfer: {
-      type: Function,
+      type: [Function, String],
       default: null
     },
     form: {
       type: Object,
       default: () => ({})
+    },
+    icon: {
+      type: String
+    },
+    iconPosition: {
+      type: String,
+      default: 'prefix'
     }
   },
   data () {
@@ -85,19 +93,22 @@ export default {
           return this.message
         }
       }
+    },
+    trim () {
+      return !!this.attrs.trim
     }
   },
   watch: {
     value: {
       immediate: true,
-      handler (val) {
+      handler () {
         this.init()
       }
     }
   },
   methods: {
-    handleChange (val) {
-      if (this.transfer) {
+    handleChange () {
+      if (this.transfer || this.trim) {
         this.$emit('input', this.transferMessage())
       } else {
         this.$emit('input', this.calValue)
@@ -108,7 +119,7 @@ export default {
     },
     handleInput (val) {
       if (!this.cent) {
-        if (this.transfer) {
+        if (this.transfer || this.trim) {
           this.$emit('input', this.transferMessage())
         } else {
           this.$emit('input', val)
@@ -125,7 +136,21 @@ export default {
       }
     },
     transferMessage () {
-      return this.transfer(this.message)
+      let message = this.message
+      if (this.trim) {
+        message = message.trim()
+      }
+      if (typeof this.transfer === 'string') {
+        const type = this.transfer
+        if (type === 'upperCase') {
+          message = message.toUpperCase()
+        }
+      }
+      if (typeof this.transfer === 'function') {
+        message = this.transfer(message)
+      }
+      this.message = message
+      return message
     }
   }
 }

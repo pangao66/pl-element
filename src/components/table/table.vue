@@ -14,7 +14,8 @@
         v-bind="col.attrs"
         :prop="col.prop"
         :label="col.label"
-        show-overflow-tooltip
+        :show-overflow-tooltip="!showSlot(col)"
+        :class-name="getColumnClass(col)"
         :formatter="col.formatter||col.dict?(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter,col):undefined"
       >
         <!--自定义列header-->
@@ -39,27 +40,34 @@
           <slot :name="col.slotName" v-bind="scope"/>
           <template v-if="col.tagMap">
             <template v-if="scope.row[col.prop]===undefined||scope.row[col.prop]==null">-</template>
-            <el-tag v-else :type="col.tagMap[scope.row[col.prop]].type">
-              {{ col.tagMap[scope.row[col.prop]].text }}
+            <el-tag v-else :type="getTagType(scope,col)">
+              {{ getTagText(scope, col) }}
             </el-tag>
           </template>
           <template v-if="col.type==='index'">
-            <slot name="index" v-bind="scope"/>
+            <slot name="index" v-bind="{...scope,startIndex,virtualScroll}"/>
           </template>
           <template v-if="col.customerRenderText">
             {{ col.customerRenderText(scope) }}
           </template>
           <template v-if="col.actions&&col.actions.length">
             <template v-for="item in col.actions">
-              <pl-button
-                v-if="item.confirmType||item.confirm"
-                :confirm-type="item.confirmType||'confirm'"
-                v-bind="item.btnConfig"
-                @confirm="item.confirm({row:scope.row,col,index})"
-              >
-                {{ item.text }}
-              </pl-button>
-              <pl-button v-else @click="item.onClick({row:scope.row,col,index})">{{ item.text }}</pl-button>
+              <template v-if="!(item.hidden&&item.hidden(scope,item))">
+                <pl-button
+                  v-if="item.confirmType||item.confirm"
+                  :confirm-type="item.confirmType||'pop'"
+                  :confirm-config="item.confirmConfig&&item.confirmConfig(scope)"
+                  :pop-config="item.popConfig&&item.popConfig(scope)"
+                  fullscreen-loading
+                  type="text"
+                  @confirm="(done)=>item.confirm(scope,done)"
+                >
+                  {{ item.text || item.actionText(scope) }}
+                </pl-button>
+                <pl-button v-else type="text" @click="item.onClick(scope)">
+                  {{ item.text || item.actionText(scope) }}
+                </pl-button>
+              </template>
             </template>
           </template>
           <VNodes v-if="col.customerRender" :vnodes="col.customerRender(scope)"/>
@@ -78,7 +86,7 @@ import NP from 'number-precision'
 import { getRandomKey } from '../../utils'
 // import './autoheight'
 import { addResizeListener, removeResizeListener } from 'element-ui/lib/utils/resize-event'
-import { throttle, debounce } from 'throttle-debounce'
+import { throttle } from 'throttle-debounce'
 
 const Item2UIDMap = new WeakMap()
 export default {
@@ -254,12 +262,16 @@ export default {
             return formatDate(cellValue, 'yyyy-MM-dd HH:mm:ss')
           case 'time':
             return formatDate(cellValue, 'HH:mm:ss')
+          case 'date-hm':
+            return formatDate(cellValue, 'yyyy-MM-dd HH:mm')
           case 'money': // 金额三位分割
             return cellValue.toLocaleString()
           case 'point2': // 保留两位小数
             return NP.round(cellValue, 2).toFixed(2)
           case 'rmb': // 人民币分变成元
             return NP.round(NP.divide(cellValue, 100), 2)
+          case 'yuan':
+            return cellValue && `￥${cellValue}`
           case 'percent': // 小数转百分比
             return NP.round(NP.times(cellValue, 100), 2)
           default :
@@ -319,7 +331,8 @@ export default {
           // 由于el-table 在滚动到最后时，会出现抖动，因此增加判断，单独设置属性
           this.tables.forEach((item) => {
             const table = item.querySelector('.el-table__body')
-            table.style.paddingTop = scrollTop - itemSize + 'px'
+            // table.style.paddingTop = scrollTop - itemSize + 'px'
+            table.style.paddingTop = this.startIndex * itemSize + 'px'
             table.style.paddingBottom = 0
           })
         } else {
@@ -398,6 +411,49 @@ export default {
           table.style.paddingBottom = height - this.scrollTop - bufferCount * itemSize + 'px'
         })
       }
+    },
+    getColumnClass (col) {
+      const map = {
+        orderNumber: 'order-number-cell',
+        carNumber: 'car-number-cell',
+        negativeAmount: 'negative-amount',
+        positiveAmount: 'positive-amount'
+      }
+      let classStr = ''
+      if (col.attrs) {
+        const colClass = col.attrs['class-name'] || col.attrs.className
+        if (colClass) {
+          classStr += colClass
+        }
+      }
+      if (map[col.type]) {
+        classStr += ` ${map[col.type] || ''}`
+      }
+      if (col.actions && col.actions.length) {
+        return 'handle-column'
+      }
+      return classStr
+    },
+    getTagType (scope, col) {
+      const value = scope.row[col.prop]
+      return col.tagMap[value] ? col.tagMap[value].type : ''
+    },
+    getTagText (scope, col) {
+      const value = scope.row[col.prop]
+      return col.tagMap[value] ? col.tagMap[value].text : ''
+    },
+    // getConfirmConfig (item, col) {
+    //   const { text, actionRowLabel, actionRowProp } = item
+    //   return {
+    //     message: `此操作将删除${actionRowLabel}为${col[actionRowProp]}的数据,是否继续?`
+    //   }
+    // },
+    getActionText ({ col, row, index }) {
+      const { actionType } = col
+      const status = row.status
+      if (actionType === 'forbid') {
+        return status ? '禁用' : '启用'
+      }
     }
   },
   beforeDestroy () {
@@ -405,6 +461,10 @@ export default {
   },
   watch: {
     size () {
+      // 解决fixed列切换size之后不对齐的问题, nextTick不生效
+      setTimeout(() => {
+        this.setHeight()
+      }, 0)
       if (this.virtualScroll) {
         this.initHeight()
       }
@@ -415,7 +475,8 @@ export default {
 
 <style lang="stylus">
   .el-table .el-table__row td .cell:empty:before, .el-table .el-table__footer-wrapper td .cell:empty:before {
-    content: "-"
+    content: "-";
+    user-select: none;
   }
   .pl-table-container .el-pagination {
     padding: 10px;

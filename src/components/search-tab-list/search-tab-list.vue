@@ -262,14 +262,15 @@ export default {
 <style lang="stylus">
   .search-list-tab-container {
     position: relative;
-  }
-  .pl-search-list-menu {
-    position: absolute;
-    z-index 2
-    right: 24px
-    > i {
+    .pl-search-list-menu {
+      position: absolute;
+      z-index 2
+      right: 24px
+      > i {
+      }
     }
   }
+
   .advance-toggle-btn {
     color: #409EFF;
   }
