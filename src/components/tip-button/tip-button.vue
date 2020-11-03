@@ -3,22 +3,26 @@
     :content="content"
     v-bind="attrs"
   >
-    <pl-button v-bind="$attrs" v-on="$listeners">
-      <slot></slot>
+    <pl-button
+      v-bind="$attrs"
+      v-on="$listeners"
+    >
+      <slot />
     </pl-button>
   </el-tooltip>
 </template>
 
 <script>
 export default {
-  name: 'pl-tip-button',
+  name: 'PlTipButton',
   props: {
     content: {
       type: String,
       required: true
     },
     tipConfig: {
-      type: Object
+      type: Object,
+      default: null
     }
   },
   computed: {
@@ -32,7 +36,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -1,5 +1,9 @@
 <template>
-  <el-form :model="form" v-bind="$attrs" ref="plForm">
+  <el-form
+    ref="plForm"
+    :model="form"
+    v-bind="$attrs"
+  >
     <template v-for="(item,index) in formItems">
       <template>
         <form-item-grid
@@ -10,24 +14,36 @@
           <template v-slot="{col,item}">
             <component
               :is="col?col.comp:item.comp"
-              v-bind="col||item"
-              v-model="form[col?col.prop:item.prop]"
               :key="index"
               :ref="col?col.prop:item.prop"
-            >
-            </component>
-            <slot :name="col?col.slot:item.slot" v-bind="{form,item}"></slot>
+              v-model="form[col?col.prop:item.prop]"
+              v-bind="col||item"
+            />
+            <slot
+              :name="col?col.slot:item.slot"
+              v-bind="{form,item}"
+            />
           </template>
         </form-item-grid>
       </template>
     </template>
-    <slot name="submit" v-bind="{form}">
+    <slot
+      name="submit"
+      v-bind="{form}"
+    >
       <el-form-item>
-        <el-button type="primary" @click="submitForm">提交</el-button>
-        <el-button @click="resetForm">重置</el-button>
+        <el-button
+          type="primary"
+          @click="submitForm"
+        >
+          提交
+        </el-button>
+        <el-button @click="resetForm">
+          重置
+        </el-button>
       </el-form-item>
     </slot>
-    <slot></slot>
+    <slot />
   </el-form>
 </template>
 
@@ -36,7 +52,7 @@
 import FormItemGrid from './form-item-grid'
 
 export default {
-  name: 'pl-search-form',
+  name: 'PlSearchForm',
   components: { FormItemGrid },
   // model: {
   //   prop: 'defaultValue',
@@ -56,6 +72,27 @@ export default {
     return {
       form: this.value
     }
+  },
+  computed: {
+    // getRandomKey () {
+    //   return getRandomKey()
+    // }
+  },
+  watch: {
+    // value: {
+    //   immediate: true,
+    //   deep: true,
+    //   handler (val) {
+    //     this.form = { ...this.form, ...val }
+    //   }
+    // },
+    // form: {
+    //   deep: true,
+    //   handler (val) {
+    //     // this.$emit('input', val)
+    //     this.$emit('change', val)
+    //   }
+    // }
   },
   created () {
     this.formItems.forEach((item) => {
@@ -78,31 +115,6 @@ export default {
     // getRandomKey () {
     //   return getRandomKey()
     // }
-  },
-  computed: {
-    // getRandomKey () {
-    //   return getRandomKey()
-    // }
-  },
-  watch: {
-    // value: {
-    //   immediate: true,
-    //   deep: true,
-    //   handler (val) {
-    //     this.form = { ...this.form, ...val }
-    //   }
-    // },
-    // form: {
-    //   deep: true,
-    //   handler (val) {
-    //     // this.$emit('input', val)
-    //     this.$emit('change', val)
-    //   }
-    // }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

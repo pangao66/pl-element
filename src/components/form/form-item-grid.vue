@@ -1,8 +1,20 @@
 <template>
   <el-row v-bind="item.attrs">
-    <el-col v-for="(col,index) in item.cols" :key="index" :span="col.span">
-      <slot v-if="col.slotName" :name="col.slotName" v-bind="{form,item:col}"></slot>
-      <pl-form-item v-bind="col" :form="form" v-else></pl-form-item>
+    <el-col
+      v-for="(col,index) in item.cols"
+      :key="index"
+      :span="col.span"
+    >
+      <slot
+        v-if="col.slotName"
+        :name="col.slotName"
+        v-bind="{form,item:col}"
+      />
+      <pl-form-item
+        v-else
+        v-bind="col"
+        :form="form"
+      />
     </el-col>
   </el-row>
 </template>
@@ -11,7 +23,7 @@
 import PlFormItem from './pl-form-item'
 
 export default {
-  name: 'form-item-grid',
+  name: 'FormItemGrid',
   components: { PlFormItem },
   props: {
     cols: {
@@ -23,12 +35,9 @@ export default {
       default: () => ({})
     },
     form: {
-      type: Object
+      type: Object,
+      default: null
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -21,7 +21,7 @@ export default {
       type: String,
       default: ''
     },
-    value: { default: '' },
+    value: { default: '', type: [Array, String, Object, Date] },
     labelWidth: {
       type: [String, Number],
       default: ''
@@ -39,19 +39,24 @@ export default {
       default: () => ({})
     },
     pickerOptions: {
-      type: Object
+      type: Object,
+      default: null
     },
     shortcuts: {
-      type: Array
+      type: Array,
+      default: null
     },
     disableDate: {
-      type: [String, Number]
+      type: [String, Number],
+      default: null
     },
     between: {
-      type: [Number, String]
+      type: [Number, String],
+      default: null
     },
     dateRangeKeys: {
-      type: Array
+      type: Array,
+      default: null
     },
     form: {
       type: Object,
@@ -214,7 +219,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

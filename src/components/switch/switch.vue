@@ -1,16 +1,19 @@
 <template>
-  <el-switch v-model="switchValue" @change="valueChange"></el-switch>
+  <el-switch
+    v-model="switchValue"
+    @change="valueChange"
+  />
 </template>
 
 <script>
 export default {
-  name: 'pl-switch',
+  name: 'PlSwitch',
   model: {
     prop: 'value',
     event: 'change'
   },
   props: {
-    value: { default: '' },
+    value: { default: null, type: Boolean },
     labelWidth: {
       type: [String, Number],
       default: ''
@@ -23,12 +26,6 @@ export default {
   data () {
     return {
       switchValue: ''
-    }
-  },
-  methods: {
-    valueChange (val) {
-      this.$emit('input', val)
-      this.$emit('change', val)
     }
   },
   computed: {
@@ -52,10 +49,12 @@ export default {
         this.switchValue = val
       }
     }
+  },
+  methods: {
+    valueChange (val) {
+      this.$emit('input', val)
+      this.$emit('change', val)
+    }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

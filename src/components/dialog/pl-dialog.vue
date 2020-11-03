@@ -4,9 +4,9 @@
     :fullscreen="fullscreen"
     custom-class="pl-dialog"
     v-bind="$attrs"
-    v-on="$listeners"
     :close-on-click-modal="false"
     center
+    v-on="$listeners"
   >
     <template v-slot:title>
       <span style="font-size: 18px;">{{ $attrs.title }}</span>
@@ -15,18 +15,22 @@
         icon="el-icon-full-screen"
         class="el-dialog-header_full_btn"
         @click="fullscreen=!fullscreen"
-      ></pl-tip-button>
+      />
     </template>
     <el-scrollbar>
-      <slot></slot>
+      <slot />
     </el-scrollbar>
-    <slot name="footer" slot="footer"></slot>
+    <slot
+      slot="footer"
+      name="footer"
+    />
   </el-dialog>
 </template>
 
 <script>
 export default {
-  name: 'pl-dialog',
+  name: 'PlDialog',
+  inheritAttrs: false,
   data () {
     return {
       fullscreen: false

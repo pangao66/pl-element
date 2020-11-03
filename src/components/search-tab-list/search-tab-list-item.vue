@@ -1,6 +1,7 @@
 <template>
   <div>
     <pl-table
+      ref="table"
       v-loading="loading"
       :columns="columns"
       :data="tableData"
@@ -9,10 +10,15 @@
       :auto-height="true"
       v-bind="$attrs"
       v-on="$listeners"
-      ref="table"
     >
-      <template v-for="slot in Object.keys($scopedSlots)" v-slot:[slot]="scope">
-        <slot :name="slot" v-bind="scope"/>
+      <template
+        v-for="slot in Object.keys($scopedSlots)"
+        v-slot:[slot]="scope"
+      >
+        <slot
+          :name="slot"
+          v-bind="scope"
+        />
       </template>
       <template v-slot:index="{row,$index,virtualScroll,startIndex}">
         <template v-if="virtualScroll">
@@ -62,7 +68,8 @@ export default {
       default: () => ({})
     },
     size: {
-      type: String
+      type: String,
+      default: 'small'
     }
   },
   data () {

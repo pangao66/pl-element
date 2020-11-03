@@ -1,26 +1,23 @@
 <template>
-  <el-time-picker v-model="time" @change="valueChange"></el-time-picker>
+  <el-time-picker
+    v-model="time"
+    @change="valueChange"
+  />
 </template>
 
 <script>
 export default {
-  name: 'pl-time',
+  name: 'PlTime',
   // model: {
   //   prop: 'value',
   //   event: 'change'
   // },
   props: {
-    value: { default: '' }
+    value: { default: '', type: [Array, Date, Object, String, Number] }
   },
   data () {
     return {
       time: ''
-    }
-  },
-  methods: {
-    valueChange (val) {
-      this.$emit('input', val)
-      this.$emit('change', val)
     }
   },
   watch: {
@@ -30,10 +27,12 @@ export default {
         this.time = val
       }
     }
+  },
+  methods: {
+    valueChange (val) {
+      this.$emit('input', val)
+      this.$emit('change', val)
+    }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

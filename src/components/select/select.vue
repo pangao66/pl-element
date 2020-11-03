@@ -3,10 +3,15 @@
     v-model="selectedValue"
     value-key="id"
     v-bind="attrs"
-    @change="handleChange"
     :placeholder="`请选择${label}`"
+    @change="handleChange"
   >
-    <el-option v-for="(item,index) in optionsList" :key="index" :label="item.label" :value="item.value"/>
+    <el-option
+      v-for="(item,index) in optionsList"
+      :key="index"
+      :label="item.label"
+      :value="item.value"
+    />
   </el-select>
 </template>
 

@@ -11,8 +11,19 @@
       >
         <el-row :gutter="10">
           <template v-for="(item,index) in formItems">
-            <el-col :key="index" :xl="6" :lg="8" :md="12" :sm="24" class="el-col-xll-6">
-              <el-form-item v-if="!item.slotName" :label="item.label" :prop="item.prop">
+            <el-col
+              :key="index"
+              :xl="6"
+              :lg="8"
+              :md="12"
+              :sm="24"
+              class="el-col-xll-6"
+            >
+              <el-form-item
+                v-if="!item.slotName"
+                :label="item.label"
+                :prop="item.prop"
+              >
                 <component
                   :is="getComp(item.comp)"
                   :key="index"
@@ -22,15 +33,34 @@
                   v-bind="item"
                 />
               </el-form-item>
-              <slot v-if="item.slotName" :name="item.slotName" v-bind="{form,item}"/>
+              <slot
+                v-if="item.slotName"
+                :name="item.slotName"
+                v-bind="{form,item}"
+              />
             </el-col>
           </template>
-          <el-form-item style="float:right;" label-width="0">
-            <pl-button debounce type="primary" @click="search">查询</pl-button>
-            <el-button @click="resetForm">重置</el-button>
-            <a style="margin-left: 8px;cursor:pointer;" class="advance-toggle-btn" @click="toggleAdvanced">
+          <el-form-item
+            style="float:right;"
+            label-width="0"
+          >
+            <pl-button
+              debounce
+              type="primary"
+              @click="search"
+            >
+              查询
+            </pl-button>
+            <el-button @click="resetForm">
+              重置
+            </el-button>
+            <a
+              style="margin-left: 8px;cursor:pointer;"
+              class="advance-toggle-btn"
+              @click="toggleAdvanced"
+            >
               {{ advanced ? '展开' : '收起' }}
-              <i class="el-icon-arrow-down"/>
+              <i :class="advanced?'el-icon-arrow-down':'el-icon-arrow-up'" />
             </a>
           </el-form-item>
         </el-row>
@@ -39,11 +69,27 @@
     <div class="search-list-tab-container">
       <div class="pl-search-list-menu">
         <div>
-          <slot name="menu-handle"/>
-          <pl-tip-button content="刷新" debounce icon="el-icon-refresh" circle @click="search"/>
-          <el-dropdown @command="toggleSize" :hide-on-click="false" style="margin-left: 6px;margin-right: 6px;">
-            <pl-tip-button content="密度" circle>
-              <svg-icon class-name="full-screen" icon-class="midu"></svg-icon>
+          <slot name="menu-handle" />
+          <pl-tip-button
+            content="刷新"
+            debounce
+            icon="el-icon-refresh"
+            circle
+            @click="search"
+          />
+          <el-dropdown
+            :hide-on-click="false"
+            style="margin-left: 6px;margin-right: 6px;"
+            @command="toggleSize"
+          >
+            <pl-tip-button
+              content="密度"
+              circle
+            >
+              <svg-icon
+                class-name="full-screen"
+                icon-class="midu"
+              />
             </pl-tip-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
@@ -51,17 +97,29 @@
                 :key="item.value"
                 :command="item.value"
                 :class="{active:size===item.value}"
-              >{{ item.label }}
+              >
+                {{ item.label }}
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <pl-tip-button :content="isFullscreen?'退出全屏':'全屏'" circle @click="toggleFullScreen">
-            <svg-icon class-name="full-screen" :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'"></svg-icon>
+          <pl-tip-button
+            :content="isFullscreen?'退出全屏':'全屏'"
+            circle
+            @click="toggleFullScreen"
+          >
+            <svg-icon
+              class-name="full-screen"
+              :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'"
+            />
           </pl-tip-button>
           <!--          <el-button icon="el-icon-menu" circle/>-->
         </div>
       </div>
-      <el-tabs v-model="activeName" type="card" @tab-click="tabClick">
+      <el-tabs
+        v-model="activeName"
+        type="card"
+        @tab-click="tabClick"
+      >
         <el-tab-pane
           v-for="item in tabs"
           :key="`${item.name}${keyDate}`"
@@ -71,7 +129,10 @@
           <template v-slot:label>
             <span>{{ item.label }}</span>
             <span v-if="typeof item.num!=='undefined'">({{ item.num }})</span>
-            <slot name="tab-label" v-bind="{...item}"/>
+            <slot
+              name="tab-label"
+              v-bind="{...item}"
+            />
           </template>
           <keep-alive>
             <tab-table-item
@@ -86,11 +147,17 @@
               :size="size"
               v-on="$listeners"
             >
-              <template v-for="slot in Object.keys($scopedSlots)" v-slot:[slot]="scope">
-                <slot :name="slot" v-bind="scope"/>
+              <template
+                v-for="slot in Object.keys($scopedSlots)"
+                v-slot:[slot]="scope"
+              >
+                <slot
+                  :name="slot"
+                  v-bind="scope"
+                />
               </template>
               <template v-slot:pagination-slot>
-                <slot name="pagination-slot"/>
+                <slot name="pagination-slot" />
               </template>
             </tab-table-item>
           </keep-alive>
@@ -107,10 +174,10 @@ import searchListMixin from '../../mixins/search-list'
 const Item2UIDMap = new WeakMap()
 export default {
   name: 'PlSearchTabList',
-  mixins: [searchListMixin],
   components: {
     TabTableItem
   },
+  mixins: [searchListMixin],
   props: {
     formItems: {
       type: Array,

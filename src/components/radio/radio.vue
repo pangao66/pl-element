@@ -1,8 +1,23 @@
 <template>
-  <el-radio-group v-model="selectedValue" v-on="$listeners">
+  <el-radio-group
+    v-model="selectedValue"
+    v-on="$listeners"
+  >
     <template v-for="item in optionsList">
-      <el-radio-button v-if="radioButton" :key="item.value" :label="item.value">{{ item.label }}</el-radio-button>
-      <el-radio v-else :key="item.value" :label="item.value">{{ item.label }}</el-radio>
+      <el-radio-button
+        v-if="radioButton"
+        :key="item.value"
+        :label="item.value"
+      >
+        {{ item.label }}
+      </el-radio-button>
+      <el-radio
+        v-else
+        :key="item.value"
+        :label="item.value"
+      >
+        {{ item.label }}
+      </el-radio>
     </template>
   </el-radio-group>
 </template>
@@ -13,7 +28,7 @@ import { isArray, isPlainObject } from '../../utils'
 export default {
   name: 'PlRadio',
   props: {
-    value: { default: '' },
+    value: { default: '', type: [String, Number, Array] },
     labelWidth: {
       type: [String, Number],
       default: ''

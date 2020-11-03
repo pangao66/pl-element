@@ -12,10 +12,9 @@
       :label="label"
       :prop="prop"
       v-bind="$attrs"
-    >
-    </component>
+    />
   </el-form-item>
-  <form-item-grid v-else/>
+  <form-item-grid v-else></form-item-grid>
 </template>
 
 <script>
@@ -73,9 +72,12 @@ export default {
     min: {
       type: Number,
       default: null
+    },
+    length: {
+      type: Number,
+      default: null
     }
   },
-  methods: {},
   computed: {
     currentComp () {
       const comp = this.comp
@@ -152,7 +154,7 @@ export default {
           trigger
         } : undefined,
         map[validation],
-        this.max || this.min ? {
+        this.max || this.min || this.length ? {
           max: this.max,
           min: this.min,
           message: this.lengthMessage,
@@ -171,7 +173,7 @@ export default {
       return this.plForm.form
     },
     lengthMessage () {
-      const { max, min } = this
+      const { max, min, length } = this
       if (this.max && this.min) {
         return `长度在${min}到${max}字符`
       }
@@ -181,11 +183,12 @@ export default {
       if (this.max) {
         return `最多输入${max}个字符`
       }
+      if (this.length) {
+        return `请输入${length}个字符`
+      }
+      return ''
     }
-  }
+  },
+  methods: {}
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -1,23 +1,51 @@
 <template>
-  <el-form ref="plForm" :model="form" :rules="rules" v-bind="attrs">
+  <el-form
+    ref="plForm"
+    :model="form"
+    :rules="rules"
+    v-bind="attrs"
+  >
     <template v-for="(item,index) in formItems">
-      <slot :name="item.slotName" v-bind="{form,item}">
+      <slot
+        :name="item.slotName"
+        v-bind="{form,item}"
+      >
         <pl-form-item
           v-if="!item.cols"
           :key="index"
           v-bind="item"
           :form="form"
         />
-        <form-item-grid v-else :item="item" :form="form">
-          <slot v-for="col in item.cols" :slot="col.slotName" :name="col.slotName" v-bind="{form,item:col}"/>
+        <form-item-grid
+          v-else
+          :item="item"
+          :form="form"
+        >
+          <slot
+            v-for="col in item.cols"
+            :slot="col.slotName"
+            :name="col.slotName"
+            v-bind="{form,item:col}"
+          />
         </form-item-grid>
       </slot>
     </template>
-    <slot/>
-    <slot name="submit" v-bind="{form}" v-if="showSubmit">
+    <slot />
+    <slot
+      v-if="showSubmit"
+      name="submit"
+      v-bind="{form}"
+    >
       <el-form-item style="margin-top: 20px;">
-        <el-button type="primary" @click="submitForm">提交</el-button>
-        <el-button @click="resetForm">重置</el-button>
+        <el-button
+          type="primary"
+          @click="submitForm"
+        >
+          提交
+        </el-button>
+        <el-button @click="resetForm">
+          重置
+        </el-button>
       </el-form-item>
     </slot>
   </el-form>
@@ -31,8 +59,8 @@ import PlFormItem from './pl-form-item'
 const Item2UIDMap = new WeakMap()
 export default {
   name: 'PlForm',
-  inheritAttrs: false,
   components: { PlFormItem, FormItemGrid },
+  inheritAttrs: false,
   provide () {
     return {
       plForm: this
@@ -52,7 +80,8 @@ export default {
       default: () => ({})
     },
     rules: {
-      type: [Object, Array]
+      type: [Object, Array],
+      default: null
     },
     showSubmit: {
       type: Boolean,

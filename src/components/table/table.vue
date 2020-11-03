@@ -1,15 +1,18 @@
 <template>
-  <div v-loading="loading" class="pl-table-container">
+  <div
+    v-loading="loading"
+    class="pl-table-container"
+  >
     <el-table
+      ref="table"
       :data="tableData"
       v-bind="attrs"
+      :height=" autoHeight ? '300px' : $attrs.height"
       v-on="$listeners"
       @cell-dblclick="copy"
-      :height=" autoHeight ? '300px' : $attrs.height"
-      ref="table"
     >
       <el-table-column
-        v-for="(col,index) in columns"
+        v-for="col in columns"
         :key="getRandomKey(col)"
         v-bind="col.attrs"
         :prop="col.prop"
@@ -23,56 +26,66 @@
           <template v-if="col.tip">
             {{ col.label }}
             <el-tooltip class="item" effect="dark" :content="col.tip" placement="top">
-              <i class="el-icon-question"/>
+              <i class="el-icon-question" />
             </el-tooltip>
           </template>
           <template v-if="col.type==='selection'">
-            <el-checkbox
-              :indeterminate="isIndeterminate"
-              :checked="checkedItems.length"
-              @change="handleCheckAllChange"
+            <el-checkbox :indeterminate="isIndeterminate" :checked="checkedItems.length"
+                         @change="handleCheckAllChange"
             ></el-checkbox>
           </template>
-          <slot v-if="col.headerSlot" :name="col.headerSlot" v-bind="scope"/>
+          <slot v-if="col.headerSlot" :name="col.headerSlot" v-bind="scope"></slot>
         </template>
         <!--自定义列 -->
         <template v-if="showSlot(col)" v-slot="scope">
-          <slot :name="col.slotName" v-bind="scope"/>
+          <slot :name="col.slotName" v-bind="scope"></slot>
           <template v-if="col.tagMap">
-            <template v-if="scope.row[col.prop]===undefined||scope.row[col.prop]==null">-</template>
+            <template v-if="scope.row[col.prop]===undefined||scope.row[col.prop]==null||scope.row[col.prop]===''">-</template>
             <el-tag v-else :type="getTagType(scope,col)">
               {{ getTagText(scope, col) }}
             </el-tag>
           </template>
           <template v-if="col.type==='index'">
-            <slot name="index" v-bind="{...scope,startIndex,virtualScroll}"/>
+            <slot name="index" v-bind="{...scope,startIndex,virtualScroll}"></slot>
           </template>
           <template v-if="col.customerRenderText">
             {{ col.customerRenderText(scope) }}
           </template>
           <template v-if="col.actions&&col.actions.length">
-            <template v-for="item in col.actions">
+            <template v-for="(item,index) in col.actions">
               <template v-if="!(item.hidden&&item.hidden(scope,item))">
                 <pl-button
                   v-if="item.confirmType||item.confirm"
+                  :key="index"
                   :confirm-type="item.confirmType||'pop'"
                   :confirm-config="item.confirmConfig&&item.confirmConfig(scope)"
                   :pop-config="item.popConfig&&item.popConfig(scope)"
                   fullscreen-loading
                   type="text"
-                  @confirm="(done)=>item.confirm(scope,done)"
+                  @confirm="(done)=>item.confirm(scope,done,index)"
                 >
                   {{ item.text || item.actionText(scope) }}
                 </pl-button>
-                <pl-button v-else type="text" @click="item.onClick(scope)">
+                <pl-button
+                  v-else
+                  :key="index"
+                  type="text"
+                  @click="item.onClick(scope)"
+                >
                   {{ item.text || item.actionText(scope) }}
                 </pl-button>
               </template>
             </template>
           </template>
-          <VNodes v-if="col.customerRender" :vnodes="col.customerRender(scope)"/>
+          <VNodes
+            v-if="col.customerRender"
+            :vnodes="col.customerRender(scope)"
+          />
           <template v-if="col.type==='selection'">
-            <el-checkbox v-model="scope.row.selected" @change="handleItemCheckedChange"></el-checkbox>
+            <el-checkbox
+              v-model="scope.row.selected"
+              @change="handleItemCheckedChange"
+            />
           </template>
         </template>
       </el-table-column>
@@ -104,6 +117,7 @@ export default {
       }
     }
   },
+  inheritAttrs: false,
   props: {
     columns: {
       required: true,
@@ -213,6 +227,17 @@ export default {
       return map[this.size]
     }
   },
+  watch: {
+    size () {
+      // 解决fixed列切换size之后不对齐的问题, nextTick不生效
+      setTimeout(() => {
+        this.setHeight()
+      }, 0)
+      if (this.virtualScroll) {
+        this.initHeight()
+      }
+    }
+  },
   mounted () {
     this.$nextTick(() => {
       if (this.autoHeight) {
@@ -244,6 +269,9 @@ export default {
         }, 0)
       }
     }
+  },
+  beforeDestroy () {
+    removeResizeListener(this.$refs.table.$el, this.setHeight())
   },
   methods: {
     formatCell (row, column, cellValue, index, formatter, col) {
@@ -448,25 +476,11 @@ export default {
     //     message: `此操作将删除${actionRowLabel}为${col[actionRowProp]}的数据,是否继续?`
     //   }
     // },
-    getActionText ({ col, row, index }) {
+    getActionText ({ col, row }) {
       const { actionType } = col
       const status = row.status
       if (actionType === 'forbid') {
         return status ? '禁用' : '启用'
-      }
-    }
-  },
-  beforeDestroy () {
-    removeResizeListener(this.$refs.table.$el, this.setHeight())
-  },
-  watch: {
-    size () {
-      // 解决fixed列切换size之后不对齐的问题, nextTick不生效
-      setTimeout(() => {
-        this.setHeight()
-      }, 0)
-      if (this.virtualScroll) {
-        this.initHeight()
       }
     }
   }

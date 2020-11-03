@@ -7,8 +7,16 @@
     @input="handleInput"
     @blur="$emit('blur')"
   >
-    <svg-icon v-if="icon" :class-name="icon" :slot="iconPosition"></svg-icon>
-    <slot v-for="slot in Object.keys($slots)" :name="slot" :slot="slot"/>
+    <svg-icon
+      v-if="icon"
+      :slot="iconPosition"
+      :class-name="icon"
+    />
+    <slot
+      v-for="slot in Object.keys($slots)"
+      :slot="slot"
+      :name="slot"
+    />
   </el-input>
 </template>
 

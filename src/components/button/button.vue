@@ -6,8 +6,13 @@
     @onConfirm="confirm"
     @onCancel="$emit('cancel')"
   >
-    <el-button slot="reference" v-loading.fullscreen.lock="fullscreenLoadingStatus" v-bind="$attrs" :type="type">
-      <slot/>
+    <el-button
+      slot="reference"
+      v-loading.fullscreen.lock="fullscreenLoadingStatus"
+      v-bind="$attrs"
+      :type="type"
+    >
+      <slot />
     </el-button>
   </el-popconfirm>
   <el-button
@@ -18,7 +23,7 @@
     :type="type"
     @click="handleClick"
   >
-    <slot/>
+    <slot />
   </el-button>
 </template>
 
@@ -27,6 +32,7 @@ import { debounce } from 'throttle-debounce'
 
 export default {
   name: 'PlButton',
+  inheritAttrs: false,
   props: {
     debounce: {
       type: Boolean,
@@ -49,7 +55,8 @@ export default {
       default: () => ({ title: '确定删除吗？' })
     },
     type: {
-      type: String
+      type: String,
+      default: ''
     },
     confirmConfig: {
       type: Object,

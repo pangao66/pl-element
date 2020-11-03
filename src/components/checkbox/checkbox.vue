@@ -1,8 +1,23 @@
 <template>
-  <el-checkbox-group v-model="selectedValue" v-on="$listeners">
+  <el-checkbox-group
+    v-model="selectedValue"
+    v-on="$listeners"
+  >
     <template v-for="item in optionsList">
-      <el-checkbox-button v-if="radioButton" :label="item.value" :key="item.value">{{ item.label }}</el-checkbox-button>
-      <el-checkbox v-else :label="item.value" :key="item.value">{{ item.label }}</el-checkbox>
+      <el-checkbox-button
+        v-if="radioButton"
+        :key="item.value"
+        :label="item.value"
+      >
+        {{ item.label }}
+      </el-checkbox-button>
+      <el-checkbox
+        v-else
+        :key="item.value"
+        :label="item.value"
+      >
+        {{ item.label }}
+      </el-checkbox>
     </template>
   </el-checkbox-group>
 </template>
@@ -10,7 +25,7 @@
 import { isArray, isPlainObject } from '../../utils'
 
 export default {
-  name: 'pl-checkbox',
+  name: 'PlCheckbox',
   props: {
     value: { default: '' },
     options: {
@@ -22,7 +37,8 @@ export default {
       default: 'label,value'
     },
     valueLabel: {
-      type: [String, Number]
+      type: [String, Number],
+      default: null
     },
     radioButton: {
       type: Boolean,
@@ -37,15 +53,6 @@ export default {
         filterable: true,
         defaultFirstOption: true
       }
-    }
-  },
-  methods: {
-    handleChange (val) {
-      this.$emit('change', val)
-      this.$emit('input', val)
-    },
-    init () {
-      this.selectedValue = this.value || []
     }
   },
   computed: {
@@ -83,6 +90,15 @@ export default {
       handler () {
         this.init()
       }
+    }
+  },
+  methods: {
+    handleChange (val) {
+      this.$emit('change', val)
+      this.$emit('input', val)
+    },
+    init () {
+      this.selectedValue = this.value || []
     }
   }
 }

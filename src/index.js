@@ -4,13 +4,12 @@
 // import pfTabTable from './components/pf-table/pf-tab-table'
 // import pTable from './components/pf-table/p-table'
 import PlTable from './components/table'
-import PSearchTable from './components/search-table'
 import PlInput from './components/input'
 import PlSelect from './components/select'
 import PlRadio from './components/radio'
 import PlCheckbox from './components/checkbox'
 import PlDate from './components/date'
-import PlButton, { PlActionBtn } from './components/button'
+import PlButton from './components/button'
 import PlTipButton from './components/tip-button'
 import PlSwitch from './components/switch'
 import PlTime from './components/time'
@@ -25,7 +24,6 @@ import './styles/index.styl'
 const PElement = {
   install: function (Vue, opts = {}) {
     Vue.component('pl-table', PlTable)
-    Vue.component('p-search-table', PSearchTable)
     Vue.component('pl-input', PlInput)
     Vue.component('pl-select', PlSelect)
     Vue.component('pl-radio', PlRadio)
@@ -36,7 +34,6 @@ const PElement = {
     Vue.component('pl-form', PlForm)
     Vue.component('pl-button', PlButton)
     Vue.component('pl-tip-button', PlTipButton)
-    Vue.component('pl-action-btn', PlActionBtn)
     Vue.component('pl-search-list', PlSearchList)
     Vue.component('pl-search-tab-list', PlSearchTabList)
     Vue.component('pl-dialog', PlDialog)
