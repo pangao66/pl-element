@@ -1,7 +1,7 @@
 <template>
   <el-radio-group
     v-model="selectedValue"
-    v-on="$listeners"
+    v-on="events"
   >
     <template v-for="item in optionsList">
       <el-radio-button
@@ -52,6 +52,10 @@ export default {
     radioButton: {
       type: Boolean,
       default: false
+    },
+    events: {
+      type: Object,
+      default: null
     }
   },
   data () {

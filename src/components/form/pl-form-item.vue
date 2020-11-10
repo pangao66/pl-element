@@ -11,6 +11,7 @@
       v-model="form[prop]"
       :label="label"
       :prop="prop"
+      :events="events"
       v-bind="$attrs"
     />
   </el-form-item>
@@ -75,6 +76,10 @@ export default {
     },
     length: {
       type: Number,
+      default: null
+    },
+    events: {
+      type: Object,
       default: null
     }
   },

@@ -3,6 +3,7 @@
     v-model="message"
     v-bind="{...attrs,...$scopedSlots}"
     :placeholder="$attrs.placeholder||`请输入${label}`"
+    v-on="events"
     @change="handleChange"
     @input="handleInput"
     @blur="$emit('blur')"
@@ -65,6 +66,10 @@ export default {
     iconPosition: {
       type: String,
       default: 'prefix'
+    },
+    events: {
+      type: [Object],
+      default: null
     }
   },
   data () {
@@ -115,6 +120,11 @@ export default {
     }
   },
   methods: {
+    handleEvent () {
+      if (this.event) {
+
+      }
+    },
     handleChange () {
       if (this.transfer || this.trim) {
         this.$emit('input', this.transferMessage())

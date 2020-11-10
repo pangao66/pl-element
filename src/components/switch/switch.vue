@@ -2,6 +2,7 @@
   <el-switch
     v-model="switchValue"
     @change="valueChange"
+    v-on="events"
   />
 </template>
 
@@ -21,6 +22,10 @@ export default {
     formItemAttrs: {
       type: Object,
       default: () => ({})
+    },
+    events: {
+      type: Object,
+      default: null
     }
   },
   data () {

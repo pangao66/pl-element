@@ -5,6 +5,7 @@
     v-bind="attrs"
     @change="handleChange"
     @focus="timeArrayFocus"
+    v-on="events"
   />
 </template>
 
@@ -61,6 +62,10 @@ export default {
     form: {
       type: Object,
       default: () => ({})
+    },
+    events: {
+      type: Object,
+      default: null
     }
   },
   data () {
@@ -71,6 +76,7 @@ export default {
   computed: {
     attrs () {
       return {
+        clearable: true,
         ...this.$PlElement.dateConfig,
         ...this.$attrs.attrs
       }

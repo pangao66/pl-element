@@ -5,6 +5,7 @@
     v-bind="attrs"
     :placeholder="`请选择${label}`"
     @change="handleChange"
+    v-on="events"
   >
     <el-option
       v-for="(item,index) in optionsList"
@@ -41,6 +42,10 @@ export default {
     label: {
       type: String,
       default: ''
+    },
+    events: {
+      type: Object,
+      default: null
     }
   },
   data () {

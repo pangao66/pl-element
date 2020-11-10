@@ -2,6 +2,7 @@
   <el-time-picker
     v-model="time"
     @change="valueChange"
+    v-on="events"
   />
 </template>
 
@@ -13,7 +14,11 @@ export default {
   //   event: 'change'
   // },
   props: {
-    value: { default: '', type: [Array, Date, Object, String, Number] }
+    value: { default: '', type: [Array, Date, Object, String, Number] },
+    events: {
+      type: Object,
+      default: null
+    }
   },
   data () {
     return {
