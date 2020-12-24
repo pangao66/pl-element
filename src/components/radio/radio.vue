@@ -1,7 +1,7 @@
 <template>
   <el-radio-group
     v-model="selectedValue"
-    v-on="events"
+    v-on="eventList"
   >
     <template v-for="item in optionsList">
       <el-radio-button
@@ -96,17 +96,11 @@ export default {
       }
       return this.options
     },
-    rules () {
-      let trigger = 'change'
-      if (this.trigger) {
-        trigger = this.trigger
+    eventList () {
+      return {
+        ...this.events,
+        ...this.$listeners
       }
-      const required = this.required ?? 'no-required'
-      return required !== 'no-required' ? {
-        required: this.required,
-        message: `${this.label}不能为空`,
-        trigger
-      } : undefined
     }
   },
   watch: {

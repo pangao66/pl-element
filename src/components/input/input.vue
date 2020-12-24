@@ -1,12 +1,8 @@
 <template>
   <el-input
     v-model="message"
-    v-bind="{...attrs,...$scopedSlots}"
-    :placeholder="$attrs.placeholder||`请输入${label}`"
-    v-on="events"
-    @change="handleChange"
-    @input="handleInput"
-    @blur="$emit('blur')"
+    v-bind="attrs"
+    v-on="eventList"
   >
     <svg-icon
       v-if="icon"
@@ -26,6 +22,7 @@ import NP from 'number-precision'
 
 export default {
   name: 'PlInput',
+  inheritAttrs: false,
   props: {
     rules: {
       type: [Object, Array],
@@ -83,8 +80,17 @@ export default {
   computed: {
     attrs () {
       return {
+        placeholder: this.$attrs.placeholder || `请输入${this.label}`,
         ...this.$PlElement.inputConfig,
         ...this.$attrs.attrs
+      }
+    },
+    eventList () {
+      return {
+        ...this.events,
+        ...this.$listeners,
+        change: this.handleChange,
+        input: this.handleInput
       }
     },
     calValue: {
@@ -100,14 +106,17 @@ export default {
           return this.transferMessage()
         }
         if (this.cent) {
-          this.message = NP.round(this.message, 2)
-          return NP.round(NP.times(this.message, 100), 0)
+          this.message = NP.round(this.message, 2) || 0
+          return NP.round(NP.times(this.message, 100), 0) || 0
         } else {
           return this.message
         }
       }
     },
     trim () {
+      if (this.cent) {
+        return false
+      }
       return !!this.attrs.trim
     }
   },
@@ -120,11 +129,6 @@ export default {
     }
   },
   methods: {
-    handleEvent () {
-      if (this.event) {
-
-      }
-    },
     handleChange () {
       if (this.transfer || this.trim) {
         this.$emit('input', this.transferMessage())
@@ -134,6 +138,9 @@ export default {
       this.$nextTick(() => {
         this.$emit('change', this.message)
       })
+      if (this.events && this.events.change) {
+        this.events.change(this.message)
+      }
     },
     handleInput (val) {
       if (!this.cent) {
@@ -142,6 +149,9 @@ export default {
         } else {
           this.$emit('input', val)
         }
+      }
+      if (this.events && this.events.input) {
+        this.events.input(val)
       }
     },
     init () {
@@ -152,6 +162,7 @@ export default {
       } else {
         this.message = this.value
       }
+      // this.message = this.value
     },
     transferMessage () {
       let message = this.message

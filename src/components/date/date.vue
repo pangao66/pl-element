@@ -5,7 +5,7 @@
     v-bind="attrs"
     @change="handleChange"
     @focus="timeArrayFocus"
-    v-on="events"
+    v-on="eventList"
   />
 </template>
 
@@ -76,9 +76,14 @@ export default {
   computed: {
     attrs () {
       return {
-        clearable: true,
         ...this.$PlElement.dateConfig,
         ...this.$attrs.attrs
+      }
+    },
+    eventList () {
+      return {
+        ...this.events,
+        ...this.$listeners
       }
     },
     calPickerOptions () {
@@ -119,7 +124,12 @@ export default {
         }
       }
       if (this.$attrs.attrs && this.$attrs.attrs.type && this.$attrs.attrs.type === 'daterange') {
-        shortcuts = ['recentWeek', 'recentMonth', 'recentThreeMonth']
+        const between = this.between
+        if (between >= 90 || !between) {
+          shortcuts = ['recentWeek', 'recentMonth', 'recentThreeMonth']
+        } else if (between >= 30) {
+          shortcuts = ['recentWeek', 'recentMonth']
+        }
       }
       if (shortcuts && shortcuts.length) {
         shortcuts.forEach((item) => {
@@ -211,9 +221,24 @@ export default {
       if (this.dateRangeKeys && this.dateRangeKeys.length) {
         const [start, end] = this.dateRangeKeys
         const [startTime, endTime] = this.date || []
+        //  如果需要时间戳类型,则设置开始时间为当日0点,结束时间为当日23:59:59
+        const valueFormat = this.attrs['value-format'] || this.attrs.valueFormat
         if (this.form) {
-          this.$set(this.form, end, endTime)
-          this.$set(this.form, start, startTime)
+          if (valueFormat && valueFormat === 'timestamp') {
+            if (startTime) {
+              this.$set(this.form, start, new Date(startTime).setHours(0, 0, 0, 0))
+            } else {
+              this.$set(this.form, start, null)
+            }
+            if (endTime) {
+              this.$set(this.form, end, new Date(endTime).setHours(0, 0, 0, 0) + 24 * 60 * 60 * 1000 - 1)
+            } else {
+              this.$set(this.form, end, null)
+            }
+          } else {
+            this.$set(this.form, end, endTime)
+            this.$set(this.form, start, startTime)
+          }
         }
       }
     },

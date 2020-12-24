@@ -1,121 +1,45 @@
 <template>
   <div
-    v-loading="loading"
     class="pl-table-container"
   >
     <el-table
       ref="table"
       :data="tableData"
       v-bind="attrs"
-      :height=" autoHeight ? '300px' : $attrs.height"
-      v-on="$listeners"
+      :height="autoHeight ? '500px' : $attrs.height"
+      v-on="{...$listeners,...events}"
       @cell-dblclick="copy"
     >
-      <el-table-column
-        v-for="col in columns"
-        :key="getRandomKey(col)"
-        v-bind="col.attrs"
-        :prop="col.prop"
-        :label="col.label"
-        :show-overflow-tooltip="!showSlot(col)"
-        :class-name="getColumnClass(col)"
-        :formatter="col.formatter||col.dict?(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter,col):undefined"
-      >
-        <!--自定义列header-->
-        <template v-if="col.headerSlot || col.tip ||col.type==='selection'" v-slot:header="scope">
-          <template v-if="col.tip">
-            {{ col.label }}
-            <el-tooltip class="item" effect="dark" :content="col.tip" placement="top">
-              <i class="el-icon-question" />
-            </el-tooltip>
+      <template v-for="col in columns">
+        <pl-table-column
+          :key="getRandomKey(col)"
+          :col="col"
+          :start-index="startIndex"
+          :virtual-scroll="virtualScroll"
+        >
+          <template
+            v-for="slot in Object.keys($scopedSlots)"
+            v-slot:[slot]="scope"
+          >
+            <slot :name="slot" v-bind="scope" />
           </template>
-          <template v-if="col.type==='selection'">
-            <el-checkbox :indeterminate="isIndeterminate" :checked="checkedItems.length"
-                         @change="handleCheckAllChange"
-            ></el-checkbox>
-          </template>
-          <slot v-if="col.headerSlot" :name="col.headerSlot" v-bind="scope"></slot>
-        </template>
-        <!--自定义列 -->
-        <template v-if="showSlot(col)" v-slot="scope">
-          <slot :name="col.slotName" v-bind="scope"></slot>
-          <template v-if="col.tagMap">
-            <template v-if="scope.row[col.prop]===undefined||scope.row[col.prop]==null||scope.row[col.prop]===''">-</template>
-            <el-tag v-else :type="getTagType(scope,col)">
-              {{ getTagText(scope, col) }}
-            </el-tag>
-          </template>
-          <template v-if="col.type==='index'">
-            <slot name="index" v-bind="{...scope,startIndex,virtualScroll}"></slot>
-          </template>
-          <template v-if="col.customerRenderText">
-            {{ col.customerRenderText(scope) }}
-          </template>
-          <template v-if="col.actions&&col.actions.length">
-            <template v-for="(item,index) in col.actions">
-              <template v-if="!(item.hidden&&item.hidden(scope,item))">
-                <pl-button
-                  v-if="item.confirmType||item.confirm"
-                  :key="index"
-                  :confirm-type="item.confirmType||'pop'"
-                  :confirm-config="item.confirmConfig&&item.confirmConfig(scope)"
-                  :pop-config="item.popConfig&&item.popConfig(scope)"
-                  fullscreen-loading
-                  type="text"
-                  @confirm="(done)=>item.confirm(scope,done,index)"
-                >
-                  {{ item.text || item.actionText(scope) }}
-                </pl-button>
-                <pl-button
-                  v-else
-                  :key="index"
-                  type="text"
-                  @click="item.onClick(scope)"
-                >
-                  {{ item.text || item.actionText(scope) }}
-                </pl-button>
-              </template>
-            </template>
-          </template>
-          <VNodes
-            v-if="col.customerRender"
-            :vnodes="col.customerRender(scope)"
-          />
-          <template v-if="col.type==='selection'">
-            <el-checkbox
-              v-model="scope.row.selected"
-              @change="handleItemCheckedChange"
-            />
-          </template>
-        </template>
-      </el-table-column>
+        </pl-table-column>
+      </template>
     </el-table>
   </div>
 </template>
 
 <script>
-import { formatDate } from 'element-ui/lib/utils/date-util'
-import NP from 'number-precision'
-import { getRandomKey } from '../../utils'
-// import './autoheight'
 import { addResizeListener, removeResizeListener } from 'element-ui/lib/utils/resize-event'
 import { throttle } from 'throttle-debounce'
+import PlTableColumn from './table-column'
+import { getRandomKey } from '../../utils'
 
 const Item2UIDMap = new WeakMap()
 export default {
   name: 'PlTable',
   components: {
-    VNodes: {
-      functional: true,
-      props: {
-        vnodes: {
-          type: Function
-        }
-      },
-      render: (h, ctx) => {
-        return ctx.props.vnodes
-      }
-    }
+    PlTableColumn
   },
   inheritAttrs: false,
   props: {
@@ -145,10 +69,6 @@ export default {
       type: Boolean,
       default: false
     },
-    fetch: {
-      type: Function,
-      default: null
-    },
     autoLoad: {
       type: Boolean,
       default: false
@@ -172,11 +92,14 @@ export default {
     size: {
       type: String,
       default: 'small'
+    },
+    events: {
+      type: Object,
+      default: null
     }
   },
   data () {
     return {
-      loading: false,
       scrollTop: 0,
       selectedAllStatus: false,
       indeterminate: false,
@@ -236,6 +159,18 @@ export default {
       if (this.virtualScroll) {
         this.initHeight()
       }
+    },
+    columns: {
+      deep: true,
+      handler () {
+        // 解决fixed列切换size之后不对齐的问题, nextTick不生效
+        setTimeout(() => {
+          this.setHeight()
+        }, 0)
+        // if (this.virtualScroll) {
+        //   this.initHeight()
+        // }
+      }
     }
   },
   mounted () {
@@ -272,46 +207,16 @@ export default {
   },
   beforeDestroy () {
     removeResizeListener(this.$refs.table.$el, this.setHeight())
+    removeResizeListener(window.document.body, this.setHeight())
   },
   methods: {
-    formatCell (row, column, cellValue, index, formatter, col) {
-      if (col.dict) {
-        return col.dict[cellValue]
+    getRandomKey (item) {
+      const persistedUID = Item2UIDMap.get(item)
+      if (!persistedUID) {
+        Item2UIDMap.set(item, getRandomKey())
+        return getRandomKey()
       }
-      const type = typeof formatter
-      if (type === 'function') {
-        return formatter({ row, column, cellValue, index })
-      }
-      if (type === 'string') {
-        switch (formatter) {
-          case 'date':
-            return formatDate(cellValue, 'yyyy-MM-dd')
-          case 'datetime':
-            return formatDate(cellValue, 'yyyy-MM-dd HH:mm:ss')
-          case 'time':
-            return formatDate(cellValue, 'HH:mm:ss')
-          case 'date-hm':
-            return formatDate(cellValue, 'yyyy-MM-dd HH:mm')
-          case 'money': // 金额三位分割
-            return cellValue.toLocaleString()
-          case 'point2': // 保留两位小数
-            return NP.round(cellValue, 2).toFixed(2)
-          case 'rmb': // 人民币分变成元
-            return NP.round(NP.divide(cellValue, 100), 2)
-          case 'yuan':
-            return cellValue && `￥${cellValue}`
-          case 'percent': // 小数转百分比
-            return NP.round(NP.times(cellValue, 100), 2)
-          default :
-            return cellValue
-        }
-      }
-      if (type === 'object') {
-        if (formatter.type && formatter.type === 'date') {
-          return formatDate(cellValue, formatter.content)
-        }
-      }
-      return cellValue
+      return persistedUID
     },
     copy (row, column, cell) {
       if (this.tableConfig && (this.tableConfig.dbClickCopy === false)) {
@@ -335,17 +240,6 @@ export default {
       document.execCommand('Copy')
       input.remove()
       this.$message.success('复制成功：' + textToCopy)
-    },
-    getRandomKey (item) {
-      const persistedUID = Item2UIDMap.get(item)
-      if (!persistedUID) {
-        Item2UIDMap.set(item, getRandomKey())
-        return getRandomKey()
-      }
-      return persistedUID
-    },
-    showSlot (col) {
-      return col.slotName || col.customerRender || col.customerRenderText || col.tagMap || col.type === 'index' || col.actions || col.type === 'selection'
     },
     listenScroll: throttle(20, true, function (e) {
       this.scrollTop = e.target.scrollTop
@@ -373,6 +267,9 @@ export default {
       }
     }),
     setHeight () {
+      if (!this.autoHeight) {
+        return
+      }
       const $table = this.$refs.table
       const bottomOffset = (this.bottomOffset) || 30
       if (!$table) return
@@ -438,49 +335,6 @@ export default {
           table.style.paddingTop = this.scrollTop + 'px'
           table.style.paddingBottom = height - this.scrollTop - bufferCount * itemSize + 'px'
         })
-      }
-    },
-    getColumnClass (col) {
-      const map = {
-        orderNumber: 'order-number-cell',
-        carNumber: 'car-number-cell',
-        negativeAmount: 'negative-amount',
-        positiveAmount: 'positive-amount'
-      }
-      let classStr = ''
-      if (col.attrs) {
-        const colClass = col.attrs['class-name'] || col.attrs.className
-        if (colClass) {
-          classStr += colClass
-        }
-      }
-      if (map[col.type]) {
-        classStr += ` ${map[col.type] || ''}`
-      }
-      if (col.actions && col.actions.length) {
-        return 'handle-column'
-      }
-      return classStr
-    },
-    getTagType (scope, col) {
-      const value = scope.row[col.prop]
-      return col.tagMap[value] ? col.tagMap[value].type : ''
-    },
-    getTagText (scope, col) {
-      const value = scope.row[col.prop]
-      return col.tagMap[value] ? col.tagMap[value].text : ''
-    },
-    // getConfirmConfig (item, col) {
-    //   const { text, actionRowLabel, actionRowProp } = item
-    //   return {
-    //     message: `此操作将删除${actionRowLabel}为${col[actionRowProp]}的数据,是否继续?`
-    //   }
-    // },
-    getActionText ({ col, row }) {
-      const { actionType } = col
-      const status = row.status
-      if (actionType === 'forbid') {
-        return status ? '禁用' : '启用'
       }
     }
   }

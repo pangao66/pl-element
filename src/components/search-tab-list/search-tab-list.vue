@@ -51,16 +51,16 @@
             >
               查询
             </pl-button>
-            <el-button @click="resetForm">
+            <pl-button debounce @click="resetForm">
               重置
-            </el-button>
+            </pl-button>
             <a
               style="margin-left: 8px;cursor:pointer;"
               class="advance-toggle-btn"
               @click="toggleAdvanced"
             >
               {{ advanced ? '展开' : '收起' }}
-              <i :class="advanced?'el-icon-arrow-down':'el-icon-arrow-up'" />
+              <i :class="advanced?'el-icon-arrow-down':'el-icon-arrow-up'"/>
             </a>
           </el-form-item>
         </el-row>
@@ -69,7 +69,7 @@
     <div class="search-list-tab-container">
       <div class="pl-search-list-menu">
         <div>
-          <slot name="menu-handle" />
+          <slot name="menu-handle"/>
           <pl-tip-button
             content="刷新"
             debounce
@@ -143,6 +143,7 @@
               v-bind="$attrs"
               :table-config="tableConfig"
               :page-config="pageConfig"
+              :keep-alive="keepAlive"
               :form="form"
               :size="size"
               v-on="$listeners"
@@ -157,7 +158,7 @@
                 />
               </template>
               <template v-slot:pagination-slot>
-                <slot name="pagination-slot" />
+                <slot name="pagination-slot"/>
               </template>
             </tab-table-item>
           </keep-alive>
@@ -218,6 +219,15 @@ export default {
     tabConfig: {
       type: Object,
       default: () => ({})
+    },
+    // 查询之前的钩子,用于判断查询条件是否合法,比如某些字段必选
+    beforeSearch: {
+      type: Function,
+      default: null
+    },
+    keepAlive: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -273,8 +283,25 @@ export default {
       })
     },
     search () {
-      this.keyDate = new Date().getTime()
-      // this.getTableData()
+      /** 查询之前校验规则
+       *如果没有beforeSearch则直接查询,
+       * 若返回promise则.then之后查询,.catch不操作
+       * 若返回 boolean, 则不为false则查询
+       */
+      if (!this.beforeSearch) {
+        this.keyDate = new Date().getTime()
+        return
+      }
+      const before = this.beforeSearch()
+      if (before && before.then) {
+        before.then(() => {
+          this.keyDate = new Date().getTime()
+        }).catch(() => {
+          console.log('已取消查询')
+        })
+      } else if (before !== false) {
+        this.keyDate = new Date().getTime()
+      }
     },
     resetForm () {
       this.$refs.plForm.resetFields()
@@ -337,7 +364,6 @@ export default {
       }
     }
   }
-
   .advance-toggle-btn {
     color: #409EFF;
   }

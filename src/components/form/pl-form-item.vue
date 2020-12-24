@@ -13,19 +13,45 @@
       :prop="prop"
       :events="events"
       v-bind="$attrs"
-    />
+    >
+      <template
+        v-for="slot in Object.keys($slots)"
+        #[slot]
+      >
+        <slot :name="slot" />
+      </template>
+    </component>
+    <template
+      v-for="slot in Object.keys($slots)"
+      v-slot:[slot]="scope"
+    >
+      <slot
+        :name="slot"
+        v-bind="scope"
+      />
+    </template>
   </el-form-item>
   <form-item-grid v-else></form-item-grid>
 </template>
 
 <script>
 import FormItemGrid from './form-item-grid'
-import { carNumReg, idCardReg, integerNumberReg, percentReg, priceReg, telReg, towPointReg } from '../../utils/regs'
+import {
+  carNumReg,
+  idCardReg,
+  integerNumberReg,
+  percentReg,
+  priceReg,
+  telReg,
+  towPointReg,
+  urlReg
+} from '../../utils/regs'
 
 export default {
   name: 'PlFormItem',
   components: { FormItemGrid },
   inject: ['plForm'],
+  inheritAttrs: false,
   props: {
     // item: {
     //   type: Object,
@@ -141,14 +167,19 @@ export default {
           message: '请输入正确的金额',
           trigger
         },
-        towPointReg: {
+        towPoint: {
           pattern: towPointReg,
           message: '请输入正确的两位小数',
           trigger
         },
-        percentReg: {
+        percent: {
           pattern: percentReg,
           message: '请输入正确的百分比',
+          trigger
+        },
+        url: {
+          pattern: urlReg,
+          message: '请输入正确的url',
           trigger
         }
       }

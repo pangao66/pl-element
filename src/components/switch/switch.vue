@@ -1,6 +1,7 @@
 <template>
   <el-switch
     v-model="switchValue"
+    v-bind="attrs"
     @change="valueChange"
     v-on="events"
   />
@@ -34,6 +35,13 @@ export default {
     }
   },
   computed: {
+    attrs () {
+      return {
+        // placeholder: this.$attrs.placeholder || `请选择${this.label}`,
+        // ...this.$PlElement.selectConfig,
+        ...this.$attrs.attrs
+      }
+    },
     rules () {
       let trigger = 'change'
       if (this.trigger) {

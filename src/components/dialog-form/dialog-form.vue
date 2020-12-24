@@ -11,6 +11,7 @@
       v-bind="formConfig"
       :form-items="formItems"
       :show-submit="false"
+      class="pl-dialog-form"
     >
       <template
         v-for="slot in Object.keys($scopedSlots)"
@@ -85,3 +86,13 @@ export default {
   }
 }
 </script>
+<style lang="stylus">
+  .pl-dialog-form {
+    .el-input__inner {
+      width: 100%;
+    }
+    .el-select {
+      width: 100%;
+    }
+  }
+</style>

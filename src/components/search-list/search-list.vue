@@ -1,8 +1,7 @@
 <template>
   <div class="pl-search-list">
-    <div class="pl-search-list-form-container">
+    <div v-if="formItems&&formItems.length" class="pl-search-list-form-container">
       <el-form
-        v-if="formItems&&formItems.length"
         ref="plForm"
         :model="form"
         v-bind="formAttrs"
@@ -31,6 +30,7 @@
                   :ref="item.prop"
                   v-model="form[item.prop]"
                   v-bind="item"
+                  :form="form"
                 />
               </el-form-item>
               <slot
@@ -44,15 +44,16 @@
             style="float:right;"
             label-width="0"
           >
-            <el-button
+            <pl-button
+              loading
               type="primary"
               @click="search"
             >
               查询
-            </el-button>
-            <el-button @click="resetForm">
+            </pl-button>
+            <pl-button loading @click="resetForm">
               重置
-            </el-button>
+            </pl-button>
             <a
               style="margin-left: 8px;cursor:pointer;"
               class="advance-toggle-btn"
@@ -71,7 +72,7 @@
           <div>
             <slot name="handle-area" />
           </div>
-          <div>
+          <div v-if="showTools">
             <pl-tip-button
               content="刷新"
               debounce
@@ -114,13 +115,28 @@
                 :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'"
               />
             </pl-tip-button>
+            <el-popover
+              placement="bottom-start"
+              trigger="click"
+            >
+              <fix-table
+                :cal-columns="calColumns"
+                @init-columns="initColumns"
+                @column-change="columnsChange"
+                @reset-columns="resetColumns"
+              ></fix-table>
+              <pl-tip-button slot="reference" content="列设置" circle icon="el-icon-s-tools
+"
+              ></pl-tip-button>
+            </el-popover>
           </div>
         </div>
       </slot>
       <pl-table
         ref="table"
+        :key="currentTableKey"
         v-loading="loading"
-        :columns="columns"
+        :columns="resultColumns"
         :data="tableData"
         :table-config="tableConfig"
         :page-config="pageConfig"
@@ -160,10 +176,12 @@
 <script>
 import { getRandomKey } from '../../utils'
 import searchListMixin from '../../mixins/search-list'
+import FixTable from './fix-table'
 
 const Item2UIDMap = new WeakMap()
 export default {
   name: 'PlSearchList',
+  components: { FixTable },
   mixins: [searchListMixin],
   props: {
     formItems: {
@@ -194,6 +212,10 @@ export default {
       type: Boolean,
       default: true
     },
+    showTools: {
+      type: Boolean,
+      default: true
+    },
     autoHeight: {
       type: Boolean,
       default: true
@@ -207,7 +229,8 @@ export default {
       currentPage: 1,
       total: 10,
       loading: false,
-      tableData: []
+      tableData: [],
+      currentTableKey: Date.now()
     }
   },
   computed: {
@@ -241,8 +264,8 @@ export default {
     this.search()
   },
   methods: {
-    search () {
-      this.getTableData()
+    search (done) {
+      this.getTableData(done)
     },
     setKeyValue (list) {
       list.forEach((item) => {
@@ -255,10 +278,10 @@ export default {
         }
       })
     },
-    resetForm () {
+    resetForm (done) {
       this.$refs.plForm.resetFields()
       this.currentPage = 1
-      this.search()
+      this.search(done)
     },
     getRandomKey (item) {
       const persistedUID = Item2UIDMap.get(item)
@@ -295,7 +318,7 @@ export default {
       this.currentPage = 1
       this.getTableData()
     },
-    getTableData () {
+    getTableData (done) {
       this.loading = true
       this.$emit('get-table-data', {
         pageSize: this.pageSize,
@@ -306,7 +329,11 @@ export default {
         this.total = total
         this.loading = false
         this.$refs.table && this.$refs.table.toTop()
+        done && done()
       })
+    },
+    resetTableKey () {
+      this.currentTableKey = Date.now()
     }
   }
 }

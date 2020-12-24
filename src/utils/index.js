@@ -1,3 +1,4 @@
+
 /**
  * 获取随机key
  * @param len

@@ -1,7 +1,7 @@
 <template>
   <el-checkbox-group
     v-model="selectedValue"
-    v-on="events"
+    v-on="eventList"
   >
     <template v-for="item in optionsList">
       <el-checkbox-button
@@ -86,6 +86,12 @@ export default {
         return list
       }
       return this.options
+    },
+    eventList () {
+      return {
+        ...this.events,
+        ...this.$listeners
+      }
     }
   },
   watch: {

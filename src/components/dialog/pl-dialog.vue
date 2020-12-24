@@ -2,7 +2,7 @@
   <el-dialog
     :visible="true"
     :fullscreen="fullscreen"
-    custom-class="pl-dialog"
+    class="pl-dialog"
     v-bind="$attrs"
     :close-on-click-modal="false"
     center
@@ -17,9 +17,7 @@
         @click="fullscreen=!fullscreen"
       />
     </template>
-    <el-scrollbar>
-      <slot />
-    </el-scrollbar>
+    <slot />
     <slot
       slot="footer"
       name="footer"

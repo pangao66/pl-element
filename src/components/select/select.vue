@@ -3,16 +3,18 @@
     v-model="selectedValue"
     value-key="id"
     v-bind="attrs"
-    :placeholder="`请选择${label}`"
     @change="handleChange"
-    v-on="events"
+    v-on="eventList"
   >
     <el-option
       v-for="(item,index) in optionsList"
       :key="index"
       :label="item.label"
       :value="item.value"
-    />
+      v-bind="item.attrs"
+    >
+      <slot name="option-slot" v-bind="item"></slot>
+    </el-option>
   </el-select>
 </template>
 
@@ -21,6 +23,7 @@ import { isArray, isPlainObject } from '../../utils'
 
 export default {
   name: 'PlSelect',
+  inheritAttrs: false,
   props: {
     value: { default: '', type: [Array, Object, String, Number] },
     options: {
@@ -30,14 +33,6 @@ export default {
     optionsAttr: {
       type: String,
       default: 'label,value'
-    },
-    valueKey: {
-      type: [String, Number],
-      default: ''
-    },
-    valueLabel: {
-      type: [String, Number],
-      default: ''
     },
     label: {
       type: String,
@@ -50,19 +45,21 @@ export default {
   },
   data () {
     return {
-      selectedValue: '',
-      defaultAttrs: {
-        clearable: true,
-        filterable: true,
-        defaultFirstOption: true
-      }
+      selectedValue: ''
     }
   },
   computed: {
     attrs () {
       return {
+        placeholder: this.$attrs.placeholder || `请选择${this.label}`,
         ...this.$PlElement.selectConfig,
         ...this.$attrs.attrs
+      }
+    },
+    eventList () {
+      return {
+        ...this.events,
+        ...this.$listeners
       }
     },
     optionsList () {

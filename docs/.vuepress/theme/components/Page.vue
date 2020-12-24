@@ -4,8 +4,6 @@
 
     <Content class="theme-default-content" >
     </Content>
-    <div style="position:fixed;
-    right: 100px;top: 100px;width:300px;height: 200px;background:red;z-index: 1000;">122</div>
     <PageEdit />
 
     <PageNav v-bind="{ sidebarItems }" />

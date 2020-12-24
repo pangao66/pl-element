@@ -41,3 +41,24 @@ sidebarDepth: 2
 
 
 </demo-block>
+
+
+form组件是对`el-form`的二次封装, 内置表单校验,将表单项弄成json配置式数组格式
+el-form的所有属性都可以直接继承
+## Attributes
+| 参数          | 说明            | 类型            | 可选值                 | 默认值   |
+|-------------  |---------------- |---------------- |---------------------- |-------- |
+| value/v-model | 表单值 | object   | — | - |
+| form-items | 表单项 | array   | — | [] |
+
+
+## formItems
+| 参数          | 说明            | 类型            | 可选值                 | 默认值   |
+|-------------  |---------------- |---------------- |---------------------- |-------- |
+| label    | el-form-item的label | string    | — | - |
+| prop | el-form-item的prop | string   | — | - |
+| comp | 需要渲染成的组件 | string   | — | - |
+| options | 当comp为select/checkbox/radio的时候此属性有效 | array   | — | - |
+| required | 表单校验的必填属性 | boolean   | — | - |
+| rules | 表单项的rules属性,和required等校验项会合并 | array/object   | — | - |
+

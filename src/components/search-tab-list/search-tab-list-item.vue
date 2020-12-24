@@ -13,7 +13,7 @@
     >
       <template
         v-for="slot in Object.keys($scopedSlots)"
-        v-slot:[slot]="scope"
+        #[slot]="scope"
       >
         <slot
           :name="slot"
@@ -70,6 +70,10 @@ export default {
     size: {
       type: String,
       default: 'small'
+    },
+    keepAlive: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -87,6 +91,11 @@ export default {
       return { ...this.$PlElement.pageConfig, ...this.pageConfig }
     }
   },
+  activated () {
+    if (!this.keepAlive) {
+      this.getTableData()
+    }
+  },
   created () {
     const pageConfig = this.pageConfig || this.$PlElement.pageConfig
     if (pageConfig) {
@@ -99,7 +108,10 @@ export default {
         this.pageSize = pageSize
       }
     }
-    this.getTableData()
+    if (this.keepAlive) {
+      this.getTableData()
+    }
+    // this.getTableData()
   },
   methods: {
     handleCurrentChange (val) {
@@ -118,11 +130,13 @@ export default {
         currentPage: this.currentPage,
         ...this.form,
         tabName: this.tabInfo.name
-      }, ({ data, total }) => {
-        this.tableData = data
-        this.total = total
+      }, ({ data, total, noRefresh }) => {
+        if (!noRefresh) {
+          this.tableData = data
+          this.total = total
+          this.$refs.table && this.$refs.table.toTop()
+        }
         this.loading = false
-        this.$refs.table && this.$refs.table.toTop()
       })
     },
     setHeight () {
