@@ -62,26 +62,3 @@ export function isArray (v) {
 export function isPlainObject (val) {
   return toString.call(val) === '[object Object]'
 }
-
-// 批量处理对象属性空格, clear表示清除无效属性，默认true
-export function filterNullValue (data, filterNullString = true, filterNullValue = true) {
-  if (!isPlainObject(data)) {
-    return data
-  }
-  const newParams = {}
-  const allParams = data
-  for (const item of Object.keys(allParams)) {
-    const check = Object.prototype.toString.call(allParams[item])
-    // 为空
-    if (!(check === '[object Null]' || check === '[object Undefined]')) {
-      if (!(filterNullString && allParams[item] === '')) {
-        newParams[item] = allParams[item]
-      }
-    } else {
-      if (!filterNullValue) {
-        newParams[item] = allParams[item]
-      }
-    }
-  }
-  return newParams
-}

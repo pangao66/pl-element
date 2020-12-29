@@ -1,18 +1,18 @@
 <template>
   <el-table-column
-    v-bind="col.attrs"
-    :prop="col.prop"
-    :label="col.label"
-    :show-overflow-tooltip="!showSlot(col)"
-    :class-name="getColumnClass(col)"
-    :formatter="col.formatter||col.dict?(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter,col):undefined"
+      v-bind="col.attrs"
+      :prop="col.prop"
+      :label="col.label"
+      :show-overflow-tooltip="!showSlot(col)"
+      :class-name="getColumnClass(col)"
+      :formatter="col.formatter||col.dict?(row,column,cellValue,index)=>formatCell(row,column,cellValue,index,col.formatter,col):undefined"
   >
     <!--自定义列header-->
     <template v-if="col.headerSlot || col.tip ||col.type==='selection'" v-slot:header="scope">
       <template v-if="col.tip">
         {{ col.label }}
         <el-tooltip class="item" effect="dark" :content="col.tip" placement="top">
-          <i class="el-icon-question" />
+          <i class="el-icon-question"/>
         </el-tooltip>
       </template>
       <template v-if="col.type==='selection'">
@@ -42,22 +42,22 @@
         <template v-for="(item,index) in col.actions">
           <template v-if="!(item.hidden&&item.hidden(scope,item))">
             <pl-button
-              v-if="item.confirmType||item.confirm"
-              :key="index"
-              :confirm-type="item.confirmType||'pop'"
-              :confirm-config="item.confirmConfig&&item.confirmConfig(scope)"
-              :pop-config="item.popConfig&&item.popConfig(scope)"
-              fullscreen-loading
-              type="text"
-              @confirm="(done)=>item.confirm(scope,done,index)"
+                v-if="item.confirmType||item.confirm"
+                :key="index"
+                :confirm-type="item.confirmType||'pop'"
+                :confirm-config="item.confirmConfig&&item.confirmConfig(scope)"
+                :pop-config="item.popConfig&&item.popConfig(scope)"
+                fullscreen-loading
+                type="text"
+                @confirm="(done)=>item.confirm(scope,done,index)"
             >
               {{ item.text || item.actionText(scope) }}
             </pl-button>
             <pl-button
-              v-else
-              :key="index"
-              type="text"
-              @click="item.onClick(scope)"
+                v-else
+                :key="index"
+                type="text"
+                @click="item.onClick(scope)"
             >
               {{ item.text || item.actionText(scope) }}
             </pl-button>
@@ -66,30 +66,32 @@
         </template>
       </template>
       <VNodes
-        v-if="col.customerRender"
-        :vnodes="col.customerRender(scope)"
+          v-if="col.customerRender"
+          :vnodes="col.customerRender(scope)"
       />
       <template v-if="col.type==='selection'">
         <el-checkbox
-          v-model="scope.row.selected"
-          @change="handleItemCheckedChange"
+            v-model="scope.row.selected"
+            @change="handleItemCheckedChange"
         />
       </template>
     </template>
-    <pl-table-column v-for="item in col.childColumns" :key="getRandomKey(item)" :col="item">
-      <template
-        v-for="slot in Object.keys($scopedSlots)"
-        v-slot:[slot]="scope"
-      >
-        <slot :name="slot" v-bind="scope" />
-      </template>
-    </pl-table-column>
+<!--    <template v-if="col.childColumns&&col.childColumns.length">-->
+<!--      <pl-table-column v-for="item in col.childColumns" :key="getRandomKey(item)" :col="item">-->
+<!--        <template-->
+<!--            v-for="slot in Object.keys($scopedSlots)"-->
+<!--            v-slot:[slot]="scope"-->
+<!--        >-->
+<!--          <slot :name="slot" v-bind="scope"/>-->
+<!--        </template>-->
+<!--      </pl-table-column>-->
+<!--    </template>-->
   </el-table-column>
 </template>
 
 <script>
-import { getRandomKey } from '../../utils'
-import { formatDate } from 'element-ui/lib/utils/date-util'
+import {getRandomKey} from '../../utils'
+import {formatDate} from 'element-ui/lib/utils/date-util'
 import NP from 'number-precision'
 
 const Item2UIDMap = new WeakMap()
@@ -123,7 +125,7 @@ export default {
     }
   },
   methods: {
-    getRandomKey (item) {
+    getRandomKey(item) {
       const persistedUID = Item2UIDMap.get(item)
       if (!persistedUID) {
         Item2UIDMap.set(item, getRandomKey())
@@ -131,17 +133,17 @@ export default {
       }
       return persistedUID
     },
-    showSlot (col) {
+    showSlot(col) {
       return col.slotName || col.customerRender || col.customerRenderText || col.tagMap || col.type === 'index' || col.actions || col.type === 'selection' ||
-        (col.childColumns && col.childColumns.length)
+          (col.childColumns && col.childColumns.length)
     },
-    formatCell (row, column, cellValue, index, formatter, col) {
+    formatCell(row, column, cellValue, index, formatter, col) {
       if (col.dict) {
         return col.dict[cellValue]
       }
       const type = typeof formatter
       if (type === 'function') {
-        return formatter({ row, column, cellValue, index })
+        return formatter({row, column, cellValue, index})
       }
       if (type === 'string') {
         switch (formatter) {
@@ -174,7 +176,7 @@ export default {
       }
       return cellValue
     },
-    getColumnClass (col) {
+    getColumnClass(col) {
       const map = {
         orderNumber: 'order-number-cell',
         carNumber: 'car-number-cell',
@@ -196,11 +198,11 @@ export default {
       }
       return classStr
     },
-    getTagType (scope, col) {
+    getTagType(scope, col) {
       const value = scope.row[col.prop]
       return col.tagMap[value] ? col.tagMap[value].type : ''
     },
-    getTagText (scope, col) {
+    getTagText(scope, col) {
       const value = scope.row[col.prop]
       return col.tagMap[value] ? col.tagMap[value].text : ''
     }

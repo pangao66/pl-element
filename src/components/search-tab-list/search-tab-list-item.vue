@@ -130,12 +130,10 @@ export default {
         currentPage: this.currentPage,
         ...this.form,
         tabName: this.tabInfo.name
-      }, ({ data, total, noRefresh }) => {
-        if (!noRefresh) {
-          this.tableData = data
-          this.total = total
-          this.$refs.table && this.$refs.table.toTop()
-        }
+      }, ({ data, total }) => {
+        this.tableData = data
+        this.total = total
+        this.$refs.table && this.$refs.table.toTop()
         this.loading = false
       })
     },

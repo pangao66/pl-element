@@ -6,7 +6,7 @@
       <el-button type="text" style="float:right" @click="resetColumns">重置</el-button>
     </div>
     <template v-for="item in showColumns">
-      <h3 v-if="item.list.length&&showColumns.length>1" :key="getItemKey()">{{ item.title }}</h3>
+      <h3 v-if="item.list.length&&showColumns.length>1" :key="item.title">{{ item.title }}</h3>
       <div v-for="col in item.list" :key="col.label" style="line-height: 30px;"
            @mouseenter="mouseEnter(col.index)"
            @mouseleave="mouseLeave(col.index)"
@@ -40,8 +40,6 @@
 </template>
 
 <script>
-import { getRandomKey } from '../../utils/getKey'
-
 export default {
   name: 'FixTable',
   props: {
@@ -98,10 +96,6 @@ export default {
     },
     resetColumns () {
       this.$emit('reset-columns')
-    },
-    getItemKey () {
-      return getRandomKey()
-      // return getItemKey(item)
     }
   }
 }

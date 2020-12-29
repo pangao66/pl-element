@@ -66,10 +66,6 @@ export default {
       plForm: this
     }
   },
-  // model: {
-  //   prop: 'defaultValue',
-  //   event: 'form-change'
-  // },
   props: {
     formItems: {
       type: Array,

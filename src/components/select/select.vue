@@ -34,6 +34,14 @@ export default {
       type: String,
       default: 'label,value'
     },
+    valueKey: {
+      type: [String, Number],
+      default: ''
+    },
+    valueLabel: {
+      type: [String, Number],
+      default: ''
+    },
     label: {
       type: String,
       default: ''
