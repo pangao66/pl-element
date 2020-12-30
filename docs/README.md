@@ -17,16 +17,14 @@
 ## 为什么要二次封装
 
 - 有些问题我们需要经常处理,比如el-date组件,选择范围的时候,返回的是一个数组,而后端经常是需要两个字段,我们需要经常在调用接口的时候将数组转化成两个字段,同时还要处理空值等
--
-
-element有些默认属性产品不是产品经理想要的,比如el-table的border,stripe等,产品经理可能想默认就是要带有竖线边框,隔行变色的效果;下拉框产品想默认有clearable清空属性,我们当然可以每个都配置,但经常会遗漏,造成这种细节bug太多
+- element有些默认属性产品不是产品经理想要的,比如el-table的border,stripe等,产品经理可能想默认就是要带有竖线边框,隔行变色的效果;下拉框产品想默认有clearable清空属性,我们当然可以每个都配置,但经常会遗漏,造成这种细节bug太多
 
 - button经常需要处理重复点击问题,稍不留神就是一个bug
-
+- form表单项太多,模板要写一大堆,又能以分成组件,大量重复代码
 ## 设计
 
 仿照antd pro的方式, 弄成json配置式的form,table,将分页,查询功能统一封装在一个组件,对外暴露@get-table-data方法供业务组件调用ajax,然后塞入数据 form组件使用动态渲染
-内部使用component :is动态组件渲染, 如传入`comp :'input'`则会渲染成 `el-input`组件,传入`comp:'select'`则会渲染成 `el-select`组件, 表单项结构
+内部使用component :is动态组件渲染, 如传入`comp :'input'`则会渲染成 `el-input`组件,传入`comp:'select'`则会渲染成 `el-select`组件, 表单项结构,如不能直接用一个组件渲染出来,可传入`slotName`,在模板中写相应的插槽模板代码即可
 
 ```js
 const formItems = [

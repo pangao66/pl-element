@@ -64,6 +64,21 @@ sidebarDepth: 2
 
 </demo-block>
 
+## Attributes
 
-## 分页异步数据
+| 参数          | 说明            | 类型            | 可选值                 | 默认值   |
+|-------------  |---------------- |---------------- |---------------------- |-------- |
+| columns    | 表格列 | array    | — | [] |
+| data | 表格数据 | array | — | [] |
+| dbClickCopy | 双击单元格复制 | boolean |       —       | false |
+| dbClickCopy | 双击单元格复制 | boolean |       —       | false |
+::: tip  温馨提示
+除以上列出的为本组件封装的新属性,其他`el-input`的任何属性均可直接继承
+:::
+## Events
+| 事件名 | 描述 | 参数 |
+|----| ----| ----|
+| click | 点击事件,如使用了loading,可用回调函数done来清除loading  | (fn:done) |
+| confirm | 当传入confirmType的时候,操作按钮确认事件  | (fn:done) |
+
 

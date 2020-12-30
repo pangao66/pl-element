@@ -49,7 +49,7 @@ module.exports = {
         title: '组件',
         collapsable: true,
         children: [
-          '/components/安装使用',
+          // '/components/安装使用',
           '/components/button',
           '/components/input',
           '/components/select',
@@ -59,7 +59,6 @@ module.exports = {
           '/components/form',
           '/components/table',
           '/components/search-list',
-          // '/components/dialog',
           '/components/tab-search-list'
         ]
       }

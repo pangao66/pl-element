@@ -61,4 +61,9 @@ el-form的所有属性都可以直接继承
 | options | 当comp为select/checkbox/radio的时候此属性有效 | array   | — | - |
 | required | 表单校验的必填属性 | boolean   | — | - |
 | rules | 表单项的rules属性,和required等校验项会合并 | array/object   | — | - |
+| attrs | 表单项的其他属性(对应element组件的props选项) | -   | — | - |
 
+## Events
+| 事件名 | 描述 | 参数 |
+|----| ----| ----|
+| confirm | 点击了提交按钮通过表单校验后会触发,val为form内容 | (fn:val) |
