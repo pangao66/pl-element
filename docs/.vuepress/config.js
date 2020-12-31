@@ -23,7 +23,20 @@ module.exports = {
     ['link', { rel: 'mask-icon', href: '/favicon.ico', color: '#3eaf7c' }],
     ['link', { rel: 'stylesheet', href: 'https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/theme-chalk/index.css' }],
     ['meta', { name: 'msapplication-TileImage', content: '/favicon.ico' }],
-    ['meta', { name: 'msapplication-TileColor', content: '#000000' }]
+    ['meta', { name: 'msapplication-TileColor', content: '#000000' }],
+    [
+      "script",
+      {},
+      `
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?29de856097b96bfa02ebb5606834aa46";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        `
+    ]
     // [ 'script', { src: 'https://shadow.elemecdn.com/npm/vue@2.5.21/dist/vue.runtime.min.js' } ],
     // [ 'script', { src: 'https://shadow.elemecdn.com/npm/vue-router@3.0.1/dist/vue-router.min.js' } ],
     // [ 'script', { src: 'https://unpkg.com/element-ui/lib/index.js' } ]
@@ -49,17 +62,17 @@ module.exports = {
         title: '组件',
         collapsable: true,
         children: [
-          // '/components/安装使用',
-          '/components/button',
-          '/components/input',
-          '/components/select',
-          '/components/radio',
-          '/components/checkbox',
-          '/components/date',
-          '/components/form',
-          '/components/table',
-          '/components/search-list',
-          '/components/tab-search-list'
+          // 'components/安装使用',
+          'components/button',
+          'components/input',
+          'components/select',
+          'components/radio',
+          'components/checkbox',
+          'components/date',
+          'components/form',
+          'components/table',
+          'components/search-list',
+          'components/tab-search-list'
         ]
       }
     ]
