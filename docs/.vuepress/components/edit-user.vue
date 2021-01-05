@@ -1,5 +1,5 @@
 <template>
-  <p-dialog-form
+  <pl-dialog-form
       :title="isEdit?'编辑用户':'添加用户'"
       :form-items="formItems"
       width="500px"
@@ -14,7 +14,7 @@
         <el-input type="textarea" v-model="form[item.prop]"/>
       </el-form-item>
     </template>
-  </p-dialog-form>
+  </pl-dialog-form>
 </template>
 
 <script>

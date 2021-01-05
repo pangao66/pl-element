@@ -1,8 +1,9 @@
 const isProduction = process.env.NODE_ENV === 'production'
+console.log(isProduction)
 module.exports = {
-  base: '/p-element/',
+  base: '/pl-element/',
   dest: './dist',
-  title: 'pElement',
+  title: 'plElement',
   description: 'elementUI组件封装',
   locales: {
     '/': {
@@ -44,7 +45,7 @@ module.exports = {
   ],
   themeConfig: {
     // 你的GitHub仓库，请正确填写
-    repo: 'https://github.com/pangao66/p-element',
+    repo: 'https://github.com/pangao66/pl-element',
     // 自定义仓库链接文字。
     repoLabel: '仓库地址',
     // sidebar: [
@@ -110,7 +111,7 @@ module.exports = {
       // 'mock': 'Mock'
     },
     output: {
-      publicPath: isProduction ? 'https://cdn.noob6.com/docs/' : '/',
+      publicPath: isProduction ? 'https://cdn.noob6.com/docs/' : '',
     },
   }
   // evergreen: true
