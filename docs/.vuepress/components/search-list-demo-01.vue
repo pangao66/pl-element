@@ -2,20 +2,20 @@
   <div>
     <el-dialog :visible="visible" @close="visible=false" fullscreen>
       <pl-search-list
-        :columns="columns"
-        :form-items="formItems"
-        @get-table-data="getTableData"
-        v-model="formData"
-        ref="plSearchList"
+          :columns="columns"
+          :form-items="formItems"
+          @get-table-data="getTableData"
+          v-model="formData"
+          ref="plSearchList"
       >
         <template #test-form-item="{form,item}">
           <el-form-item label="测试slot" prop="testValue">
             <el-cascader
-              style="width:100%"
-              v-model="form.testValue"
-              :options="options"
-              clearable
-              @change="handleChange"></el-cascader>
+                style="width:100%"
+                v-model="form.testValue"
+                :options="options"
+                clearable
+                @change="handleChange"></el-cascader>
           </el-form-item>
         </template>
         <template #name="{row}">
@@ -29,14 +29,14 @@
         </template>
       </pl-search-list>
     </el-dialog>
-    <el-alert  type="warning" :closable="false" center>此例请全屏查看</el-alert>
+    <el-alert type="warning" :closable="false" center>此例请全屏查看</el-alert>
     <el-button @click="visible=true">全屏展示</el-button>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import { filterNullValue } from '../../../src/utils'
+import { filterObject } from '../util'
 
 const jobDict = {
   designer: '设计',
@@ -50,7 +50,7 @@ const sexDict = {
 }
 export default {
   name: 'search-list-demo-01',
-  data () {
+  data() {
     return {
       formData: {
         id: '',
@@ -64,10 +64,12 @@ export default {
     }
   },
   methods: {
-    async getTableData ({ currentPage, pageSize, sex, ...val }, done) {
-      let res = await axios.post('/search-table', filterNullValue({
-        currentPage, pageSize,
+    async getTableData({ currentPage, pageSize, sex, ...val }, done) {
+      console.log(val)
+      let res = await axios.post('/search-table', filterObject({
         ...val,
+        currentPage,
+        pageSize,
         sex: sex ? parseInt(sex) : '',
         testValue: undefined
       }))
@@ -80,19 +82,19 @@ export default {
         })
       }
     },
-    async deleteData (row) {
+    async deleteData(row) {
       let res = await axios.post('/delete-user', { id: row.id })
       if (res.status === 200) {
         this.$message.success('删除成功')
         this.$refs.plSearchList.search()
       }
     },
-    handleChange () {
+    handleChange() {
 
     }
   },
   computed: {
-    columns () {
+    columns() {
       return [
         { prop: 'index', label: '序号', type: 'index' },
         { prop: 'id', label: 'id' },
@@ -135,7 +137,7 @@ export default {
         }
       ]
     },
-    formItems () {
+    formItems() {
       return [
         { comp: 'input', prop: 'id', label: 'id' },
         { comp: 'input', prop: 'name', label: '姓名' },
@@ -145,7 +147,7 @@ export default {
         { slotName: 'test-form-item', prop: 'test', label: '测试slot' }
       ]
     },
-    options () {
+    options() {
       return [
         {
           value: 'zhinan', label: '指南',

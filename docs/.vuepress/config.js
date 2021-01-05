@@ -111,7 +111,7 @@ module.exports = {
       // 'mock': 'Mock'
     },
     output: {
-      publicPath: isProduction ? 'https://cdn.noob6.com/docs/' : '',
+      publicPath: isProduction ? 'https://cdn.noob6.com/docs/' : undefined,
     },
   }
   // evergreen: true
