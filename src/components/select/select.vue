@@ -60,7 +60,7 @@ export default {
     attrs () {
       return {
         placeholder: this.$attrs.placeholder || `请选择${this.label}`,
-        ...this.$PlElement.selectConfig,
+        ...this.$PlElement?.selectConfig,
         ...this.$attrs.attrs
       }
     },

@@ -76,7 +76,7 @@ export default {
   computed: {
     attrs () {
       return {
-        ...this.$PlElement.dateConfig,
+        ...this.$PlElement?.dateConfig,
         ...this.$attrs.attrs
       }
     },

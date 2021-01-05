@@ -81,7 +81,7 @@ export default {
     attrs () {
       return {
         placeholder: this.$attrs.placeholder || `请输入${this.label}`,
-        ...this.$PlElement.inputConfig,
+        ...this.$PlElement?.inputConfig,
         ...this.$attrs.attrs
       }
     },

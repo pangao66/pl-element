@@ -10,13 +10,13 @@ export default {
       const { script, html, style } = this.codepen
       console.log(html)
       const resourcesTpl = `
-<script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.min.js"><\/script>
+<script src="https://cdn.noob6.com/lib/vue/2.6.12/vue.min.js"><\/script>
 <!-- 引入样式 -->
-<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-<link rel="stylesheet" href="https://oss.noob6.com/pl-element/pl-element.css">
+<link rel="stylesheet" href="https://cdn.noob6.com/lib/element-ui/2.14.1/index.min.css">
+<link rel="stylesheet" href="https://cdn.noob6.com/lib/pl-element/theme/pl-element.css">
 <!-- 引入组件库 -->
-<script src="https://unpkg.com/element-ui/lib/index.js"><\/script>
-<script src="https://oss.noob6.com/pl-element/pl-element.umd.min.js"><\/script>
+<script src="https://cdn.noob6.com/lib/element-ui/2.14.1/index.js"><\/script>
+<script src="https://cdn.noob6.com/lib/pl-element/pl-element.umd.min.js"><\/script>
 <div id="app">
  ${html}
 </div>

@@ -1,3 +1,4 @@
+const isProduction = process.env.NODE_ENV === 'production'
 module.exports = {
   base: '/p-element/',
   dest: './dist',
@@ -21,22 +22,22 @@ module.exports = {
     ],
     ['link', { rel: 'apple-touch-icon', href: '/favicon.ico' }],
     ['link', { rel: 'mask-icon', href: '/favicon.ico', color: '#3eaf7c' }],
-    ['link', { rel: 'stylesheet', href: 'https://cdn.bootcdn.net/ajax/libs/element-ui/2.13.2/theme-chalk/index.css' }],
+    ['link', { rel: 'stylesheet', href: 'https://cdn.noob6.com/admin/theme/index.css' }],
     ['meta', { name: 'msapplication-TileImage', content: '/favicon.ico' }],
     ['meta', { name: 'msapplication-TileColor', content: '#000000' }],
-    [
-      "script",
-      {},
-      `
-        var _hmt = _hmt || [];
-        (function() {
-          var hm = document.createElement("script");
-          hm.src = "https://hm.baidu.com/hm.js?29de856097b96bfa02ebb5606834aa46";
-          var s = document.getElementsByTagName("script")[0]; 
-          s.parentNode.insertBefore(hm, s);
-        })();
-        `
-    ]
+    // [
+    //   "script",
+    //   {},
+    //   `
+    //     var _hmt = _hmt || [];
+    //     (function() {
+    //       var hm = document.createElement("script");
+    //       hm.src = "https://hm.baidu.com/hm.js?29de856097b96bfa02ebb5606834aa46";
+    //       var s = document.getElementsByTagName("script")[0];
+    //       s.parentNode.insertBefore(hm, s);
+    //     })();
+    //     `
+    // ]
     // [ 'script', { src: 'https://shadow.elemecdn.com/npm/vue@2.5.21/dist/vue.runtime.min.js' } ],
     // [ 'script', { src: 'https://shadow.elemecdn.com/npm/vue-router@3.0.1/dist/vue-router.min.js' } ],
     // [ 'script', { src: 'https://unpkg.com/element-ui/lib/index.js' } ]
@@ -62,7 +63,7 @@ module.exports = {
         title: '组件',
         collapsable: true,
         children: [
-          // 'components/安装使用',
+          'components/install',
           'components/button',
           'components/input',
           'components/select',
@@ -107,7 +108,10 @@ module.exports = {
       // 'vue':'Vue',
       // 'element-ui': 'ELEMENT'
       // 'mock': 'Mock'
-    }
+    },
+    output: {
+      publicPath: isProduction ? 'https://cdn.noob6.com/docs/' : '/',
+    },
   }
   // evergreen: true
 }

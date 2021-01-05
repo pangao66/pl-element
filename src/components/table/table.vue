@@ -110,7 +110,7 @@ export default {
   computed: {
     attrs () {
       return {
-        ...this.$PlElement.tableConfig,
+        ...this.$PlElement?.tableConfig,
         ...this.tableConfig,
         size: this.size
       }

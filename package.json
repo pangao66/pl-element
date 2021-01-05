@@ -1,5 +1,5 @@
 {
-  "name": "pf-table",
+  "name": "pl-element",
   "version": "1.1.1",
   "description": "",
   "main": "index.js",
@@ -29,7 +29,7 @@
     "screenfull": "^5.0.2",
     "vue": "^2.6.12",
     "vue-highlight.js": "^3.1.0",
-    "vue-router": "^3.4.7"
+    "vue-router": "^3.4.9"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",

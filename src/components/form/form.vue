@@ -91,7 +91,7 @@ export default {
   },
   computed: {
     attrs () {
-      return { ...this.$PlElement.formConfig, ...this.$attrs }
+      return { ...this.$PlElement?.formConfig, ...this.$attrs }
     }
   },
   watch: {},
