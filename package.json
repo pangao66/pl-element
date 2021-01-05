@@ -19,7 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "@vuepress/plugin-google-analytics": "^1.4.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "element-ui": "^2.13.2",
     "gh-pages": "^2.2.0",
     "gitalk": "^1.6.2",
