@@ -103,9 +103,6 @@
   "bugs": {
     "url": "x"
   },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
   "homepage": "x",
   "keywords": [
     "vue"
