@@ -1,42 +1,149 @@
 {
   "name": "pl-element",
-  "version": "1.1.1",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "version": "0.0.5",
+  "private": false,
+  "description": "基于element-ui的二次封装组件库",
+  "author": "pangao <pg243911007@sina.cn>",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "docs:dev": "vuepress dev docs",
+    "serve": "cross-env NODE_ENV=development && vue-cli-service serve --copy",
+    "test:unit": "vue-cli-service test:unit",
     "docs:build": "vuepress build docs",
-    "dev": "vuepress dev docs --temp .temp",
-    "build": "vuepress build docs",
-    "deploy": "gh-pages -d dist -m deploy",
-    "deploy:build": "npm run build && npm run deploy"
+    "docs:dev": "vuepress dev docs",
+    "lib": "cross-env NODE_ENV=production rimraf ./lib && node ./build/rollup.build",
+    "lib:cli": "cross-env rimraf ./lib && node ./build/cli.build.js",
+    "lint:css": "cross-env  stylelint 'packages/**/*.{html,vue,css,less,scss,styl}' --fix && stylelint 'examples/**/*.{html,vue,css,less,scss,styl}' --fix && stylelint 'src/**/*.{html,vue,css,less,scss,styl}' --fix && stylelint 'docs/.vuepress/**/*.{html,vue,css,less,scss,styl}' --fix",
+    "lint:prettier": "cross-env prettier --write \"src/**/*.js\" \"src/**/*.vue\" --loglevel warn",
+    "precommit": "lint-staged",
+    "pub:cli": "npm run uv && npm run lib:cli && npm publish",
+    "pub:rollup": "npm run uv && npm run lib && npm publish",
+    "uv": "cross-env node ./script/update.version.js",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
-  "author": "",
-  "license": "ISC",
+  "main": "lib/index.js",
+  "files": [
+    "lib",
+    "src",
+    "packages",
+    "types"
+  ],
   "dependencies": {
-    "@vuepress/plugin-google-analytics": "^1.4.1",
-    "axios": "^0.19.2",
-    "element-ui": "^2.13.2",
-    "gh-pages": "^2.2.0",
-    "gitalk": "^1.6.2",
-    "highlight.js": "^9.18.1",
-    "mockjs": "^1.1.0",
-    "number-precision": "^1.3.2",
-    "screenfull": "^5.0.2",
-    "vue": "^2.6.12",
-    "vue-highlight.js": "^3.1.0",
-    "vue-router": "^3.4.9"
+    "axios": "^0.21.1",
+    "core-js": "^3.8.2",
+    "number-precision": "^1.5.0",
+    "screenfull": "^5.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.6",
-    "@vuepress/plugin-back-to-top": "^1.4.1",
-    "@vuepress/plugin-pwa": "^1.4.1",
-    "node-sass": "^4.14.1",
-    "sass-loader": "^10.0.4",
-    "vuepress": "^1.7.1"
-  }
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
+    "@vue/cli-plugin-babel": "~4.5.9",
+    "@vue/cli-plugin-eslint": "~4.5.9",
+    "@vue/cli-plugin-unit-jest": "~4.5.9",
+    "@vue/cli-service": "~4.5.9",
+    "@vue/eslint-config-standard": "^5.1.2",
+    "@vue/test-utils": "1.0.0-beta.29",
+    "@vuepress/plugin-back-to-top": "^1.0.4",
+    "@vuepress/plugin-medium-zoom": "^1.0.4",
+    "autoprefixer": "^9.6.1",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^23.6.0",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "chalk": "^2.4.2",
+    "conventional-changelog-cli": "^2.0.23",
+    "core-js": "^3.8.2",
+    "cross-env": "^5.2.1",
+    "cssnano": "^4.1.10",
+    "element-ui": "^2.12.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "highlight.js": "^9.15.10",
+    "husky": "^3.0.5",
+    "image-webpack-loader": "^6.0.0",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
+    "lint-staged": "^9.2.5",
+    "mini-css-extract-plugin": "^0.8.0",
+    "postcss-cssnext": "^3.1.0",
+    "postcss-nested": "^4.1.2",
+    "postcss-simple-vars": "^5.0.2",
+    "prettier": "^1.18.2",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.21.0",
+    "rollup-plugin-alias": "^2.0.0",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-filesize": "^6.2.0",
+    "rollup-plugin-img": "^1.1.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-stylus-compiler": "^1.0.1",
+    "rollup-plugin-terser": "^5.1.1",
+    "rollup-plugin-vue": "^5.0.1",
+    "runjs": "^4.4.2",
+    "stylelint": "^10.1.0",
+    "stylelint-config-standard": "^18.3.0",
+    "stylelint-order": "^3.1.0",
+    "stylelint-webpack-plugin": "^0.10.5",
+    "vue": "^2.6.12",
+    "vue-highlight.js": "^2.2.0",
+    "vue-router": "^3.1.3",
+    "vue-template-compiler": "^2.6.12",
+    "vuepress": "^1.0.8",
+    "vuex": "^3.1.1",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.8",
+    "webpack-merge": "^4.2.2"
+  },
+  "bugs": {
+    "url": "x"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "homepage": "x",
+  "keywords": [
+    "vue"
+  ],
+  "license": "MIT",
+  "lint-staged": {
+    "src/**/*.{js}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ],
+    "packages/**/*.{js,jsx,vue}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ],
+    "pageages/**/*.{html,vue,css,less,scss,styl}": [
+      "stylelint --fix",
+      "git add"
+    ],
+    "examples/**/*.{js,jsx,vue}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ],
+    "examples/**/*.{html,vue,css,less,scss,styl}": [
+      "stylelint --fix",
+      "git add"
+    ],
+    "docs/**/*.{js,jsx,vue}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pangao66/pl-element"
+  },
+  "style": "lib/style/index.css"
 }

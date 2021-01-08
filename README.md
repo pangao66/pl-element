@@ -1,2 +1,6 @@
-pf-table基于element-ui的table封装,使得查询,分页,loading,表单提交编辑等配置化,减少重复逻辑
-详细文档见:[https://pangao66.github.io/pl-element/components/button.html/](https://pangao66.github.io/pl-element/components/button.html)
+# pl-element
+
+[文档地址](https://pangao.picp.vip)
+vuepress 跟vue-cli的core-js版本不一致,解决方案
+https://github.com/vuejs/vuepress/issues/2275
+

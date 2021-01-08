@@ -1,52 +1,55 @@
-// import pfTable from './components/pf-table/pf-table'
-// import pFrom from './components/pf-table/p-form'
-// import pDialogForm from './components/pf-table/p-dialog-form'
-// import pfTabTable from './components/pf-table/pf-tab-table'
-// import pTable from './components/pf-table/p-table'
-import PlTable from './components/table'
-import PlInput from './components/input'
-import PlSelect from './components/select'
-import PlRadio from './components/radio'
-import PlCheckbox from './components/checkbox'
-import PlDate from './components/date'
-import PlButton from './components/button'
-import PlTipButton from './components/tip-button'
-import PlSwitch from './components/switch'
-import PlTime from './components/time'
-import PlForm from './components/form'
-import PlSearchList from './components/search-list'
-import PlSearchTabList from './components/search-tab-list'
-import PlDialog from './components/dialog'
-import PlDialogFrom from './components/dialog-form'
-import * as utils from './utils'
-import './styles/index.styl'
+// import FileHandle from '../packages/file-handle/index'
+// import TestModule from '../packages/test-module/index'
+import PlTable from '../packages/components/table'
+import PlInput from '../packages/components/input'
+import PlSelect from '../packages/components/select'
+import PlRadio from '../packages/components/radio'
+import PlCheckbox from '../packages/components/checkbox'
+import PlDate from '../packages/components/date'
+import PlButton from '../packages/components/button'
+import PlTipButton from '../packages/components/tip-button'
+import PlSwitch from '../packages/components/switch'
+import PlTime from '../packages/components/time'
+import PlForm from '../packages/components/form'
+import PlSearchList from '../packages/components/search-list'
+import PlSearchTabList from '../packages/components/search-tab-list'
+import PlDialog from '../packages/components/dialog'
+import PlDialogFrom from '../packages/components/dialog-form'
+// import * as utils from '../packages/utils'
+import '../packages/styles/index.styl'
+import { version } from '../package.json'
 
-const PElement = {
-  install: function (Vue, opts = {}) {
-    Vue.component('pl-table', PlTable)
-    Vue.component('pl-input', PlInput)
-    Vue.component('pl-select', PlSelect)
-    Vue.component('pl-radio', PlRadio)
-    Vue.component('pl-checkbox', PlCheckbox)
-    Vue.component('pl-date', PlDate)
-    Vue.component('pl-switch', PlSwitch)
-    Vue.component('pl-time', PlTime)
-    Vue.component('pl-form', PlForm)
-    Vue.component('pl-button', PlButton)
-    Vue.component('pl-tip-button', PlTipButton)
-    Vue.component('pl-search-list', PlSearchList)
-    Vue.component('pl-search-tab-list', PlSearchTabList)
-    Vue.component('pl-dialog', PlDialog)
-    Vue.component('pl-dialog-form', PlDialogFrom)
-    Vue.prototype.$PlElement = {
-      tableConfig: opts.tableConfig,
-      pageConfig: opts.pageConfig,
-      selectConfig: opts.selectConfig,
-      inputConfig: opts.inputConfig,
-      dateConfig: opts.dateConfig,
-      formConfig: opts.formConfig
-    }
+const components = [PlTable, PlInput, PlSelect, PlRadio, PlCheckbox, PlDate, PlButton, PlTipButton, PlSwitch, PlTime, PlForm, PlSearchList, PlSearchTabList, PlDialog, PlDialogFrom]
+const install = function (Vue) {
+  // 判断是否安装
+  if (install.installed) {
+    return
   }
+  components.forEach((component) => {
+    Vue.component(component.name, component)
+  })
 }
-export default PElement
-export { utils }
+
+if (typeof window !== 'undefined' && window.Vue) {
+  install(window.Vue)
+}
+
+export default {
+  version,
+  install,
+  PlTable,
+  PlInput,
+  PlSelect,
+  PlRadio,
+  PlCheckbox,
+  PlDate,
+  PlButton,
+  PlTipButton,
+  PlSwitch,
+  PlTime,
+  PlForm,
+  PlSearchList,
+  PlSearchTabList,
+  PlDialog,
+  PlDialogFrom
+}

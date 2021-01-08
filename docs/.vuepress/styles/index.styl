@@ -1,64 +1,10 @@
-.theme-default-content:not(.custom) {
-  max-width: 1000px !important
-}
-.theme-default-content:not(.custom){
-  margin: 0 20px;
-}
-/* 滚动条 */
-::-webkit-scrollbar {
-  // 纵向
-  width: 8px;
-  // 横向
-  height: 8px;
-  background-color: #ededed;
-}
-/* 滚动条上的按钮(上下箭头) */
-::-webkit-scrollbar-button {
-  display: none;
-}
-/* 滚动条轨道 */
-::-webkit-scrollbar-track {
-  background-color: #ededed;
-}
-/* 滚动条轨道，没有滑块 */
-::-webkit-scrollbar-track-piece {
-  background-color: #ededed;
-}
-/* 垂直滚动条和水平滚动条交汇的部分 */
-::-webkit-scrollbar-corner {
-  background-color: #ededed;
-}
-/* 滚动条上的滚动滑块 */
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background-color: #d6d6d6;
-}
-/* 右下角拖动块 */
-::-webkit-resizer {
-  display: none;
-}
-table {
-  border-collapse: unset;
-  border-spacing: unset;
-  tr, td, th {
-    border: unset;
-  }
-  &.el-table__body, &.el-table__footer, &.el-table__header{
-    margin: 0
-  }
-}
-.demo-block {
-  .el-form .el-input {
-    //width: 230px
-  }
-  h4 {
-    margin: 5px
-    font-weight: 800
-    color: #1f2f3d;
-  }
-  p {
-    margin: 10px;
-    font-size: 14px
-    line-height: 1.5em
-  }
-}
+.custom-block
+  &-title
+    margin-bottom -0.4rem !important
+
+p
+  display block
+  margin-block-start 1em
+  margin-block-end 1em
+  margin-inline-start 0px
+  margin-inline-end 0px
