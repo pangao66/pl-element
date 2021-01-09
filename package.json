@@ -1,6 +1,6 @@
 {
   "name": "pl-element",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "private": false,
   "description": "基于element-ui的二次封装组件库",
   "author": "pangao <pg243911007@sina.cn>",
