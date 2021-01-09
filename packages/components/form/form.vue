@@ -1,26 +1,9 @@
 <template>
-  <el-form
-    ref="plForm"
-    :model="form"
-    :rules="rules"
-    v-bind="attrs"
-  >
+  <el-form ref="plForm" :model="form" :rules="rules" v-bind="attrs">
     <template v-for="(item, index) in formItems">
-      <slot
-        :name="item.slotName"
-        v-bind="{ form, item }"
-      >
-        <pl-form-item
-          v-if="!item.cols"
-          :key="index"
-          v-bind="item"
-          :form="form"
-        />
-        <form-item-grid
-          v-else
-          :item="item"
-          :form="form"
-        >
+      <slot :name="item.slotName" v-bind="{ form, item }">
+        <pl-form-item v-if="!item.cols" :key="index" v-bind="item" :form="form" />
+        <form-item-grid v-else :item="item" :form="form">
           <slot
             v-for="col in item.cols"
             :slot="col.slotName"
@@ -31,19 +14,12 @@
       </slot>
     </template>
     <slot />
-    <slot
-      v-if="showSubmit"
-      name="submit"
-      v-bind="{ form }"
-    >
+    <slot v-if="showSubmit" name="submit" v-bind="{ form }">
       <el-form-item style="margin-top: 20px;">
-        <el-button
-          type="primary"
-          @click="submitForm"
-        >
+        <el-button type="primary" @click="submitForm">
           提交
         </el-button>
-        <el-button @click="resetForm">
+        <el-button @click="resetFields">
           重置
         </el-button>
       </el-form-item>
@@ -59,6 +35,7 @@ import PlFormItem from './pl-form-item'
 const Item2UIDMap = new WeakMap()
 export default {
   name: 'PlForm',
+  componentName: 'PlForm',
   components: { PlFormItem, FormItemGrid },
   inheritAttrs: false,
   provide() {
@@ -82,11 +59,16 @@ export default {
     showSubmit: {
       type: Boolean,
       default: true
+    },
+    asyncInitValue: {
+      type: Object,
+      default: null
     }
   },
   data() {
     return {
-      form: this.value
+      form: this.value,
+      fields: []
     }
   },
   computed: {
@@ -94,9 +76,36 @@ export default {
       return { ...this.$PlElement?.formConfig, ...this.$attrs }
     }
   },
-  watch: {},
+  watch: {
+    asyncInitValue: {
+      deep: true,
+      immediate: true,
+      handler(val) {
+        if (val) {
+          this.form = JSON.parse(JSON.stringify(val))
+        }
+      }
+    }
+  },
   created() {
     this.setKeyValue(this.formItems)
+    this.$on('pl.form.addField', (field) => {
+      if (field) {
+        this.fields.push(field)
+      }
+    })
+    this.$emit('form-mounted', {
+      plFrom: this.$refs.plForm,
+      fields: this.fields
+    })
+    /* istanbul ignore next */
+    this.$on('pl.form.removeField', (prop) => {
+      if (prop) {
+        const index = this.fields.findIndex((item) => item.prop === prop)
+        this.fields.splice(index, 1)
+        this.$set(this.form, prop, null)
+      }
+    })
   },
   methods: {
     setKeyValue(list) {
@@ -121,9 +130,6 @@ export default {
         return Promise.reject(e)
       }
     },
-    resetForm() {
-      this.$refs.plForm.resetFields()
-    },
     getRandomKey(item) {
       const persistedUID = Item2UIDMap.get(item)
       if (!persistedUID) {
@@ -145,16 +151,43 @@ export default {
       return map[comp] || comp
     },
     validate(...args) {
-      return this.$refs.plForm.validate()
+      return this.$refs.plForm.validate(...args)
     },
     validateField(...args) {
-      this.$refs.plForm.validateField()
+      this.$refs.plForm.validateField(...args)
     },
     resetFields(...args) {
-      this.$refs.plForm.resetFields()
+      if (this.asyncInitValue) {
+        this.form = JSON.parse(JSON.stringify(this.asyncInitValue))
+      } else {
+        this.$refs.plForm.resetFields(...args)
+      }
     },
     clearValidate(...args) {
       this.$refs.plForm.clearValidate(...args)
+    },
+    handleForm(event, ...args) {
+      if (this[event] && typeof this[event] === 'function') {
+        return this[event](...args)
+      }
+      if (this.$refs.plForm[event] && typeof this.$refs.plForm[event]) {
+        return this.$refs.plForm[event](...args)
+      } else {
+        throw new Error('eventName is not exit')
+      }
+    },
+    // 供父组件找formItem
+    findFormItem(prop) {
+      const formItem = this.fields.find((item) => item.prop === prop)
+      return formItem.formItem
+    },
+    // 供父组件找formItemFiled
+    findFormItemFiled(prop) {
+      const formItem = this.fields.find((item) => item.prop === prop)
+      return formItem.formItemFiled
+    },
+    findFormRef() {
+      return this.$refs.plForm
     }
   }
 }

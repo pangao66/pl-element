@@ -11,19 +11,8 @@
       >
         <el-row :gutter="10">
           <template v-for="(item, index) in formItems">
-            <el-col
-              :key="index"
-              :xl="6"
-              :lg="8"
-              :md="12"
-              :sm="24"
-              class="el-col-xll-6"
-            >
-              <el-form-item
-                v-if="!item.slotName"
-                :label="item.label"
-                :prop="item.prop"
-              >
+            <el-col :key="index" :xl="6" :lg="8" :md="12" :sm="24" class="el-col-xll-6">
+              <el-form-item v-if="!item.slotName" :label="item.label" :prop="item.prop">
                 <component
                   :is="getComp(item.comp)"
                   :key="index"
@@ -33,28 +22,14 @@
                   v-bind="item"
                 />
               </el-form-item>
-              <slot
-                v-if="item.slotName"
-                :name="item.slotName"
-                v-bind="{ form, item }"
-              />
+              <slot v-if="item.slotName" :name="item.slotName" v-bind="{ form, item }" />
             </el-col>
           </template>
-          <el-form-item
-            style="float:right;"
-            label-width="0"
-          >
-            <pl-button
-              debounce
-              type="primary"
-              @click="search"
-            >
+          <el-form-item style="float:right;" label-width="0">
+            <pl-button debounce type="primary" @click="search">
               查询
             </pl-button>
-            <pl-button
-              debounce
-              @click="resetForm"
-            >
+            <pl-button debounce @click="resetForm">
               重置
             </pl-button>
             <a
@@ -63,7 +38,7 @@
               @click="toggleAdvanced"
             >
               {{ advanced ? '展开' : '收起' }}
-              <i :class="advanced ? 'el-icon-arrow-down' : 'el-icon-arrow-up'" />
+              <i class="el-icon-arrow-up" :class="{ advanced }"></i>
             </a>
           </el-form-item>
         </el-row>
@@ -73,26 +48,14 @@
       <div class="pl-search-list-menu">
         <div>
           <slot name="menu-handle" />
-          <pl-tip-button
-            content="刷新"
-            debounce
-            icon="el-icon-refresh"
-            circle
-            @click="search"
-          />
+          <pl-tip-button content="刷新" debounce icon="el-icon-refresh" circle @click="search" />
           <el-dropdown
             :hide-on-click="false"
             style="margin-left: 6px;margin-right: 6px;"
             @command="toggleSize"
           >
-            <pl-tip-button
-              content="密度"
-              circle
-            >
-              <svg-icon
-                class-name="full-screen"
-                icon-class="midu"
-              />
+            <pl-tip-button content="密度" circle>
+              <svg-icon class-name="full-screen" icon-class="midu" />
             </pl-tip-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item
@@ -118,11 +81,7 @@
           <!--          <el-button icon="el-icon-menu" circle/>-->
         </div>
       </div>
-      <el-tabs
-        v-model="activeName"
-        type="card"
-        @tab-click="tabClick"
-      >
+      <el-tabs v-model="activeName" type="card" @tab-click="tabClick">
         <el-tab-pane
           v-for="item in tabs"
           :key="`${item.name}${keyDate}`"
@@ -132,10 +91,7 @@
           <template v-slot:label>
             <span>{{ item.label }}</span>
             <span v-if="typeof item.num !== 'undefined'">({{ item.num }})</span>
-            <slot
-              name="tab-label"
-              v-bind="{ ...item }"
-            />
+            <slot name="tab-label" v-bind="{ ...item }" />
           </template>
           <keep-alive>
             <tab-table-item
@@ -147,18 +103,12 @@
               :table-config="tableConfig"
               :page-config="pageConfig"
               :keep-alive="keepAlive"
-              :form="form"
+              :form="queryData"
               :size="size"
               v-on="$listeners"
             >
-              <template
-                v-for="slot in Object.keys($scopedSlots)"
-                v-slot:[slot]="scope"
-              >
-                <slot
-                  :name="slot"
-                  v-bind="scope"
-                />
+              <template v-for="slot in Object.keys($scopedSlots)" v-slot:[slot]="scope">
+                <slot :name="slot" v-bind="scope" />
               </template>
               <template v-slot:pagination-slot>
                 <slot name="pagination-slot" />
@@ -171,7 +121,7 @@
   </div>
 </template>
 <script>
-import { getRandomKey } from '../../utils'
+import { getRandomKey, filterObject } from '../../utils'
 import TabTableItem from './search-tab-list-item'
 import searchListMixin from '../../mixins/search-list'
 
@@ -231,6 +181,10 @@ export default {
     keepAlive: {
       type: Boolean,
       default: true
+    },
+    syncFormData: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -238,12 +192,13 @@ export default {
       form: this.value,
       advanced: false,
       activeName: '',
-      keyDate: ''
+      keyDate: '',
+      searchData: {}
     }
   },
   computed: {
     formAttrs() {
-      return { ...this.$PlElement.formConfig, ...this.formConfig }
+      return { ...this.$PlElement?.formConfig, ...this.formConfig }
     },
     hasChildClass() {
       let length = this.formItems.length
@@ -252,13 +207,15 @@ export default {
       }
       return `has-items-gt-${length}`
     },
-    columnSlots() {
-      if (!this.columns.length) {
-        return this.tabs.forEach((item) => {
-          return item.columns.filter((c) => c.slot).map((c) => c.slot)
-        })
-      }
-      return this.columns.filter((c) => c.slot).map((c) => c.slot)
+    queryData() {
+      let data = this.syncFormData ? this.form : this.searchData
+      data = JSON.parse(JSON.stringify(data))
+      this.formItems.forEach((item) => {
+        if (item.comp === 'date' && item.attrs?.type === 'daterange') {
+          delete data[item.prop]
+        }
+      })
+      return filterObject(data)
     }
   },
   watch: {
@@ -292,6 +249,7 @@ export default {
        * 若返回 boolean, 则不为false则查询
        */
       if (!this.beforeSearch) {
+        this.searchData = JSON.parse(JSON.stringify(this.form))
         this.keyDate = new Date().getTime()
         return
       }
@@ -299,12 +257,14 @@ export default {
       if (before && before.then) {
         before
           .then(() => {
+            this.searchData = JSON.parse(JSON.stringify(this.form))
             this.keyDate = new Date().getTime()
           })
           .catch(() => {
             console.log('已取消查询')
           })
       } else if (before !== false) {
+        this.searchData = JSON.parse(JSON.stringify(this.form))
         this.keyDate = new Date().getTime()
       }
     },
@@ -357,6 +317,9 @@ export default {
           this.loading = false
         }
       )
+    },
+    handleTable(...args) {
+      this.$refs['tab-table-item'][0].handleTable(...args)
     }
   }
 }

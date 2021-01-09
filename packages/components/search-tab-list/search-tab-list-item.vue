@@ -11,14 +11,8 @@
       v-bind="$attrs"
       v-on="$listeners"
     >
-      <template
-        v-for="slot in Object.keys($scopedSlots)"
-        #[slot]="scope"
-      >
-        <slot
-          :name="slot"
-          v-bind="scope"
-        />
+      <template v-for="slot in Object.keys($scopedSlots)" #[slot]="scope">
+        <slot :name="slot" v-bind="scope" />
       </template>
       <template v-slot:index="{ row, $index, virtualScroll, startIndex }">
         <template v-if="virtualScroll">
@@ -88,7 +82,7 @@ export default {
   },
   computed: {
     pageAttrs() {
-      return { ...this.$PlElement.pageConfig, ...this.pageConfig }
+      return { ...this.$PlElement?.pageConfig, ...this.pageConfig }
     }
   },
   activated() {
@@ -143,6 +137,9 @@ export default {
     },
     setHeight() {
       this.$refs.table.setHeight()
+    },
+    handleTable(...args) {
+      this.$refs.table.handleTable(...args)
     }
   }
 }

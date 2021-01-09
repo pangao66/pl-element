@@ -1,10 +1,5 @@
 <template>
-  <el-switch
-    v-model="switchValue"
-    v-bind="attrs"
-    @change="valueChange"
-    v-on="events"
-  />
+  <el-switch v-model="switchValue" v-bind="attrs" @change="valueChange" v-on="events" />
 </template>
 
 <script>

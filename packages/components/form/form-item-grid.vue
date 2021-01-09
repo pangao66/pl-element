@@ -1,20 +1,8 @@
 <template>
   <el-row v-bind="item.attrs">
-    <el-col
-      v-for="(col, index) in item.cols"
-      :key="index"
-      :span="col.span"
-    >
-      <slot
-        v-if="col.slotName"
-        :name="col.slotName"
-        v-bind="{ form, item: col }"
-      />
-      <pl-form-item
-        v-else
-        v-bind="col"
-        :form="form"
-      />
+    <el-col v-for="(col, index) in item.cols" :key="index" :span="col.span">
+      <slot v-if="col.slotName" :name="col.slotName" v-bind="{ form, item: col }" />
+      <pl-form-item v-else v-bind="col" :form="form" />
     </el-col>
   </el-row>
 </template>

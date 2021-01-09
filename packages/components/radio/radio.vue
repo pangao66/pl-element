@@ -1,21 +1,10 @@
 <template>
-  <el-radio-group
-    v-model="selectedValue"
-    v-on="eventList"
-  >
+  <el-radio-group v-model="selectedValue" v-on="eventList">
     <template v-for="item in optionsList">
-      <el-radio-button
-        v-if="radioButton"
-        :key="item.value"
-        :label="item.value"
-      >
+      <el-radio-button v-if="radioButton" :key="item.value" :label="item.value">
         {{ item.label }}
       </el-radio-button>
-      <el-radio
-        v-else
-        :key="item.value"
-        :label="item.value"
-      >
+      <el-radio v-else :key="item.value" :label="item.value">
         {{ item.label }}
       </el-radio>
     </template>

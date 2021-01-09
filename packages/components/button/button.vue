@@ -124,8 +124,3 @@ export default {
   }
 }
 </script>
-<style>
-.test {
-  background: red;
-}
-</style>

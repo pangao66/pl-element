@@ -18,10 +18,7 @@
       />
     </template>
     <slot />
-    <slot
-      slot="footer"
-      name="footer"
-    />
+    <slot slot="footer" name="footer" />
   </el-dialog>
 </template>
 

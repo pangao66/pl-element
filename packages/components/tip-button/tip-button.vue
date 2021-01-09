@@ -1,12 +1,6 @@
 <template>
-  <el-tooltip
-    :content="content"
-    v-bind="attrs"
-  >
-    <pl-button
-      v-bind="$attrs"
-      v-on="$listeners"
-    >
+  <el-tooltip :content="content" v-bind="attrs">
+    <pl-button v-bind="$attrs" v-on="$listeners">
       <slot />
     </pl-button>
   </el-tooltip>

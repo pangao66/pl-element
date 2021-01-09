@@ -8,9 +8,15 @@
     line-height: 21px
   }
   .advance-toggle-btn {
+    &:hover{
+      color: #66b1ff;
+    }
     > i {
       transition: all 0.3s ease 0s;
       transform: rotate(0turn);
+      &.advanced {
+        transform: rotate(0.5turn)
+      }
     }
   }
 }
@@ -116,3 +122,13 @@
   background: #ECF5FF;
   color: #409EFF;
 }
+span .el-button.el-popover__reference {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 6px;
+  margin-right: 6px;
+}
+  .pl-search-list-tools-bar{
+    display: flex;
+    align-items: center;
+  }

@@ -1,3 +1,8 @@
+// import pfTable from './components/pf-table/pf-table'
+// import pFrom from './components/pf-table/p-form'
+// import pDialogForm from './components/pf-table/p-dialog-form'
+// import pfTabTable from './components/pf-table/pf-tab-table'
+// import pTable from './components/pf-table/p-table'
 import PlTable from './components/table'
 import PlInput from './components/input'
 import PlSelect from './components/select'

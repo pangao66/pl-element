@@ -93,7 +93,7 @@ export default {
       let shortcuts = this.shortcuts || []
       const list = []
       const today = new Date()
-      const todayTime = today.getTime()
+      const todayTime = today.setHours(0, 0, 0, 0)
       const map = {
         today: {
           text: '今天',

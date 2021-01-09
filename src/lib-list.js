@@ -2,11 +2,11 @@ module.exports = {
   index: {
     input: 'src/index.js',
     output: 'index'
-  },
-  button: {
-    input: 'packages/components/button/index.js',
-    output: 'pl-button'
   }
+  // button: {
+  //   input: 'packages/components/button/index.js',
+  //   output: 'pl-button'
+  // }
   // index: {
   //   input: 'src/index.js',
   //   output: 'index'

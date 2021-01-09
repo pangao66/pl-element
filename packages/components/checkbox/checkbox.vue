@@ -1,21 +1,10 @@
 <template>
-  <el-checkbox-group
-    v-model="selectedValue"
-    v-on="eventList"
-  >
+  <el-checkbox-group v-model="selectedValue" v-on="eventList">
     <template v-for="item in optionsList">
-      <el-checkbox-button
-        v-if="radioButton"
-        :key="item.value"
-        :label="item.value"
-      >
+      <el-checkbox-button v-if="radioButton" :key="item.value" :label="item.value">
         {{ item.label }}
       </el-checkbox-button>
-      <el-checkbox
-        v-else
-        :key="item.value"
-        :label="item.value"
-      >
+      <el-checkbox v-else :key="item.value" :label="item.value">
         {{ item.label }}
       </el-checkbox>
     </template>
@@ -27,7 +16,10 @@ import { isArray, isPlainObject } from '../../utils'
 export default {
   name: 'PlCheckbox',
   props: {
-    value: { default: '', type: [String, Number] },
+    value: {
+      default: '',
+      type: [String, Number]
+    },
     options: {
       type: [Array, Object],
       default: () => []
@@ -68,9 +60,15 @@ export default {
         this.options.map((item) => {
           // 如果每项是对象形式
           if (isPlainObject(item)) {
-            list.push({ label: item[label], value: item[value] })
+            list.push({
+              label: item[label],
+              value: item[value]
+            })
           } else {
-            list.push({ label: item, value: item })
+            list.push({
+              label: item,
+              value: item
+            })
           }
         })
         return list

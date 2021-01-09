@@ -11,26 +11,18 @@
       v-bind="formConfig"
       :form-items="formItems"
       :show-submit="false"
+      :async-init-value="asyncInitValue"
       class="pl-dialog-form"
     >
-      <template
-        v-for="slot in Object.keys($scopedSlots)"
-        v-slot:[slot]="scope"
-      >
-        <slot
-          :name="slot"
-          v-bind="scope"
-        />
+      <template v-for="slot in Object.keys($scopedSlots)" v-slot:[slot]="scope">
+        <slot :name="slot" v-bind="scope" />
       </template>
     </pl-form>
     <template #footer>
       <el-button @click="$emit('close')">
         取消
       </el-button>
-      <pl-button
-        type="primary"
-        @click="submit"
-      >
+      <pl-button type="primary" @click="submit">
         确定
       </pl-button>
     </template>
@@ -53,6 +45,10 @@ export default {
     formConfig: {
       type: Object,
       default: () => ({})
+    },
+    asyncInitValue: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -81,6 +77,9 @@ export default {
           this.fullscreenLoadingStatus = false
         })
       } catch (e) {}
+    },
+    handleForm(...args) {
+      return this.$refs.form.handleForm(...args)
     }
   }
 }

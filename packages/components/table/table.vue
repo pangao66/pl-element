@@ -15,14 +15,8 @@
           :start-index="startIndex"
           :virtual-scroll="virtualScroll"
         >
-          <template
-            v-for="slot in Object.keys($scopedSlots)"
-            v-slot:[slot]="scope"
-          >
-            <slot
-              :name="slot"
-              v-bind="scope"
-            />
+          <template v-for="slot in Object.keys($scopedSlots)" v-slot:[slot]="scope">
+            <slot :name="slot" v-bind="scope" />
           </template>
         </pl-table-column>
       </template>
@@ -336,6 +330,15 @@ export default {
           table.style.paddingTop = this.scrollTop + 'px'
           table.style.paddingBottom = height - this.scrollTop - bufferCount * itemSize + 'px'
         })
+      }
+    },
+    handleTable(event, ...args) {
+      if (this[event] && typeof this[event] === 'function') {
+        return this[event](...args)
+      }
+      const tableRef = this.$refs.table
+      if (tableRef[event] && typeof tableRef[event] === 'function') {
+        return tableRef[event](...args)
       }
     }
   }

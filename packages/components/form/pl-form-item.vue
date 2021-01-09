@@ -1,10 +1,5 @@
 <template>
-  <el-form-item
-    v-if="!cols"
-    :label="label"
-    :prop="prop"
-    :rules="calRules"
-  >
+  <el-form-item v-if="!cols" ref="plFormItem" :label="label" :prop="prop" :rules="calRules">
     <component
       :is="currentComp"
       :ref="prop"
@@ -14,21 +9,12 @@
       :events="events"
       v-bind="$attrs"
     >
-      <template
-        v-for="slot in Object.keys($slots)"
-        #[slot]
-      >
+      <template v-for="slot in Object.keys($slots)" #[slot]>
         <slot :name="slot" />
       </template>
     </component>
-    <template
-      v-for="slot in Object.keys($slots)"
-      v-slot:[slot]="scope"
-    >
-      <slot
-        :name="slot"
-        v-bind="scope"
-      />
+    <template v-for="slot in Object.keys($slots)" v-slot:[slot]="scope">
+      <slot :name="slot" v-bind="scope" />
     </template>
   </el-form-item>
   <form-item-grid v-else />
@@ -46,11 +32,13 @@ import {
   towPointReg,
   urlReg
 } from '../../utils/regs'
+import emitter from 'element-ui/lib/mixins/emitter'
 
 export default {
   name: 'PlFormItem',
   components: { FormItemGrid },
   inject: ['plForm'],
+  mixins: [emitter],
   inheritAttrs: false,
   props: {
     // item: {
@@ -138,7 +126,16 @@ export default {
       } else {
         handleWayText = '请选择'
       }
-      const trigger = this.trigger || 'blur'
+      // const trigger = this.trigger || 'blur'
+      let trigger
+      if (this.trigger) {
+        trigger = this.trigger
+      }
+      if (this.comp === 'input') {
+        trigger = 'blur'
+      } else {
+        trigger = 'change'
+      }
       const required = this.required ?? 'no-required'
       const validation = this.validation
       const map = {
@@ -228,6 +225,21 @@ export default {
       }
       return ''
     }
+  },
+  mounted() {
+    if (this.prop) {
+      this.dispatch('PlForm', 'pl.form.addField', {
+        formItem: this.$refs.plFormItem,
+        formItemFiled: this.$refs[this.prop],
+        plFormItem: this,
+        prop: this.prop
+      })
+    }
+  },
+  beforeDestroy() {
+    this.dispatch('PlForm', 'pl.form.removeField', {
+      prop: this.prop
+    })
   },
   methods: {}
 }

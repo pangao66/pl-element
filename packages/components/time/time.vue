@@ -1,9 +1,5 @@
 <template>
-  <el-time-picker
-    v-model="time"
-    @change="valueChange"
-    v-on="events"
-  />
+  <el-time-picker v-model="time" @change="valueChange" v-on="events" />
 </template>
 
 <script>

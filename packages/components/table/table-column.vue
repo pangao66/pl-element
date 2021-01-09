@@ -13,18 +13,10 @@
     "
   >
     <!--自定义列header-->
-    <template
-      v-if="col.headerSlot || col.tip || col.type === 'selection'"
-      v-slot:header="scope"
-    >
+    <template v-if="col.headerSlot || col.tip || col.type === 'selection'" v-slot:header="scope">
       <template v-if="col.tip">
         {{ col.label }}
-        <el-tooltip
-          class="item"
-          effect="dark"
-          :content="col.tip"
-          placement="top"
-        >
+        <el-tooltip class="item" effect="dark" :content="col.tip" placement="top">
           <i class="el-icon-question" />
         </el-tooltip>
       </template>
@@ -33,23 +25,13 @@
           :indeterminate="isIndeterminate"
           :checked="checkedItems.length"
           @change="handleCheckAllChange"
-        />
+        ></el-checkbox>
       </template>
-      <slot
-        v-if="col.headerSlot"
-        :name="col.headerSlot"
-        v-bind="scope"
-      />
+      <slot v-if="col.headerSlot" :name="col.headerSlot" v-bind="scope"></slot>
     </template>
     <!--自定义列 -->
-    <template
-      v-if="showSlot(col)"
-      v-slot="scope"
-    >
-      <slot
-        :name="col.slotName"
-        v-bind="scope"
-      />
+    <template v-if="showSlot(col)" v-slot="scope">
+      <slot :name="col.slotName" v-bind="scope"></slot>
       <template v-if="col.tagMap">
         <template
           v-if="
@@ -60,18 +42,12 @@
         >
           -
         </template>
-        <el-tag
-          v-else
-          :type="getTagType(scope, col)"
-        >
+        <el-tag v-else :type="getTagType(scope, col)">
           {{ getTagText(scope, col) }}
         </el-tag>
       </template>
       <template v-if="col.type === 'index'">
-        <slot
-          name="index"
-          v-bind="{ ...scope, startIndex, virtualScroll }"
-        />
+        <slot name="index" v-bind="{ ...scope, startIndex, virtualScroll }"></slot>
       </template>
       <template v-if="col.customerRenderText">
         {{ col.customerRenderText(scope) }}
@@ -91,42 +67,23 @@
             >
               {{ item.text || item.actionText(scope) }}
             </pl-button>
-            <pl-button
-              v-else
-              :key="index"
-              type="text"
-              @click="item.onClick(scope)"
-            >
+            <pl-button v-else :key="index" type="text" @click="item.onClick(scope)">
               {{ item.text || item.actionText(scope) }}
             </pl-button>
-            <el-divider
-              :key="index"
-              direction="vertical"
-            />
+            <el-divider :key="index" direction="vertical"></el-divider>
           </template>
         </template>
       </template>
-      <VNodes
-        v-if="col.customerRender"
-        :vnodes="col.customerRender(scope)"
-      />
+      <VNodes v-if="col.customerRender" :vnodes="col.customerRender(scope)" />
       <template v-if="col.type === 'selection'">
-        <el-checkbox
-          v-model="scope.row.selected"
-          @change="handleItemCheckedChange"
-        />
+        <el-checkbox v-model="scope.row.selected" @change="handleItemCheckedChange" />
       </template>
     </template>
-    <!--    <template v-if="col.childColumns&&col.childColumns.length">-->
-    <!--      <pl-table-column v-for="item in col.childColumns" :key="getRandomKey(item)" :col="item">-->
-    <!--        <template-->
-    <!--            v-for="slot in Object.keys($scopedSlots)"-->
-    <!--            v-slot:[slot]="scope"-->
-    <!--        >-->
-    <!--          <slot :name="slot" v-bind="scope"/>-->
-    <!--        </template>-->
-    <!--      </pl-table-column>-->
-    <!--    </template>-->
+    <pl-table-column v-for="item in col.childColumns" :key="getRandomKey(item)" :col="item">
+      <template v-for="slot in Object.keys($scopedSlots)" v-slot:[slot]="scope">
+        <slot :name="slot" v-bind="scope" />
+      </template>
+    </pl-table-column>
   </el-table-column>
 </template>
 

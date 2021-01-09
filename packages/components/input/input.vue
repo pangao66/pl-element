@@ -1,19 +1,7 @@
 <template>
-  <el-input
-    v-model="message"
-    v-bind="attrs"
-    v-on="eventList"
-  >
-    <svg-icon
-      v-if="icon"
-      :slot="iconPosition"
-      :class-name="icon"
-    />
-    <slot
-      v-for="slot in Object.keys($slots)"
-      :slot="slot"
-      :name="slot"
-    />
+  <el-input v-model="message" v-bind="attrs" v-on="eventList">
+    <svg-icon v-if="icon" :slot="iconPosition" :class-name="icon" />
+    <slot v-for="slot in Object.keys($slots)" :slot="slot" :name="slot" />
   </el-input>
 </template>
 
@@ -36,7 +24,10 @@ export default {
       type: String,
       default: ''
     },
-    value: { default: '', type: [String, Number] },
+    value: {
+      default: '',
+      type: [String, Number]
+    },
     required: {
       type: Boolean,
       default: null

@@ -5,7 +5,7 @@ import VueHighlightJS from 'vue-highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
 import DemoBlock from './components/demo-block'
 import  HelloWord from '../../examples/components/HelloWorld.vue'
-import PlElement from '../../lib/index'
+import PlElement from '../../packages/index'
 export default ({
   Vue, // VuePress 正在使用的 Vue 构造函数
   options, // 附加到根实例的一些选项

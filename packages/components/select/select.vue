@@ -1,11 +1,5 @@
 <template>
-  <el-select
-    v-model="selectedValue"
-    value-key="id"
-    v-bind="attrs"
-    @change="handleChange"
-    v-on="eventList"
-  >
+  <el-select v-model="calValue" v-bind="attrs" @change="handleChange" v-on="eventList">
     <el-option
       v-for="(item, index) in optionsList"
       :key="index"
@@ -13,10 +7,7 @@
       :value="item.value"
       v-bind="item.attrs"
     >
-      <slot
-        name="option-slot"
-        v-bind="item"
-      />
+      <slot name="option-slot" v-bind="item"></slot>
     </el-option>
   </el-select>
 </template>
@@ -41,6 +32,10 @@ export default {
       type: [String, Number],
       default: ''
     },
+    labelKey: {
+      type: String,
+      default: 'label'
+    },
     valueLabel: {
       type: [String, Number],
       default: ''
@@ -52,6 +47,10 @@ export default {
     events: {
       type: Object,
       default: null
+    },
+    isBindObject: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -60,6 +59,14 @@ export default {
     }
   },
   computed: {
+    calValue: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('input', val)
+      }
+    },
     attrs() {
       return {
         placeholder: this.$attrs.placeholder || `请选择${this.label}`,
@@ -75,14 +82,16 @@ export default {
     },
     optionsList() {
       if (isArray(this.options)) {
-        if (this.valueKey) {
+        // 绑定对象
+        if (this.valueKey && this.isBindObject) {
           return this.options.map((item) => {
             return {
-              label: item[this.valueLabel],
+              label: item[this.labelKey],
               value: { ...item }
             }
           })
         }
+        // 配置别名
         if (this.optionsAttr) {
           const [label, value] = this.optionsAttr.split(',')
           this.options.forEach((item) => {
@@ -92,6 +101,7 @@ export default {
         }
         return this.options
       }
+      // 传入对象枚举key,value结构
       if (isPlainObject(this.options)) {
         const list = []
         Object.keys(this.options).forEach((key) => {
@@ -105,21 +115,10 @@ export default {
       return this.options
     }
   },
-  watch: {
-    value: {
-      immediate: true,
-      handler() {
-        this.init()
-      }
-    }
-  },
   methods: {
     handleChange(val) {
-      this.$emit('change', val)
-      this.$emit('input', val)
-    },
-    init() {
-      this.selectedValue = this.value
+      this.calValue = val
+      this.$emit('change')
     }
   }
 }

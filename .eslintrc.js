@@ -12,7 +12,9 @@ module.exports = {
     'vue/no-side-effects-in-computed-properties': 'off',
     // 属性空格
     'vue/attribute-hyphenation': 'off',
-    'vue/html-closing-bracket-spacing':'off'
+    'vue/html-closing-bracket-spacing': 'off',
+    'vue/html-self-closing': 'off',
+    'vue/max-attributes-per-line': 'off'
   },
   parserOptions: {
     parser: 'babel-eslint'
