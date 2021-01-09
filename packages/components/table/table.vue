@@ -8,18 +8,17 @@
       v-on="{ ...$listeners, ...events }"
       @cell-dblclick="copy"
     >
-      <template v-for="col in columns">
-        <pl-table-column
-          :key="getRandomKey(col)"
-          :col="col"
-          :start-index="startIndex"
-          :virtual-scroll="virtualScroll"
-        >
-          <template v-for="slot in Object.keys($scopedSlots)" v-slot:[slot]="scope">
-            <slot :name="slot" v-bind="scope" />
-          </template>
-        </pl-table-column>
-      </template>
+      <pl-table-column
+        v-for="col in columns"
+        :key="getRandomKey(col)"
+        :col="col"
+        :start-index="startIndex"
+        :virtual-scroll="virtualScroll"
+      >
+        <template v-for="slot in Object.keys($scopedSlots)" v-slot:[slot]="scope">
+          <slot :name="slot" v-bind="scope" />
+        </template>
+      </pl-table-column>
     </el-table>
   </div>
 </template>

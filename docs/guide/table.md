@@ -55,6 +55,13 @@ sidebarDepth: 2
 <<< docs/.vuepress/components/table-demo-03.vue
 </demo-block>
 
+## 多级表头
+<demo-block>
+<table-demo-06 slot="source"></table-demo-06>
+
+<<< docs/.vuepress/components/table-demo-06.vue
+</demo-block>
+
 ## 综合演示
 
 <demo-block>

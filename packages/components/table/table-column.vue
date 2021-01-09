@@ -3,7 +3,6 @@
     v-bind="col.attrs"
     :prop="col.prop"
     :label="col.label"
-    :show-overflow-tooltip="!showSlot(col)"
     :class-name="getColumnClass(col)"
     :formatter="
       col.formatter || col.dict
@@ -12,7 +11,8 @@
         : undefined
     "
   >
-    <!--自定义列header-->
+    <!--    此处注释误删,换行部分场景会导致空白slot的bug
+  --><!--自定义列header-->
     <template v-if="col.headerSlot || col.tip || col.type === 'selection'" v-slot:header="scope">
       <template v-if="col.tip">
         {{ col.label }}
@@ -28,8 +28,7 @@
         ></el-checkbox>
       </template>
       <slot v-if="col.headerSlot" :name="col.headerSlot" v-bind="scope"></slot>
-    </template>
-    <!--自定义列 -->
+    </template><!--自定义列 -->
     <template v-if="showSlot(col)" v-slot="scope">
       <slot :name="col.slotName" v-bind="scope"></slot>
       <template v-if="col.tagMap">
@@ -78,8 +77,9 @@
       <template v-if="col.type === 'selection'">
         <el-checkbox v-model="scope.row.selected" @change="handleItemCheckedChange" />
       </template>
-    </template>
-    <pl-table-column v-for="item in col.childColumns" :key="getRandomKey(item)" :col="item">
+    </template><!--此处注释误删,请勿换行,
+    换行会出现空白slot
+    --><pl-table-column v-for="(item, index) in col.childColumns" :key="index" :col="item">
       <template v-for="slot in Object.keys($scopedSlots)" v-slot:[slot]="scope">
         <slot :name="slot" v-bind="scope" />
       </template>
@@ -120,6 +120,10 @@ export default {
     virtualScroll: {
       type: Boolean,
       default: false
+    },
+    childColumns: {
+      type: Array,
+      default: null
     }
   },
   methods: {
@@ -149,7 +153,12 @@ export default {
       }
       const type = typeof formatter
       if (type === 'function') {
-        return formatter({ row, column, cellValue, index })
+        return formatter({
+          row,
+          column,
+          cellValue,
+          index
+        })
       }
       if (type === 'string') {
         switch (formatter) {
