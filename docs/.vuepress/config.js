@@ -1,8 +1,9 @@
 const pkg = require('../../package.json')
+const isProduction = process.env.NODE_ENV === 'production'
 module.exports = {
   title: pkg.name,
-  description: '快速搭建第三方库',
-  base: '/',
+  description: 'elementUI二次封装',
+  base: '/pl-element/',
   themeConfig: {
     nav: [
       { text: '主页', link: '/' },
@@ -52,5 +53,21 @@ module.exports = {
 
     // 放大
     ['@vuepress/medium-zoom', { selector: 'img' }]
-  ]
+  ],
+  configureWebpack: {
+    externals: {
+      // vue: 'Vue',
+      // vuex: 'Vuex',
+      // 'vue-router': 'VueRouter',
+      // 'swiper': 'Swiper',
+      // 'moment': 'moment'
+      // 'socket.io-client': 'io'
+      // 'vue':'Vue',
+      // 'element-ui': 'ELEMENT'
+      // 'mock': 'Mock'
+    },
+    output: {
+      publicPath: isProduction ? 'https://cdn.noob6.com/docs/' : undefined,
+    },
+  }
 }
