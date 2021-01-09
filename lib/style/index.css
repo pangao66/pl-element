@@ -3,7 +3,7 @@
 
 .pl-icon{display:inline-block;vertical-align:middle}.pl-icon,.pl-icon svg{width:14px;height:14px;fill:currentColor}
 .fix-table-container{width:180px}.fix-table-container h3{margin:0}
-.pl-button-icon-midu{display:inline-block;vertical-align:middle;width:14px;height:14px;background:url(../../svg/midu.svg) no-repeat 50%/100% 100%;fill:currentColor}
+
 .search-list-tab-container{position:relative}.search-list-tab-container .pl-search-list-menu{position:absolute;z-index:2;right:24px}.advance-toggle-btn{color:#409eff}.pl-search-list-form .el-input__inner{width:100%}
 .el-dialog-header_full_btn{position:absolute;top:20px;right:50px;background:0 0;outline:none;border:none;padding:0;font-size:16px}
 .pl-dialog-form .el-input__inner,.pl-dialog-form .el-select{width:100%}

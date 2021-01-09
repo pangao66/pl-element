@@ -4,6 +4,7 @@
       <el-form
         ref="plForm"
         :model="form"
+        label-position="right"
         v-bind="formAttrs"
         class="pl-search-list-form"
         :class="[{ advance: advanced }, hasChildClass]"
@@ -207,7 +208,11 @@ export default {
   },
   computed: {
     formAttrs() {
-      return { ...this.$PlElement?.formConfig, ...this.formConfig }
+      return {
+        'label-width': '120px',
+        ...this.$PlElement?.formConfig,
+        ...this.formConfig
+      }
     },
     pageAttrs() {
       return { ...this.$PlElement?.pageConfig, ...this.pageConfig }
@@ -346,13 +351,4 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
-.pl-button-icon-midu {
-  display: inline-block;
-  vertical-align: middle;
-  width: 14px;
-  height: 14px;
-  background: url("../../svg/midu.svg") no-repeat center / 100% 100%;
-  fill: currentColor;
-}
-</style>
+<style lang="stylus"></style>
