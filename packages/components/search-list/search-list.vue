@@ -1,9 +1,9 @@
 <template>
   <div class="pl-search-list">
     <div v-if="formItems && formItems.length" class="pl-search-list-form-container">
-      <el-form
+      <pl-form
         ref="plForm"
-        :model="form"
+        v-model="form"
         label-position="right"
         v-bind="formAttrs"
         class="pl-search-list-form"
@@ -13,16 +13,21 @@
         <el-row :gutter="10">
           <template v-for="(item, index) in formItems">
             <el-col :key="index" :xl="6" :lg="8" :md="12" :sm="24" class="el-col-xll-6">
-              <el-form-item v-if="!item.slotName" :label="item.label" :prop="item.prop">
-                <component
-                  :is="getComp(item.comp)"
-                  :key="index"
-                  :ref="item.prop"
-                  v-model="form[item.prop]"
-                  v-bind="item"
-                  :form="form"
-                />
-              </el-form-item>
+              <!--              <el-form-item v-if="!item.slotName" :label="item.label" :prop="item.prop">-->
+              <!--                <component-->
+              <!--                  :is="getComp(item.comp)"-->
+              <!--                  :key="index"-->
+              <!--                  :ref="item.prop"-->
+              <!--                  v-model="form[item.prop]"-->
+              <!--                  v-bind="item"-->
+              <!--                  :form="form"-->
+              <!--                />-->
+              <!--              </el-form-item>-->
+              <pl-form-item
+                v-if="!item.slotName"
+                v-model="form[item.prop]"
+                v-bind="item"
+              ></pl-form-item>
               <slot v-if="item.slotName" :name="item.slotName" v-bind="{ form, item }" />
             </el-col>
           </template>
@@ -43,7 +48,7 @@
             </a>
           </el-form-item>
         </el-row>
-      </el-form>
+      </pl-form>
     </div>
     <div class="search-list-table-container">
       <slot name="form-after">
@@ -137,11 +142,13 @@ import { getRandomKey, filterObject } from '../../utils'
 import searchListMixin from '../../mixins/search-list'
 import FixTable from './fix-table'
 import PlIcon from '../../components/pl-icon/pl-icon'
+import PlFormItem from '../../components/form/pl-form-item'
 
 const Item2UIDMap = new WeakMap()
 export default {
   name: 'PlSearchList',
   components: {
+    PlFormItem,
     PlIcon,
     FixTable
   },

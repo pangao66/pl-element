@@ -1,23 +1,14 @@
 <template>
-  <el-switch v-model="switchValue" v-bind="attrs" @change="valueChange" v-on="events" />
+  <el-switch v-model="calValue" v-bind="attrs" @change="valueChange" v-on="events" />
 </template>
 
 <script>
 export default {
   name: 'PlSwitch',
-  model: {
-    prop: 'value',
-    event: 'change'
-  },
   props: {
-    value: { default: null, type: Boolean },
-    labelWidth: {
-      type: [String, Number],
-      default: ''
-    },
-    formItemAttrs: {
-      type: Object,
-      default: () => ({})
+    value: {
+      default: null,
+      type: Boolean
     },
     events: {
       type: Object,
@@ -25,9 +16,7 @@ export default {
     }
   },
   data() {
-    return {
-      switchValue: ''
-    }
+    return {}
   },
   computed: {
     attrs() {
@@ -37,32 +26,18 @@ export default {
         ...this.$attrs.attrs
       }
     },
-    rules() {
-      let trigger = 'change'
-      if (this.trigger) {
-        trigger = this.trigger
-      }
-      const required = this.required ?? 'no-required'
-      return required !== 'no-required'
-        ? {
-          required: this.required,
-          message: `${this.label}不能为空`,
-          trigger
-        }
-        : undefined
-    }
-  },
-  watch: {
-    value: {
-      immediate: true,
-      handler(val) {
-        this.switchValue = val
+    calValue: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('input', val)
       }
     }
   },
   methods: {
     valueChange(val) {
-      this.$emit('input', val)
+      this.calValue = val
       this.$emit('change', val)
     }
   }

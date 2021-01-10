@@ -1,5 +1,5 @@
 <template>
-  <el-radio-group v-model="selectedValue" v-on="eventList">
+  <el-radio-group v-model="calValue" v-on="eventList">
     <template v-for="item in optionsList">
       <el-radio-button v-if="radioButton" :key="item.value" :label="item.value">
         {{ item.label }}
@@ -17,18 +17,9 @@ import { isArray, isPlainObject } from '../../utils'
 export default {
   name: 'PlRadio',
   props: {
-    value: { default: '', type: [String, Number, Array] },
-    labelWidth: {
-      type: [String, Number],
-      default: ''
-    },
-    formItemAttrs: {
-      type: Object,
-      default: () => ({})
-    },
-    required: {
-      type: Boolean,
-      default: null
+    value: {
+      default: '',
+      type: [String, Number, Array]
     },
     options: {
       type: [Array, Object],
@@ -48,14 +39,7 @@ export default {
     }
   },
   data() {
-    return {
-      selectedValue: '',
-      defaultAttrs: {
-        clearable: true,
-        filterable: true,
-        defaultFirstOption: true
-      }
-    }
+    return {}
   },
   computed: {
     optionsList() {
@@ -66,9 +50,15 @@ export default {
         this.options.map((item) => {
           // 如果每项是对象形式
           if (isPlainObject(item)) {
-            list.push({ label: item[label], value: item[value] })
+            list.push({
+              label: item[label],
+              value: item[value]
+            })
           } else {
-            list.push({ label: item, value: item })
+            list.push({
+              label: item,
+              value: item
+            })
           }
         })
         return list
@@ -90,23 +80,20 @@ export default {
         ...this.events,
         ...this.$listeners
       }
-    }
-  },
-  watch: {
-    value: {
-      immediate: true,
-      handler() {
-        this.init()
+    },
+    calValue: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('input', val)
       }
     }
   },
   methods: {
     handleChange(val) {
       this.$emit('change', val)
-      this.$emit('input', val)
-    },
-    init() {
-      this.selectedValue = this.value
+      this.calValue = val
     }
   }
 }

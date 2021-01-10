@@ -54,9 +54,7 @@ export default {
     }
   },
   data() {
-    return {
-      selectedValue: ''
-    }
+    return {}
   },
   computed: {
     calValue: {

@@ -1,5 +1,5 @@
 <template>
-  <el-checkbox-group v-model="selectedValue" v-on="eventList">
+  <el-checkbox-group v-model="calValue" v-on="eventList">
     <template v-for="item in optionsList">
       <el-checkbox-button v-if="radioButton" :key="item.value" :label="item.value">
         {{ item.label }}
@@ -42,14 +42,7 @@ export default {
     }
   },
   data() {
-    return {
-      selectedValue: [],
-      defaultAttrs: {
-        clearable: true,
-        filterable: true,
-        defaultFirstOption: true
-      }
-    }
+    return {}
   },
   computed: {
     optionsList() {
@@ -90,23 +83,20 @@ export default {
         ...this.events,
         ...this.$listeners
       }
-    }
-  },
-  watch: {
-    value: {
-      immediate: true,
-      handler() {
-        this.init()
+    },
+    calValue: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('input', val)
       }
     }
   },
   methods: {
     handleChange(val) {
       this.$emit('change', val)
-      this.$emit('input', val)
-    },
-    init() {
-      this.selectedValue = this.value || []
+      this.calValue = val
     }
   }
 }

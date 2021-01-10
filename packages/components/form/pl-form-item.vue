@@ -3,21 +3,27 @@
     <component
       :is="currentComp"
       :ref="prop"
-      v-model="form[prop]"
+      :value="value"
       :label="label"
       :prop="prop"
       :events="events"
       v-bind="$attrs"
+      v-on="$listeners"
     >
       <template v-for="slot in Object.keys($slots)" #[slot]>
         <slot :name="slot" />
       </template>
     </component>
-    <template v-for="slot in Object.keys($slots)" v-slot:[slot]="scope">
+    <template v-for="slot in Object.keys($slots)" #[slot]="scope">
       <slot :name="slot" v-bind="scope" />
     </template>
   </el-form-item>
-  <form-item-grid v-else />
+  <el-row v-else>
+    <el-col v-for="(col, index) in cols" :key="index" :span="col.span">
+      <slot v-if="col.slotName" :name="col.slotName" v-bind="{ form, item: col }" />
+      <pl-form-item v-else v-bind="col" />
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -48,6 +54,10 @@ export default {
     // form: {
     //   type: Object
     // },
+    value: {
+      type: [Array, String, Object, Number, Boolean, Date],
+      default: null
+    },
     comp: {
       type: String,
       default: ''

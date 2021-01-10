@@ -2,15 +2,27 @@
   <el-form ref="plForm" :model="form" :rules="rules" v-bind="attrs">
     <template v-for="(item, index) in formItems">
       <slot :name="item.slotName" v-bind="{ form, item }">
-        <pl-form-item v-if="!item.cols" :key="index" v-bind="item" :form="form" />
-        <form-item-grid v-else :item="item" :form="form">
-          <slot
-            v-for="col in item.cols"
-            :slot="col.slotName"
-            :name="col.slotName"
-            v-bind="{ form, item: col }"
-          />
-        </form-item-grid>
+        <pl-form-item
+          v-if="!item.cols"
+          :key="index"
+          v-model="form[item.prop]"
+          v-bind="item"
+          :form="form"
+        />
+        <!--        <form-item-grid v-else :item="item" :form="form">-->
+        <!--          <slot-->
+        <!--            v-for="col in item.cols"-->
+        <!--            :slot="col.slotName"-->
+        <!--            :name="col.slotName"-->
+        <!--            v-bind="{ form, item: col }"-->
+        <!--          />-->
+        <!--        </form-item-grid>-->
+        <el-row v-if="item.cols" v-bind="item.attrs">
+          <el-col v-for="(col, index) in item.cols" :key="index" :span="col.span">
+            <slot v-if="col.slotName" :name="col.slotName" v-bind="{ form, item: col }" />
+            <pl-form-item v-else v-model="form[col.prop]" v-bind="col" :form="form" />
+          </el-col>
+        </el-row>
       </slot>
     </template>
     <slot />
@@ -29,14 +41,17 @@
 
 <script>
 import { getRandomKey } from '../../utils'
-import FormItemGrid from './form-item-grid'
+// import FormItemGrid from './form-item-grid'
 import PlFormItem from './pl-form-item'
 
 const Item2UIDMap = new WeakMap()
 export default {
   name: 'PlForm',
   componentName: 'PlForm',
-  components: { PlFormItem, FormItemGrid },
+  components: {
+    PlFormItem
+    // FormItemGrid
+  },
   inheritAttrs: false,
   provide() {
     return {
@@ -67,13 +82,21 @@ export default {
   },
   data() {
     return {
-      form: this.value,
+      // form: {},
       fields: []
     }
   },
   computed: {
     attrs() {
       return { ...this.$PlElement?.formConfig, ...this.$attrs }
+    },
+    form: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('input', val)
+      }
     }
   },
   watch: {
@@ -188,6 +211,9 @@ export default {
     },
     findFormRef() {
       return this.$refs.plForm
+    },
+    setForm(key, value) {
+      this.$set(this.form, key, value)
     }
   }
 }

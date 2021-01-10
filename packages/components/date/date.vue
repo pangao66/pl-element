@@ -1,6 +1,6 @@
 <template>
   <el-date-picker
-    v-model="date"
+    v-model="calDate"
     :picker-options="calPickerOptions"
     v-bind="attrs"
     @change="handleChange"
@@ -13,6 +13,7 @@
 export default {
   name: 'PlDate',
   inheritAttrs: false,
+  inject: ['plForm'],
   props: {
     label: {
       type: String,
@@ -22,22 +23,9 @@ export default {
       type: String,
       default: ''
     },
-    value: { default: '', type: [Array, String, Object, Date] },
-    labelWidth: {
-      type: [String, Number],
-      default: ''
-    },
-    formItemAttrs: {
-      type: Object,
-      default: () => ({})
-    },
-    required: {
-      type: Boolean,
-      default: null
-    },
-    limit: {
-      type: Object,
-      default: () => ({})
+    value: {
+      default: '',
+      type: [Array, String, Object, Date]
     },
     pickerOptions: {
       type: Object,
@@ -59,21 +47,23 @@ export default {
       type: Array,
       default: null
     },
-    form: {
-      type: Object,
-      default: () => ({})
-    },
     events: {
       type: Object,
       default: null
     }
   },
   data() {
-    return {
-      date: ''
-    }
+    return {}
   },
   computed: {
+    calDate: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('input', val)
+      }
+    },
     attrs() {
       return {
         ...this.$PlElement?.dateConfig,
@@ -196,54 +186,24 @@ export default {
       }
     }
   },
-  watch: {
-    value: {
-      immediate: true,
-      deep: true,
-      handler(val) {
-        this.date = val
-        this.handleChange(val)
-      }
-    }
-  },
   methods: {
     handleChange(val) {
-      // const valueFormat = this.$attrs.valueFormat || this.$attrs['value-format']
-      // // console.log(valueFormat)
-      // // 如果结果格式化为时间戳并且是范围选择,首日期应为当日0时,末日期应为当日23时59分59秒
-      // if (valueFormat === 'timestamp' && this.date instanceof Array) {
-      //   if (val.length) {
-      //     val[1] = new Date(new Date(new Date(val[1]).toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1).getTime()
-      //   }
-      // }
+      // 如果结果格式化为时间戳并且是范围选择,首日期应为当日0时,末日期应为当日23时59分59秒
       this.$emit('change', val)
-      this.$emit('input', val)
+      this.calDate = val
       if (this.dateRangeKeys && this.dateRangeKeys.length) {
         const [start, end] = this.dateRangeKeys
-        const [startTime, endTime] = this.date || []
+        let [startTime, endTime] = this.date || []
         //  如果需要时间戳类型,则设置开始时间为当日0点,结束时间为当日23:59:59
         const valueFormat = this.attrs['value-format'] || this.attrs.valueFormat
-        if (this.form) {
-          if (valueFormat && valueFormat === 'timestamp') {
-            if (startTime) {
-              this.$set(this.form, start, new Date(startTime).setHours(0, 0, 0, 0))
-            } else {
-              this.$set(this.form, start, null)
-            }
-            if (endTime) {
-              this.$set(
-                this.form,
-                end,
-                new Date(endTime).setHours(0, 0, 0, 0) + 24 * 60 * 60 * 1000 - 1
-              )
-            } else {
-              this.$set(this.form, end, null)
-            }
-          } else {
-            this.$set(this.form, end, endTime)
-            this.$set(this.form, start, startTime)
-          }
+        if (valueFormat && valueFormat === 'timestamp') {
+          startTime = startTime ? new Date(startTime).setHours(0, 0, 0) : null
+          endTime = endTime
+            ? new Date(endTime).setHours(0, 0, 0, 0) + 24 * 60 * 60 * 1000 - 1
+            : null
         }
+        this.plForm.setForm(start, startTime || null)
+        this.plForm.setForm(end, endTime || null)
       }
     },
     timeArrayFocus() {
