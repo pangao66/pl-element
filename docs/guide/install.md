@@ -3,7 +3,10 @@ title: 安装使用
 sidebarDepth: 2
 ---
 ## 全部引入
-组件暂未上传npm,可克隆仓库使用
+`
+npm install pl-element --save
+`
+
 ```js
 import PlElement from '../pl-element'
 Vue.use(PlElement, {
