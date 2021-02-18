@@ -18,7 +18,7 @@
         <!--          />-->
         <!--        </form-item-grid>-->
         <el-row v-if="item.cols" v-bind="item.attrs">
-          <el-col v-for="(col, index) in item.cols" :key="index" :span="col.span">
+          <el-col v-for="(col, index2) in item.cols" :key="index2" :span="col.span">
             <slot v-if="col.slotName" :name="col.slotName" v-bind="{ form, item: col }" />
             <pl-form-item v-else v-model="form[col.prop]" v-bind="col" :form="form" />
           </el-col>
